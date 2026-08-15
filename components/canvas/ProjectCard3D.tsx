@@ -119,48 +119,59 @@ function CardContent({
     let mountedVideo: HTMLVideoElement | null = null
     let mountedTexture: THREE.VideoTexture | null = null
 
-    const run = async () => {
-      let srcToUse = videoSrc
-      try {
-        srcToUse = await acquireObjectUrl(videoSrc)
-      } catch {
-        // Blob fetch failed — fall back to raw URL instead of killing card
-        srcToUse = videoSrc
-      }
-      if (cancelled) return
+    const video = document.createElement('video')
+    video.crossOrigin = 'anonymous'
+    video.loop = true
+    video.muted = true
+    video.playsInline = true
+    video.autoplay = true
+    video.preload = 'auto'
+    video.src = videoSrc
+    mountedVideo = video
+    videoRef.current = video
 
-      const video = document.createElement('video')
-      video.crossOrigin = 'anonymous'
-      video.loop = true
-      video.muted = true
-      video.playsInline = true
-      video.autoplay = true
-      video.src = srcToUse
-      mountedVideo = video
-      videoRef.current = video
-
-      const playPromise = video.play()
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {})
-      }
-
+    const createAndSetTexture = () => {
+      if (cancelled || mountedTexture) return
       const videoTexture = new THREE.VideoTexture(video)
       videoTexture.colorSpace = THREE.SRGBColorSpace
       videoTexture.minFilter = THREE.LinearFilter
       videoTexture.magFilter = THREE.LinearFilter
       videoTexture.generateMipmaps = false
       mountedTexture = videoTexture
-
-      if (!cancelled) {
-        setTexture(videoTexture)
-        setHasError(false)
-      }
+      setTexture(videoTexture)
+      setHasError(false)
     }
 
-    run()
+    if (video.readyState >= 2) {
+      createAndSetTexture()
+    } else {
+      video.addEventListener('loadeddata', createAndSetTexture)
+      video.addEventListener('canplay', createAndSetTexture)
+    }
+
+    const playPromise = video.play()
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {})
+    }
+
+    // Background Blob pre-caching optimization (swaps src to blob once downloaded without destroying texture)
+    acquireObjectUrl(videoSrc)
+      .then((blobUrl) => {
+        if (!cancelled && mountedVideo && blobUrl && mountedVideo.src !== blobUrl) {
+          const currentTime = mountedVideo.currentTime
+          mountedVideo.src = blobUrl
+          mountedVideo.currentTime = currentTime
+          mountedVideo.play().catch(() => {})
+        }
+      })
+      .catch(() => {
+        // Blob fetch failed — raw URL remains active
+      })
 
     return () => {
       cancelled = true
+      video.removeEventListener('loadeddata', createAndSetTexture)
+      video.removeEventListener('canplay', createAndSetTexture)
       if (mountedTexture) {
         mountedTexture.dispose()
         mountedTexture = null
@@ -168,12 +179,10 @@ function CardContent({
       if (mountedVideo) {
         try { mountedVideo.pause() } catch { /* ignore */ }
         try { mountedVideo.removeAttribute('src') } catch { /* ignore */ }
-        mountedVideo.removeAttribute('src')
         try { mountedVideo.load() } catch { /* ignore */ }
         mountedVideo = null
       }
       if (videoRef.current === mountedVideo) videoRef.current = null
-      // Always decrement blob cache refCount — last one out revokes the URL.
       releaseObjectUrl(videoSrc)
     }
   }, [videoSrc])

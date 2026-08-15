@@ -21,6 +21,12 @@ interface ScrollState {
   videoStatus: VideoStatus
   videoDuration: number
 
+  // Real Asset Preloading State
+  framesLoaded: number
+  totalFramesToPreload: number
+  videosLoadedCount: number
+  totalVideosToPreload: number
+
   lenis: Lenis | null
 
   setScrollProgress: (progress: number) => void
@@ -32,6 +38,8 @@ interface ScrollState {
   setIsDebugOpen: (open: boolean | ((prev: boolean) => boolean)) => void
   setCursorState: (state: CursorMode, text?: string | null) => void
   setVideoStatus: (status: VideoStatus, duration?: number) => void
+  setFramesLoaded: (loaded: number, total?: number) => void
+  setVideosLoadedCount: (loaded: number, total?: number) => void
   setLenis: (lenis: Lenis | null) => void
   scrollToSection: (sectionId: SectionId) => void
 }
@@ -57,6 +65,11 @@ export const useScrollStore = create<ScrollState>((set, get) => ({
   videoStatus: 'idle',
   videoDuration: 0,
 
+  framesLoaded: 0,
+  totalFramesToPreload: 60,
+  videosLoadedCount: 0,
+  totalVideosToPreload: 4,
+
   lenis: null,
 
   setScrollProgress: (progress) => set({ scrollProgress: progress }),
@@ -80,6 +93,16 @@ export const useScrollStore = create<ScrollState>((set, get) => ({
     set((state) => ({
       videoStatus: status,
       videoDuration: duration > 0 ? duration : state.videoDuration,
+    })),
+  setFramesLoaded: (loaded, total = 60) =>
+    set((state) => ({
+      framesLoaded: Math.max(state.framesLoaded, loaded),
+      totalFramesToPreload: total,
+    })),
+  setVideosLoadedCount: (loaded, total = 4) =>
+    set((state) => ({
+      videosLoadedCount: Math.max(state.videosLoadedCount, loaded),
+      totalVideosToPreload: total,
     })),
   setLenis: (lenis) => set({ lenis }),
 

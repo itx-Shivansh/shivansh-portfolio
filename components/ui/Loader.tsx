@@ -65,12 +65,29 @@ const MODULES = [
   },
 ]
 
+const PROJECT_VIDEOS = [
+  '/videos/aria_vid.mp4',
+  '/videos/ind_sig.mp4',
+  '/videos/shivantra_vid.mp4',
+  '/videos/obsidian_vid.mp4',
+]
+
 export default function Loader() {
-  const { setIsLoaded } = useScrollStore()
+  const {
+    setIsLoaded,
+    framesLoaded,
+    totalFramesToPreload,
+    videosLoadedCount,
+    totalVideosToPreload,
+    setVideosLoadedCount,
+  } = useScrollStore()
+
   const [progress, setProgress] = useState<number>(0)
+  const [statusMessage, setStatusMessage] = useState<string>('Preloading core WebGL shaders and modules...')
   const [shouldRender, setShouldRender] = useState<boolean>(true)
   const [dotIndex, setDotIndex] = useState<number>(0)
   const overlayRef = useRef<HTMLDivElement>(null)
+  const isCompletingRef = useRef<boolean>(false)
 
   // Animated 3 loading dots interval
   useEffect(() => {
@@ -80,40 +97,126 @@ export default function Loader() {
     return () => clearInterval(dotInterval)
   }, [])
 
+  // 1. Preload 4 Project Videos (wait for loadeddata / canplay)
   useEffect(() => {
-    let currentProgress = 0
-    const interval = setInterval(() => {
-      currentProgress += Math.floor(Math.random() * 10) + 5
-      if (currentProgress >= 100) {
-        currentProgress = 100
-        clearInterval(interval)
-        setProgress(100)
+    let cancelled = false
+    const readyVideos = new Set<string>()
 
-        // Hold at 100% briefly so user sees complete status before fading out
-        setTimeout(() => {
-          if (overlayRef.current) {
-            gsap.to(overlayRef.current, {
-              opacity: 0,
-              scale: 1.03,
-              duration: duration.slow,
-              ease: ease.cinematic,
-              onComplete: () => {
-                setIsLoaded(true)
-                setShouldRender(false)
-              },
-            })
-          } else {
-            setIsLoaded(true)
-            setShouldRender(false)
-          }
-        }, 500)
-      } else {
-        setProgress(currentProgress)
+    const videoElements = PROJECT_VIDEOS.map((src) => {
+      const vid = document.createElement('video')
+      vid.crossOrigin = 'anonymous'
+      vid.muted = true
+      vid.playsInline = true
+      vid.preload = 'auto'
+      vid.src = src
+
+      const markReady = () => {
+        if (cancelled) return
+        if (!readyVideos.has(src)) {
+          readyVideos.add(src)
+          setVideosLoadedCount(readyVideos.size, PROJECT_VIDEOS.length)
+        }
       }
-    }, 70)
 
-    return () => clearInterval(interval)
-  }, [setIsLoaded])
+      if (vid.readyState >= 2) {
+        markReady()
+      } else {
+        vid.addEventListener('loadeddata', markReady)
+        vid.addEventListener('canplay', markReady)
+        vid.addEventListener('error', markReady) // Treat error as fallback ready to avoid blocking
+      }
+
+      vid.load()
+      return { vid, markReady }
+    })
+
+    return () => {
+      cancelled = true
+      videoElements.forEach(({ vid, markReady }) => {
+        vid.removeEventListener('loadeddata', markReady)
+        vid.removeEventListener('canplay', markReady)
+        vid.removeEventListener('error', markReady)
+        try { vid.pause() } catch { /* ignore */ }
+        try { vid.removeAttribute('src') } catch { /* ignore */ }
+      })
+    }
+  }, [setVideosLoadedCount])
+
+  // 2. Real Asset Loading Calculation & Progress Ticker
+  useEffect(() => {
+    let animId: number
+    let forceComplete = false
+
+    // Safety timeout: 10s max so flaky network connections never lock the UI
+    const timeoutId = setTimeout(() => {
+      forceComplete = true
+    }, 10000)
+
+    const update = () => {
+      const framesRatio = Math.min(1, framesLoaded / Math.max(1, totalFramesToPreload))
+      const videosRatio = Math.min(1, videosLoadedCount / Math.max(1, totalVideosToPreload))
+
+      let target = Math.floor(framesRatio * 50 + videosRatio * 50)
+      if (forceComplete) target = 100
+
+      // Smooth step towards target progress
+      setProgress((prev) => {
+        if (prev >= 100 && !isCompletingRef.current) {
+          isCompletingRef.current = true
+          setTimeout(() => {
+            if (overlayRef.current) {
+              gsap.to(overlayRef.current, {
+                opacity: 0,
+                scale: 1.03,
+                duration: duration.slow,
+                ease: ease.cinematic,
+                onComplete: () => {
+                  setIsLoaded(true)
+                  setShouldRender(false)
+                },
+              })
+            } else {
+              setIsLoaded(true)
+              setShouldRender(false)
+            }
+          }, 400)
+          return 100
+        }
+
+        if (prev < target) {
+          const next = prev + Math.max(1, Math.floor((target - prev) * 0.25))
+          return Math.min(100, next)
+        }
+        return prev
+      })
+
+      // Update HUD status text based on active preloading focus
+      if (videosLoadedCount < totalVideosToPreload) {
+        setStatusMessage(`Preloading 3D Project Videos (${videosLoadedCount}/${totalVideosToPreload})...`)
+      } else if (framesLoaded < totalFramesToPreload) {
+        setStatusMessage(`Decoding Background Sequence (${framesLoaded}/${totalFramesToPreload} frames)...`)
+      } else {
+        setStatusMessage('Redirecting to experience...')
+      }
+
+      if (!isCompletingRef.current) {
+        animId = requestAnimationFrame(update)
+      }
+    }
+
+    animId = requestAnimationFrame(update)
+
+    return () => {
+      cancelAnimationFrame(animId)
+      clearTimeout(timeoutId)
+    }
+  }, [
+    framesLoaded,
+    totalFramesToPreload,
+    videosLoadedCount,
+    totalVideosToPreload,
+    setIsLoaded,
+  ])
 
   if (!shouldRender) return null
 
@@ -221,9 +324,7 @@ export default function Loader() {
                 {progress === 100 ? 'System Check Complete.' : 'Performing System Diagnostic...'}
               </p>
               <p className="text-[#F5B800] font-semibold">
-                {progress === 100
-                  ? 'Redirecting to experience...'
-                  : 'Loading core WebGL shaders and modules...'}
+                {statusMessage}
               </p>
             </div>
             <span className="text-[#F5B800] text-lg font-bold">]</span>

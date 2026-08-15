@@ -28,6 +28,7 @@ export default function ScrollVideoBackground() {
 
   const scrollProgress = useScrollStore((state) => state.scrollProgress)
   const setVideoStatus = useScrollStore((state) => state.setVideoStatus)
+  const setFramesLoaded = useScrollStore((state) => state.setFramesLoaded)
   const selectedProject = useScrollStore((state) => state.selectedProject)
 
   // Keep scrollProgressRef updated without tearing down the RAF loop
@@ -107,6 +108,7 @@ export default function ScrollVideoBackground() {
         if (cancelled) return
         loadedCount++
         highestDecodedFrameRef.current = Math.max(highestDecodedFrameRef.current, i)
+        setFramesLoaded(loadedCount, 60)
 
         // Render first frame as soon as frame 0 or early frames load/decode
         if (i === 0 || loadedCount === 1) {
@@ -149,7 +151,7 @@ export default function ScrollVideoBackground() {
     return () => {
       cancelled = true
     }
-  }, [setVideoStatus])
+  }, [setVideoStatus, setFramesLoaded])
 
   // ─── 4. Continuous, persistent RAF ticker (Mounted ONCE) ──────────
   useEffect(() => {
