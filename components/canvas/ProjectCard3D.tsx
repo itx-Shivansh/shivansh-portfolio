@@ -120,7 +120,6 @@ function CardContent({
     let mountedTexture: THREE.VideoTexture | null = null
 
     const video = document.createElement('video')
-    video.crossOrigin = 'anonymous'
     video.loop = true
     video.muted = true
     video.playsInline = true
@@ -154,7 +153,7 @@ function CardContent({
       playPromise.catch(() => {})
     }
 
-    // Background Blob pre-caching optimization (swaps src to blob once downloaded without destroying texture)
+    // Background Blob pre-caching optimization
     acquireObjectUrl(videoSrc)
       .then((blobUrl) => {
         if (!cancelled && mountedVideo && blobUrl && mountedVideo.src !== blobUrl) {
@@ -208,16 +207,22 @@ function CardContent({
     )
   }, [imageUrl, project.title, videoSrc])
 
+  // Sync texture to material on texture state change
+  useEffect(() => {
+    if (materialRef.current && texture) {
+      materialRef.current.map = texture
+      materialRef.current.needsUpdate = true
+    }
+  }, [texture])
+
   useFrame(() => {
     if (!meshRef.current) return
 
     const effectiveOpacity = opacityBase * groupOpacityRef.current
     effectiveOpacityRef.current = effectiveOpacity
 
-    if (materialRef.current && texture) {
-      materialRef.current.map = texture
+    if (materialRef.current) {
       materialRef.current.opacity = effectiveOpacity
-      materialRef.current.needsUpdate = true
     }
 
     const offset = index - progress

@@ -104,7 +104,6 @@ export default function Loader() {
 
     const videoElements = PROJECT_VIDEOS.map((src) => {
       const vid = document.createElement('video')
-      vid.crossOrigin = 'anonymous'
       vid.muted = true
       vid.playsInline = true
       vid.preload = 'auto'
