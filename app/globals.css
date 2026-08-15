@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base Dark Palette — Active Theory Pitch Black */
+    --color-bg-base: 0 0 0; /* #000000 */
+    --color-bg-surface: 8 9 13; /* #08090d */
+    --color-bg-surface-elevated: 14 16 24; /* #0e1018 */
+    --color-bg-glass: rgba(8, 9, 13, 0.85);
+    
+    /* Border & Separator Tones */
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-glow: rgba(0, 217, 255, 0.3);
+
+    /* Text Palette */
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    --color-text-muted: #475569;
+
+    /* Accent Palette - Electric Cyan to Violet */
+    --color-accent-cyan: #00d9ff;
+    --color-accent-violet: #8b5cf6;
+    --color-accent-glow: rgba(0, 217, 255, 0.15);
+
+    /* Easing Functions for CSS */
+    --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
+    --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-enter: cubic-bezier(0.33, 1, 0.68, 1);
+    --ease-exit: cubic-bezier(0.32, 0, 0.67, 0);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Clamped Fluid Typography Scale (safely bounded min/max) */
+    --font-size-display-xxl: clamp(2.75rem, 7.5vw, 7.5rem);
+    --font-size-display-xl: clamp(2.2rem, 5.5vw, 5.5rem);
+    --font-size-display-lg: clamp(1.75rem, 3.2vw, 3.25rem);
+    --font-size-watermark: clamp(4.5rem, 12vw, 14rem);
+    --font-size-heading-md: clamp(1.3rem, 2vw, 2.2rem);
+    --font-size-body-lg: clamp(1.05rem, 0.9vw, 1.3rem);
+    --font-size-body-md: clamp(0.95rem, 0.5vw, 1.05rem);
+    --font-size-body-sm: clamp(0.8rem, 0.3vw, 0.9rem);
+    --font-size-caption: clamp(0.68rem, 0.25vw, 0.75rem);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: auto; /* Lenis handles smooth scrolling */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: rgb(var(--color-bg-base));
+    color: var(--color-text-primary);
+  }
+
+  body {
+    font-family: var(--font-body), system-ui, sans-serif;
+    background-color: rgb(var(--color-bg-base));
+    color: var(--color-text-primary);
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  /* Fluid type utility classes */
+  .text-display-xxl {
+    font-size: var(--font-size-display-xxl);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  .text-display-xl {
+    font-size: var(--font-size-display-xl);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  .text-display-lg {
+    font-size: var(--font-size-display-lg);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .text-heading-md {
+    font-size: var(--font-size-heading-md);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .text-watermark {
+    font-size: var(--font-size-watermark);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+  }
+
+  .text-body-lg {
+    font-size: var(--font-size-body-lg);
+    line-height: 1.6;
+  }
+
+  .text-body-md {
+    font-size: var(--font-size-body-md);
+    line-height: 1.6;
+  }
+
+  .text-body-sm {
+    font-size: var(--font-size-body-sm);
+    line-height: 1.5;
+  }
+
+  .text-caption {
+    font-size: var(--font-size-caption);
+    line-height: 1.4;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Gradient Text Utility */
+  .text-accent-gradient {
+    background: linear-gradient(135deg, var(--color-accent-cyan) 0%, var(--color-accent-violet) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Ambient Glow & Glass Surfaces */
+  .glass-panel {
+    background: var(--color-bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .glow-cyan {
+    box-shadow: 0 0 35px -5px rgba(0, 217, 255, 0.3);
+  }
+
+  .glow-violet {
+    box-shadow: 0 0 35px -5px rgba(139, 92, 246, 0.3);
+  }
+
+  /* Technical Gridlines & Crosshair Markers */
+  .bg-technical-grid {
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .text-mono-meta {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+  }
+}
+
+/* Subtle section divider for scaffolding */
+section[id]:not(#hero) {
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+::selection {
+  background: rgba(0, 217, 255, 0.25);
+  color: #ffffff;
+}
+
+/* Loader progress bar stripe animation */
+@keyframes stripe-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1rem 0;
+  }
+}
