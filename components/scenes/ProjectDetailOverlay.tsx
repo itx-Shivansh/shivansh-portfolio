@@ -107,7 +107,7 @@ export default function ProjectDetailOverlay({ project, onClose }: ProjectDetail
   const overlayContent = (
     <div
       ref={overlayRef}
-      className="fixed inset-0 flex items-center justify-center overflow-y-auto bg-bg-base p-6 backdrop-blur-2xl md:p-12 lg:p-16 select-none"
+      className="fixed inset-0 flex items-center justify-center overflow-y-auto bg-bg-base p-4 sm:p-6 backdrop-blur-2xl md:p-12 lg:p-16 select-none h-dvh min-h-dvh"
       style={{
         zIndex: 2147483647,
         isolation: 'isolate',
@@ -123,7 +123,7 @@ export default function ProjectDetailOverlay({ project, onClose }: ProjectDetail
       <div
         ref={contentRef}
         onClick={(e) => e.stopPropagation()} // Prevent click inside modal from closing
-        className="relative my-auto w-full max-w-4xl rounded-3xl border border-border-subtle bg-bg-surface p-8 shadow-2xl backdrop-blur-xl md:p-12 space-y-10 max-h-[90vh] overflow-y-auto"
+        className="relative my-auto w-full max-w-4xl rounded-2xl sm:rounded-3xl border border-border-subtle bg-bg-surface p-5 sm:p-8 shadow-2xl backdrop-blur-xl md:p-12 space-y-8 max-h-[85dvh] overflow-y-auto"
       >
         {/* Top Header Bar */}
         <div className="flex items-center justify-between border-b border-white/10 pb-6">

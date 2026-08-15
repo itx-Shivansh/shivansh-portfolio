@@ -1,0 +1,11 @@
+# Exclude heavy video files from Vercel deploy (use a CDN instead)
+public/videos/aria_vid.mp4
+public/videos/ind_sig.mp4
+public/videos/scroll.mp4
+
+# Dev artifacts
+active-theory-example.mp4
+indiasignal_image.png
+obsidian_image.png
+content-brief.md
+docs/

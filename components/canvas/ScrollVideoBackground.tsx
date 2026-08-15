@@ -23,6 +23,8 @@ export default function ScrollVideoBackground() {
   const currentFrameRef = useRef<number>(0)
   const lastDrawnFrameRef = useRef<number>(-1)
   const scrollProgressRef = useRef<number>(0)
+  const highestDecodedFrameRef = useRef<number>(0)
+  const hasSignaledReadyRef = useRef<boolean>(false)
 
   const scrollProgress = useScrollStore((state) => state.scrollProgress)
   const setVideoStatus = useScrollStore((state) => state.setVideoStatus)
@@ -104,13 +106,18 @@ export default function ScrollVideoBackground() {
       const onImageReady = () => {
         if (cancelled) return
         loadedCount++
+        highestDecodedFrameRef.current = Math.max(highestDecodedFrameRef.current, i)
 
         // Render first frame as soon as frame 0 or early frames load/decode
         if (i === 0 || loadedCount === 1) {
           renderFrame(0)
         }
 
-        if (loadedCount >= TOTAL_FRAMES) {
+        // Progressive readiness: signal 'ready' as soon as first 30 frames are decoded (Category 4)
+        if (!hasSignaledReadyRef.current && (highestDecodedFrameRef.current >= 30 || loadedCount >= 30)) {
+          hasSignaledReadyRef.current = true
+          setVideoStatus('ready', TOTAL_FRAMES)
+        } else if (loadedCount >= TOTAL_FRAMES) {
           setVideoStatus('ready', TOTAL_FRAMES)
         }
       }
@@ -150,7 +157,10 @@ export default function ScrollVideoBackground() {
 
     const tick = () => {
       const targetProgress = scrollProgressRef.current
-      const targetFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, targetProgress * (TOTAL_FRAMES - 1)))
+      const rawTargetFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, targetProgress * (TOTAL_FRAMES - 1)))
+      
+      // Clamp targetFrame to highest decoded frame index (Category 4)
+      const targetFrame = Math.min(rawTargetFrame, highestDecodedFrameRef.current)
       
       const diff = targetFrame - currentFrameRef.current
 
@@ -176,7 +186,7 @@ export default function ScrollVideoBackground() {
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 pointer-events-none z-0 h-screen w-screen overflow-hidden select-none transition-opacity duration-300 ${selectedProject ? 'opacity-0 invisible' : 'opacity-100 visible'}`}
+      className={`fixed inset-0 pointer-events-none z-0 h-screen h-dvh w-screen overflow-hidden select-none transition-opacity duration-300 ${selectedProject ? 'opacity-0 invisible' : 'opacity-100 visible'}`}
       style={{ backgroundColor: '#000000' }}
     >
       {/* ── Ultra-Smooth 60fps Canvas Image Sequence Background ───────── */}

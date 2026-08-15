@@ -56,7 +56,7 @@ export default function SkillsScene() {
   return (
     <section
       id="skills"
-      className="relative w-full select-none py-20 px-6 sm:px-12 md:px-20 lg:pl-32 lg:pr-16"
+      className="relative w-full select-none py-16 sm:py-20 px-4 sm:px-12 md:px-20 lg:pl-32 lg:pr-16"
     >
       <div className="w-full max-w-7xl mx-auto space-y-10 z-10 relative pointer-events-auto select-none">
         {/* ── Top Header Row ─────────────────────────────────────────── */}

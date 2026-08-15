@@ -10,7 +10,7 @@ export default function JourneyScene() {
     <section
       ref={sectionRef}
       id="journey"
-      className="relative w-full select-none py-20 px-6 sm:px-12 md:px-20 lg:pl-32 lg:pr-16"
+      className="relative w-full select-none py-16 sm:py-20 px-4 sm:px-12 md:px-20 lg:pl-32 lg:pr-16"
     >
       <div className="w-full max-w-7xl mx-auto space-y-10 z-10 relative pointer-events-auto select-none">
         {/* ── Top Header Row: Chapter Badge & Download Resume Button ──── */}
@@ -41,7 +41,7 @@ export default function JourneyScene() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Heading, Subtitle & Bio */}
           <div className="lg:col-span-7 space-y-5">
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
               <span className="text-white">About </span>
               <span className="text-[#F5B800]">Me</span>
             </h2>
@@ -62,7 +62,7 @@ export default function JourneyScene() {
 
             {/* 4-Item Quick Info Grid Bar */}
             <div className="pt-2">
-              <div className="rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-5 grid grid-cols-2 md:grid-cols-4 gap-4 divide-y md:divide-y-0 md:divide-x divide-white/10 shadow-2xl">
+              <div className="rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 divide-y sm:divide-y-0 md:divide-x divide-white/10 shadow-2xl">
                 {/* Item 1 */}
                 <div className="flex flex-col items-start space-y-1.5 pr-2 pt-2 md:pt-0">
                   <div className="text-[#F5B800]">

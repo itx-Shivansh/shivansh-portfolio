@@ -94,7 +94,19 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
 
     ScrollTrigger.refresh()
 
-    // 6. Keypress listener for Debug HUD toggle (Backtick key `)
+    // 6. Debounced ScrollTrigger refresh on window resize & orientationchange (Category 3)
+    let resizeTimeout: NodeJS.Timeout | null = null
+    const handleResizeOrOrientation = () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 200)
+    }
+
+    window.addEventListener('resize', handleResizeOrOrientation)
+    window.addEventListener('orientationchange', handleResizeOrOrientation)
+
+    // 7. Keypress listener for Debug HUD toggle (Backtick key `)
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '`' || e.key === '~') {
         setIsDebugOpen((prev) => !prev)
@@ -104,6 +116,9 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+      window.removeEventListener('resize', handleResizeOrOrientation)
+      window.removeEventListener('orientationchange', handleResizeOrOrientation)
       triggers.forEach((t) => t.kill())
       gsap.ticker.remove(updateRaf)
       lenis.destroy()

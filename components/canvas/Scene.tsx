@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import clsx from 'clsx'
 import CameraRig from './CameraRig'
@@ -18,10 +19,21 @@ export default function Scene() {
   const selectedProject = useScrollStore((state) => state.selectedProject)
   const isProjectsInteractive = activeSection === 'projects' && !selectedProject
 
+  const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false)
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 768px), (pointer: coarse)')
+    setIsMobileDevice(mobileQuery.matches)
+
+    const handleChange = (e: MediaQueryListEvent) => setIsMobileDevice(e.matches)
+    mobileQuery.addEventListener('change', handleChange)
+    return () => mobileQuery.removeEventListener('change', handleChange)
+  }, [])
+
   return (
     <div
       className={clsx(
-        'fixed inset-0 h-screen w-screen overflow-hidden transition-all duration-300',
+        'fixed inset-0 h-screen h-dvh w-screen overflow-hidden transition-all duration-300',
         selectedProject
           ? 'z-[10] pointer-events-none opacity-0 invisible'
           : isProjectsInteractive
@@ -31,7 +43,7 @@ export default function Scene() {
     >
       <Canvas
         camera={{ position: [0, 0, 8], fov: 45 }}
-        dpr={[1, 2]}
+        dpr={isMobileDevice ? [1, 1.25] : [1, 2]}
         gl={{
           antialias: true,
           alpha: true,

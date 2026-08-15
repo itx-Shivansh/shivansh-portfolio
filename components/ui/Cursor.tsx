@@ -18,9 +18,9 @@ export default function Cursor() {
     // Bail out immediately if modal is open — no cursor engine setup needed
     if (selectedProject) return
 
-    // Detect touch / coarse pointer devices
-    const touchQuery = window.matchMedia('(pointer: coarse)')
-    if (touchQuery.matches) {
+    // Detect touch / coarse pointer devices (e.g. phones, tablets)
+    const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    if (!isFinePointer) {
       setIsTouchDevice(true)
       return
     }

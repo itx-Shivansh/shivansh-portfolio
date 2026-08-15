@@ -19,7 +19,7 @@ export default function ProjectsScene() {
       const travel = projects.length * 800
 
       if (sectionRef.current) {
-        sectionRef.current.style.height = `calc(100vh + ${travel}px)`
+        sectionRef.current.style.height = `calc(100dvh + ${travel}px)`
       }
 
       ScrollTrigger.create({
@@ -54,11 +54,11 @@ export default function ProjectsScene() {
         <div
           ref={containerRef}
           className={clsx(
-            'sticky top-0 flex h-screen w-full flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-32 overflow-hidden z-10 pointer-events-none',
+            'sticky top-0 flex h-screen h-dvh w-full flex-col justify-center px-4 sm:px-12 md:px-20 lg:px-32 overflow-hidden z-10 pointer-events-none',
             selectedProject && 'opacity-0 pointer-events-none'
           )}
         >
-          <div className="absolute top-12 left-6 sm:left-12 md:left-20 lg:left-32 flex items-center gap-4 z-20">
+          <div className="absolute top-6 sm:top-12 left-4 sm:left-12 md:left-20 lg:left-32 flex items-center gap-4 z-20">
             <div className="flex items-center gap-3 rounded-full border border-[#F5B800]/30 bg-[#121215]/80 px-4 py-1.5 backdrop-blur-md shadow-lg">
               <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse"></span>
               <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">

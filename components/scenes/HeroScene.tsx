@@ -179,18 +179,18 @@ export default function HeroScene() {
       {/* Sticky Viewport Container */}
       <div
         ref={containerRef}
-        className="sticky top-0 flex h-screen w-full items-center justify-between px-8 sm:px-16 md:px-24 lg:pl-36 lg:pr-20 overflow-hidden z-10"
+        className="sticky top-0 flex h-screen h-dvh w-full items-center justify-between px-4 sm:px-16 md:px-24 lg:pl-36 lg:pr-20 overflow-hidden z-10"
       >
         {/* ── Left Hero Main Content ──────────────────────────────────── */}
-        <div className="flex w-full max-w-3xl flex-col items-start text-left select-none space-y-6 md:space-y-7">
+        <div className="flex w-full max-w-3xl flex-col items-start text-left select-none space-y-5 sm:space-y-6 md:space-y-7">
           {/* Top Badge Pill */}
           <div ref={badgeRef} className="flex items-center gap-3">
-            <div className="rounded-full border border-[#F5B800]/40 bg-[#121214]/80 px-4 py-1.5 backdrop-blur-md flex items-center gap-2.5 shadow-lg">
-              <span className="font-mono text-[11px] font-bold text-[#F5B800] tracking-widest uppercase">
-                ENGINEERING & AI
+            <div className="rounded-full border border-[#F5B800]/40 bg-[#121214]/80 px-3.5 sm:px-4 py-1.5 backdrop-blur-md flex flex-wrap items-center gap-2 sm:gap-2.5 shadow-lg">
+              <span className="font-mono text-[10px] sm:text-[11px] font-bold text-[#F5B800] tracking-widest uppercase">
+                ENGINEERING &amp; AI
               </span>
-              <span className="w-1 h-1 rounded-full bg-[#F5B800]" />
-              <span className="font-mono text-[11px] font-semibold text-neutral-300 tracking-widest uppercase">
+              <span className="w-1 h-1 rounded-full bg-[#F5B800] hidden xs:inline-block" />
+              <span className="font-mono text-[10px] sm:text-[11px] font-semibold text-neutral-300 tracking-widest uppercase">
                 DELHI TECHNOLOGICAL UNIVERSITY
               </span>
             </div>
@@ -199,7 +199,7 @@ export default function HeroScene() {
           {/* Huge Dual-Color Name Headline */}
           <h1
             ref={headlineRef}
-            className="font-display font-extrabold uppercase tracking-tight leading-[0.88] select-none text-[64px] sm:text-[92px] lg:text-[112px]"
+            className="font-display font-extrabold uppercase tracking-tight leading-[0.88] select-none text-[48px] xs:text-[60px] sm:text-[92px] lg:text-[112px]"
           >
             <span className="hero-word block text-white">SHIVANSH</span>
             <span className="hero-word block text-[#F5B800]">RAJ</span>

@@ -203,6 +203,41 @@ export default function Nav() {
           </a>
         </div>
       </aside>
+
+      {/* ── Mobile Floating Bottom Dock Bar ─────────────────────────────── */}
+      <nav
+        aria-label="Mobile navigation"
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex lg:hidden items-center gap-1 p-1.5 bg-[#0c0c0e]/90 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl pointer-events-auto select-none max-w-[92vw]"
+      >
+        {navItems.map((item) => {
+          const isActive =
+            (item.id === 'home' && activeSection === 'hero') ||
+            (item.id === 'about' && activeSection === 'journey') ||
+            (item.id === 'projects' && activeSection === 'projects') ||
+            (item.id === 'skills' && activeSection === 'skills') ||
+            (item.id === 'contact' && activeSection === 'contact')
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.targetSection)}
+              className={`min-w-[44px] min-h-[44px] px-3 py-2 rounded-full flex flex-col items-center justify-center transition-all duration-200 ${
+                isActive
+                  ? 'bg-[#1c180e] border border-[#F5B800]/50 text-[#F5B800] shadow-[0_0_10px_rgba(245,184,0,0.2)]'
+                  : 'text-neutral-400 hover:text-white'
+              }`}
+              aria-label={`Navigate to ${item.label}`}
+            >
+              <div className={isActive ? 'text-[#F5B800]' : ''}>
+                {item.icon}
+              </div>
+              <span className={`text-[9px] font-mono tracking-tight ${isActive ? 'text-[#F5B800] font-bold' : 'text-neutral-400'}`}>
+                {item.label}
+              </span>
+            </button>
+          )
+        })}
+      </nav>
     </>
   )
 }
