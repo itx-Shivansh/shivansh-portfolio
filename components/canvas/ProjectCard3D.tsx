@@ -153,6 +153,12 @@ function CardContent({
       playPromise.catch(() => {})
     }
 
+    const handleEnded = () => {
+      video.currentTime = 0
+      video.play().catch(() => {})
+    }
+    video.addEventListener('ended', handleEnded)
+
     // Background Blob pre-caching optimization
     acquireObjectUrl(videoSrc)
       .then((blobUrl) => {
@@ -171,6 +177,7 @@ function CardContent({
       cancelled = true
       video.removeEventListener('loadeddata', createAndSetTexture)
       video.removeEventListener('canplay', createAndSetTexture)
+      video.removeEventListener('ended', handleEnded)
       if (mountedTexture) {
         mountedTexture.dispose()
         mountedTexture = null
