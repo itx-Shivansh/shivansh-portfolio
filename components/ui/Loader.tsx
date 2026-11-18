@@ -264,7 +264,7 @@ export default function Loader() {
         {/* Barbershop Striped Glowing Progress Bar */}
         <div className="w-full max-w-xl mx-auto h-3.5 rounded-full bg-[#16140e] border border-[#F5B800]/40 p-0.5 shadow-[0_0_20px_rgba(245,184,0,0.25)] relative overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-[#F5B800] via-[#FFB300] to-[#E65100] transition-all duration-150 ease-out shadow-[0_0_12px_#F5B800] relative overflow-hidden"
+            className="h-full rounded-full bg-gradient-to-r from-[#F5B800] to-[#A67C00] transition-all duration-150 ease-out shadow-[0_0_12px_#F5B800] relative overflow-hidden"
             style={{ width: `${progress}%` }}
           >
             {/* Barbershop Diagonal Stripe Overlay */}

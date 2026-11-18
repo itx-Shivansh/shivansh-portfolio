@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { displayFont, bodyFont } from './fonts'
 import Scene from '@/components/canvas/Scene'
+import CursorSpotlight from '@/components/ui/CursorSpotlight'
 import Cursor from '@/components/ui/Cursor'
 import Nav from '@/components/ui/Nav'
 import Loader from '@/components/ui/Loader'
@@ -33,6 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SmoothScrollProvider>
           {/* Persistent WebGL canvas — rendered fixed behind all content */}
           <Scene />
+
+          {/* Gold ambient cursor spotlight — z-[1], above black base, below all content */}
+          <CursorSpotlight />
 
           {/* Global UI Overlays */}
           <TabTitleController />

@@ -309,7 +309,7 @@ export default function ProjectDetailOverlay({ project, onClose }: ProjectDetail
               href={project.links.live}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#F5B800] to-[#E65100] hover:brightness-110 px-7 py-3.5 text-xs font-mono font-extrabold text-black transition-all shadow-lg hover:scale-[1.02]"
+              className="group inline-flex items-center gap-2 rounded-2xl bg-[#F5B800] hover:brightness-110 px-7 py-3.5 text-xs font-mono font-extrabold text-black transition-all shadow-lg hover:scale-[1.02]"
             >
               <span>View Live Demo</span>
               <span className="transition-transform group-hover:translate-x-1">
