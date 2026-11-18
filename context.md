@@ -168,10 +168,58 @@ Project_Shivansh/
 2. **Chunk 2 (Done):** Palette swap to gold and black — defined gold (`#F5B800`) and dim gold (`#A67C00`), removed cyan and violet tokens, updated selection, cursor, HUD, CameraRig lighting, and contact button.
 3. **Chunk 3 (Done):** Gold cursor spotlight (desktop-only interactive glow at `z-[1]`, 600px radial gradient, lerp 0.12, rAF with idle cutoff, zero mousemove React re-renders) + orange gradient clearance (`#E65100`, `#FFB300`).
 4. **Chunk 4 (Done):** Two-column shell — fixed left column (hero/identity/nav) + scrolling right column (normal document flow: About, HTML ProjectsList, Skills, Contact). Unmounted WebGL Scene, unmounted HeroScene and ProjectsScene, decoupled Loader to fixed 800ms sequence, updated SECTION_IDS to 4 canonical sections, replaced ScrollTriggers with IntersectionObserver.
-5. **Chunk 5:** About with photo + consolidate journey content + font decision.
-6. **Chunk 6:** Polish: solid card surfaces, remove backdrop-blur, hover states, spotlight tuning.
+5. **Chunk 5 (Done):** About section with personal photo (`public/images/shivansh.jpg`) + consolidated education content into `content/journey.ts`.
+6. **Chunk 6:** Polish: solid card surfaces, remove backdrop-blur, hover states, spotlight tuning + font decision (moved from Chunk 5).
 7. **Chunk 7:** Cleanup: delete R3F canvas/scene files, orphans, /style-guide, uninstall three and @react-three/*, decide on GSAP/Lenis.
 8. **Chunk 8:** Mobile polish, responsive tuning, performance audit, and production deployment check (merge to main via a Vercel preview).
+
+## Old journey.ts (replaced)
+```ts
+export interface Milestone {
+  year: string
+  title: string
+  description: string
+}
+
+export const milestones: Milestone[] = [
+  {
+    year: '2024',
+    title: 'Started Engineering at DTU',
+    description:
+      'Joined Delhi Technological University in Mechanical Engineering (Automobile). This marked the beginning of my engineering journey and sparked my interest in software development beyond the classroom.',
+  },
+  {
+    year: '2024',
+    title: 'Entered the World of Programming',
+    description:
+      'Started learning programming from scratch, exploring web development, Python, Java, and problem-solving while discovering my passion for software engineering.',
+  },
+  {
+    year: '2025',
+    title: 'Built My First AI Applications',
+    description:
+      'Developed AI-powered assistants focused on intelligent conversations, automation, and productivity. This helped me understand how AI can solve practical problems.',
+  },
+  {
+    year: '2025',
+    title: 'Started Building Real Products',
+    description:
+      'Shifted from learning concepts to creating complete software projects including AI assistants, automation tools, and full-stack applications with real-world use cases.',
+  },
+  {
+    year: '2026',
+    title: 'Expanding Into Full-Stack & AI Engineering',
+    description:
+      'Focused on developing scalable applications, improving software engineering skills, strengthening DSA, and building products that combine artificial intelligence with modern web technologies.',
+  },
+  {
+    year: 'Future',
+    title: 'The Vision',
+    description:
+      'Build innovative AI products that impact millions of users while growing into a software engineer capable of creating world-class digital experiences.',
+  },
+]
+```
 
 ## Chunk 4 Implementation Plan
 - **SECTION_IDS & SECTION_ORDER (`lib/constants.ts` & `lib/scrollStore.ts`):**
@@ -226,3 +274,9 @@ Project_Shivansh/
   - **Constants & Store:** Removed `HERO` from `SECTION_IDS` and `SECTION_ORDER`. Default active section is `SECTION_IDS.JOURNEY`.
   - **WebGL Teardown:** Unmounted `<Scene />` from `app/layout.tsx`, `<HeroScene />` and `<ProjectsScene />` from `app/page.tsx`.
   - **Loader Decoupling:** Replaced 4-video preloading gate in `Loader.tsx` with a fixed ~800ms progress sequence preserving all diagnostic visuals. First Load JS dropped from 218 kB to 148 kB.
+- **Chunk 5: Personal Photo in About & Education Consolidation (2026-11-18):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Assets:** Photo available at `public/images/shivansh.jpg` (1254x1254 px, 2.21 MB). Note: `public/resume.pdf` is missing on disk.
+  - **About Photo:** Added personal portrait to `components/scenes/JourneyScene.tsx` using `next/image` (`width={400}`, `height={500}`, portrait 4:5, `object-cover`, sizes configured). Treated with `rounded-xl`, 1px border `rgba(245,184,0,0.3)`, and an offset gold outline frame behind it (offset 12px via `translate-x-3 translate-y-3`, shifts to 8px on hover with `duration-300`). Sits in a sub-column (~1/3 width at `lg`) beside the quote card; collapses above quote card with `max-w-xs` below `lg`.
+  - **Education Data Consolidation:** Preserved old `content/journey.ts` milestone data in `context.md`. Rewrote `content/journey.ts` to export typed `educationHistory` (`EducationItem[]`) matching the displayed education cards verbatim. `JourneyScene.tsx` now renders education cards dynamically.
+  - **Roadmap Adjustment:** Fonts decision moved to Chunk 6.

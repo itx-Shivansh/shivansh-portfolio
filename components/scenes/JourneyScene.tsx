@@ -1,7 +1,9 @@
 'use client'
 
 import { useRef } from 'react'
+import Image from 'next/image'
 import { sound } from '@/lib/sound'
+import { educationHistory } from '@/content/journey'
 
 export default function JourneyScene() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -102,7 +104,7 @@ export default function JourneyScene() {
                 </div>
 
                 {/* Item 4 */}
-                <div className="flex flex-col items-start space-y-1.5 md:pl-4 pt-2 md:pt-0">
+                <div className="flex flex-col items-start space-y-1.5 md:pl-4 pr-2 pt-2 md:pt-0">
                   <div className="text-[#F5B800]">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <circle cx="12" cy="12" r="10" />
@@ -117,15 +119,41 @@ export default function JourneyScene() {
             </div>
           </div>
 
-          {/* Right Column: Quote Card */}
-          <div className="w-full">
-            <div className="w-full rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-7 shadow-2xl space-y-4">
-              <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
-              <p className="text-neutral-200 text-sm italic font-normal leading-relaxed">
-                Code is not just what I write, it&apos;s how I solve problems, create impact and make ideas real.
-              </p>
-              <div className="font-mono text-xs font-bold text-[#F5B800] pt-2">
-                &mdash; Shivansh Raj
+          {/* ── Photo & Quote Card Row ───────────────────────────────── */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch pt-2">
+            {/* Left Photo Sub-Column (~1/3 at lg, max-w-xs on mobile) */}
+            <div className="w-full max-w-xs lg:max-w-none mx-auto lg:mx-0 lg:col-span-5 p-2 sm:p-3 flex items-center justify-center">
+              <div className="group relative w-full aspect-[4/5] rounded-xl">
+                {/* Offset Gold Outline Frame Behind Photo */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 translate-x-3 translate-y-3 rounded-xl border border-[#F5B800]/20 pointer-events-none transition-transform duration-300 ease-out group-hover:translate-x-2 group-hover:translate-y-2"
+                />
+
+                {/* Photo Image Card */}
+                <div className="relative h-full w-full overflow-hidden rounded-xl border border-[#F5B800]/30 bg-[#0d0d10] shadow-xl">
+                  <Image
+                    src="/images/shivansh.jpg"
+                    alt="Shivansh Raj"
+                    width={400}
+                    height={500}
+                    className="h-full w-full object-cover"
+                    sizes="(max-width: 768px) 320px, (max-width: 1024px) 320px, 260px"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Right Quote Card (~2/3 at lg) */}
+            <div className="w-full lg:col-span-7 flex">
+              <div className="w-full rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-7 shadow-2xl space-y-4 flex flex-col justify-between">
+                <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
+                <p className="text-neutral-200 text-sm italic font-normal leading-relaxed">
+                  Code is not just what I write, it&apos;s how I solve problems, create impact and make ideas real.
+                </p>
+                <div className="font-mono text-xs font-bold text-[#F5B800] pt-2">
+                  &mdash; Shivansh Raj
+                </div>
               </div>
             </div>
           </div>
@@ -251,42 +279,21 @@ export default function JourneyScene() {
 
             {/* Vertical Timeline List */}
             <div className="relative pl-6 space-y-7 border-l border-[#F5B800]/30 ml-2">
-              {/* Item 1 */}
-              <div className="relative space-y-1">
-                <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#F5B800] shadow-[0_0_8px_#F5B800]" />
-                <h4 className="text-xs font-bold text-white">Delhi Technological University (DTU)</h4>
-                <p className="text-[11px] text-neutral-300 font-medium">B.Tech in Mechanical Engineering</p>
-                <p className="text-[11px] text-neutral-400 font-normal">Specialization in Automotive (AE)</p>
-                <div className="pt-1">
-                  <span className="inline-block rounded-full border border-[#F5B800]/40 bg-[#1b1912] px-3 py-0.5 font-mono text-[10px] font-bold text-[#F5B800]">
-                    2024 &ndash; 2028
-                  </span>
+              {educationHistory.map((item) => (
+                <div key={item.id} className="relative space-y-1">
+                  <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#F5B800] shadow-[0_0_8px_#F5B800]" />
+                  <h4 className="text-xs font-bold text-white">{item.institution}</h4>
+                  <p className="text-[11px] text-neutral-300 font-medium">{item.degree}</p>
+                  {item.specialization && (
+                    <p className="text-[11px] text-neutral-400 font-normal">{item.specialization}</p>
+                  )}
+                  <div className="pt-1">
+                    <span className="inline-block rounded-full border border-[#F5B800]/40 bg-[#1b1912] px-3 py-0.5 font-mono text-[10px] font-bold text-[#F5B800]">
+                      {item.period}
+                    </span>
+                  </div>
                 </div>
-              </div>
-
-              {/* Item 2 */}
-              <div className="relative space-y-1">
-                <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#F5B800] shadow-[0_0_8px_#F5B800]" />
-                <h4 className="text-xs font-bold text-white">Kulachi Hansraj Model School</h4>
-                <p className="text-[11px] text-neutral-400 font-normal">Senior Secondary (CBSE) &ndash; PCM</p>
-                <div className="pt-1">
-                  <span className="inline-block rounded-full border border-[#F5B800]/40 bg-[#1b1912] px-3 py-0.5 font-mono text-[10px] font-bold text-[#F5B800]">
-                    2024
-                  </span>
-                </div>
-              </div>
-
-              {/* Item 3 */}
-              <div className="relative space-y-1">
-                <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#F5B800] shadow-[0_0_8px_#F5B800]" />
-                <h4 className="text-xs font-bold text-white">Kulachi Hansraj Model School</h4>
-                <p className="text-[11px] text-neutral-400 font-normal">Secondary (CBSE)</p>
-                <div className="pt-1">
-                  <span className="inline-block rounded-full border border-[#F5B800]/40 bg-[#1b1912] px-3 py-0.5 font-mono text-[10px] font-bold text-[#F5B800]">
-                    2022
-                  </span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -294,4 +301,3 @@ export default function JourneyScene() {
     </section>
   )
 }
-
