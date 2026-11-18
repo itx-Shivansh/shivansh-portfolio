@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { displayFont, bodyFont } from './fonts'
 import Scene from '@/components/canvas/Scene'
-import ScrollVideoBackground from '@/components/canvas/ScrollVideoBackground'
 import Cursor from '@/components/ui/Cursor'
 import Nav from '@/components/ui/Nav'
 import Loader from '@/components/ui/Loader'
@@ -32,9 +31,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-screen bg-bg-base font-body text-text-primary antialiased selection:bg-accent-cyan/20 selection:text-white">
         <SmoothScrollProvider>
-          {/* Scroll-Scrubbed Video Background Engine */}
-          <ScrollVideoBackground />
-
           {/* Persistent WebGL canvas — rendered fixed behind all content */}
           <Scene />
 

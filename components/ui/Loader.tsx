@@ -75,8 +75,6 @@ const PROJECT_VIDEOS = [
 export default function Loader() {
   const {
     setIsLoaded,
-    framesLoaded,
-    totalFramesToPreload,
     videosLoadedCount,
     totalVideosToPreload,
     setVideosLoadedCount,
@@ -152,10 +150,9 @@ export default function Loader() {
     }, 10000)
 
     const update = () => {
-      const framesRatio = Math.min(1, framesLoaded / Math.max(1, totalFramesToPreload))
       const videosRatio = Math.min(1, videosLoadedCount / Math.max(1, totalVideosToPreload))
 
-      let target = Math.floor(framesRatio * 50 + videosRatio * 50)
+      let target = Math.floor(videosRatio * 100)
       if (forceComplete) target = 100
 
       // Smooth step towards target progress
@@ -192,8 +189,6 @@ export default function Loader() {
       // Update HUD status text based on active preloading focus
       if (videosLoadedCount < totalVideosToPreload) {
         setStatusMessage(`Preloading 3D Project Videos (${videosLoadedCount}/${totalVideosToPreload})...`)
-      } else if (framesLoaded < totalFramesToPreload) {
-        setStatusMessage(`Decoding Background Sequence (${framesLoaded}/${totalFramesToPreload} frames)...`)
       } else {
         setStatusMessage('Redirecting to experience...')
       }
@@ -210,8 +205,6 @@ export default function Loader() {
       clearTimeout(timeoutId)
     }
   }, [
-    framesLoaded,
-    totalFramesToPreload,
     videosLoadedCount,
     totalVideosToPreload,
     setIsLoaded,

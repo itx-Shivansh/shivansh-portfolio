@@ -22,6 +22,7 @@
     /* Accent Palette - Electric Cyan to Violet */
     --color-accent-cyan: #00d9ff;
     --color-accent-violet: #8b5cf6;
+    --color-accent-gold: #F5B800;
     --color-accent-glow: rgba(0, 217, 255, 0.15);
 
     /* Easing Functions for CSS */

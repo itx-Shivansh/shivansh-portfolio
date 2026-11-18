@@ -26,6 +26,7 @@ const config: Config = {
         accent: {
           cyan: 'var(--color-accent-cyan)',
           violet: 'var(--color-accent-violet)',
+          gold: 'var(--color-accent-gold)',
         },
         text: {
           primary: 'var(--color-text-primary)',

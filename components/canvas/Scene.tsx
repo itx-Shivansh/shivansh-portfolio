@@ -9,10 +9,8 @@ import ProjectCarousel3D from './ProjectCarousel3D'
 import { useScrollStore } from '@/lib/scrollStore'
 
 /**
- * WebGL Canvas — transparent R3F layer that composites post-processing
- * (motion blur, chromatic aberration, bloom) on top of the scroll-scrubbed
- * video background. Background objects have been removed; scroll.mp4 is
- * the sole background visual.
+ * WebGL Canvas — transparent R3F layer hosting the spatial 3D gallery
+ * carousel, camera rig, and post-processing effects.
  */
 export default function Scene() {
   const activeSection = useScrollStore((state) => state.activeSection)

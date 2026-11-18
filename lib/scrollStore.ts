@@ -4,7 +4,6 @@ import type Lenis from 'lenis'
 import { Project } from '@/content/projects'
 
 export type CursorMode = 'default' | 'hover' | 'text' | 'hidden'
-export type VideoStatus = 'idle' | 'loading' | 'ready' | 'error' | 'fallback'
 
 interface ScrollState {
   scrollProgress: number
@@ -18,12 +17,7 @@ interface ScrollState {
   cursorState: CursorMode
   cursorText: string | null
 
-  videoStatus: VideoStatus
-  videoDuration: number
-
-  // Real Asset Preloading State
-  framesLoaded: number
-  totalFramesToPreload: number
+  // Real Asset Preloading State (3D project video textures)
   videosLoadedCount: number
   totalVideosToPreload: number
 
@@ -37,8 +31,6 @@ interface ScrollState {
   setIsLoaded: (loaded: boolean) => void
   setIsDebugOpen: (open: boolean | ((prev: boolean) => boolean)) => void
   setCursorState: (state: CursorMode, text?: string | null) => void
-  setVideoStatus: (status: VideoStatus, duration?: number) => void
-  setFramesLoaded: (loaded: number, total?: number) => void
   setVideosLoadedCount: (loaded: number, total?: number) => void
   setLenis: (lenis: Lenis | null) => void
   scrollToSection: (sectionId: SectionId) => void
@@ -62,11 +54,6 @@ export const useScrollStore = create<ScrollState>((set, get) => ({
   cursorState: 'default',
   cursorText: null,
 
-  videoStatus: 'idle',
-  videoDuration: 0,
-
-  framesLoaded: 0,
-  totalFramesToPreload: 60,
   videosLoadedCount: 0,
   totalVideosToPreload: 4,
 
@@ -89,16 +76,6 @@ export const useScrollStore = create<ScrollState>((set, get) => ({
       isDebugOpen: typeof open === 'function' ? open(state.isDebugOpen) : open,
     })),
   setCursorState: (state, text = null) => set({ cursorState: state, cursorText: text }),
-  setVideoStatus: (status, duration = 0) =>
-    set((state) => ({
-      videoStatus: status,
-      videoDuration: duration > 0 ? duration : state.videoDuration,
-    })),
-  setFramesLoaded: (loaded, total = 60) =>
-    set((state) => ({
-      framesLoaded: Math.max(state.framesLoaded, loaded),
-      totalFramesToPreload: total,
-    })),
   setVideosLoadedCount: (loaded, total = 4) =>
     set((state) => ({
       videosLoadedCount: Math.max(state.videosLoadedCount, loaded),
