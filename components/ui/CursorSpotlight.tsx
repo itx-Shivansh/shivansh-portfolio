@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react'
  * CursorSpotlight — Soft ambient gold illumination layer.
  *
  * Sits at z-[1] directly above the pitch-black base (#000000) and behind
- * all scene content, cards, and WebGL canvas elements.
+ * all scene content and cards.
  * Desktop only: enabled via (hover: hover) and (pointer: fine).
  * Zero React re-renders during mouse movement; drives CSS custom properties
  * on a requestAnimationFrame lerp loop that idles when mouse stops.

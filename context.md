@@ -11,10 +11,7 @@
 - **UI & Runtime:** React `^18`, React DOM `^18`, Node `v24.11.1` (no node version pinned in package.json)
 - **Package Manager:** `npm` (via `package-lock.json`)
 - **3D & Graphics:** 
-  - `three`: `^0.167.0`
-  - `@react-three/fiber`: `^8.17.10`
-  - `@react-three/drei`: `^9.112.0`
-  - `@react-three/postprocessing`: `^2.16.3`
+  - Uninstalled in Chunk 7: `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing`, `@types/three` (all 3D WebGL runtime code removed)
 - **Animation & Scrolling:**
   - `gsap`: `^3.12.5`
   - `@gsap/react`: `^2.1.1`
@@ -37,30 +34,16 @@ Project_Shivansh/
 │   ├── fonts.ts
 │   ├── globals.css
 │   ├── layout.tsx
-│   ├── page.tsx
-│   └── style-guide/ (candidate for deletion in future chunk)
-│       └── page.tsx
+│   └── page.tsx
 ├── components/
-│   ├── canvas/
-│   │   ├── CameraRig.tsx
-│   │   ├── ContactAtmosphere.tsx (orphan - to delete in Chunk 7)
-│   │   ├── HeroShaderBackground.tsx (orphan - to delete in Chunk 7)
-│   │   ├── Journey3DObjects.tsx (orphan - to delete in Chunk 7)
-│   │   ├── ProjectCard3D.tsx
-│   │   ├── ProjectCarousel3D.tsx
-│   │   ├── Scene.tsx
-│   │   ├── ScenePostProcessing.tsx
-│   │   └── Skills3DConstellation.tsx (orphan - to delete in Chunk 7)
 │   ├── providers/
 │   │   ├── MainShell.tsx
 │   │   ├── SmoothScrollProvider.tsx
 │   │   └── TabTitleController.tsx
 │   ├── scenes/
 │   │   ├── ContactScene.tsx
-│   │   ├── HeroScene.tsx (unmounted - to delete in Chunk 7)
 │   │   ├── JourneyScene.tsx
 │   │   ├── ProjectDetailOverlay.tsx
-│   │   ├── ProjectsScene.tsx (unmounted - to delete in Chunk 7)
 │   │   └── SkillsScene.tsx
 │   ├── sections/
 │   │   └── ProjectsList.tsx
@@ -77,7 +60,6 @@ Project_Shivansh/
 │   ├── projects.ts
 │   └── skills.ts
 ├── docs/
-│   └── transitions.md
 ├── lib/
 │   ├── motion/
 │   │   ├── index.ts
@@ -87,7 +69,10 @@ Project_Shivansh/
 │   ├── sound.ts
 │   └── soundStore.ts
 ├── public/
-│   └── videos/ (4 MP4 files: aria_vid.mp4, ind_sig.mp4, obsidian_vid.mp4, shivantra_vid.mp4, 2.96 MB)
+│   ├── images/
+│   │   └── shivansh.jpg (181 KB real JPEG)
+│   ├── videos/ (4 MP4 files: aria_vid.mp4, ind_sig.mp4, obsidian_vid.mp4, shivantra_vid.mp4, 2.96 MB)
+│   └── resume.pdf (126 KB)
 ├── .env.local
 ├── .eslintrc.json
 ├── .gitignore
@@ -170,7 +155,7 @@ Project_Shivansh/
 5. **Chunk 5 (Done):** About section with personal photo (`public/images/shivansh.jpg`) + consolidated education content into `content/journey.ts`.
 6. **Chunk 6 (Done):** Polish: photo hygiene (real JPEG 1000x1000, 181 KB), card surfaces (`surface.card` & `surface['card-hover']`), removed backdrop-blur from all active scene cards, JetBrains Mono font integration, projects list hover dimming (lg+), CursorSpotlight constants extracted.
 6b. **Chunk 6b (Done):** Layout fixes: Name container query clamp `clamp(2rem, 10.5cqw, 4.5rem)` in left column; Skills section re-layout (stacked header, wrapping filter pills, full-width compact stats row, responsive category grid with unbreakable tags/pills, quote card relocated below grid).
-7. **Chunk 7:** Cleanup: delete R3F canvas/scene files, orphans, /style-guide, uninstall three and @react-three/*, decide on GSAP/Lenis.
+7. **Chunk 7 (Done):** Cleanup: deleted 9 WebGL canvas files, deleted `components/canvas/`, deleted `HeroScene.tsx` & `ProjectsScene.tsx`, deleted `app/style-guide/`, deleted `docs/transitions.md`. Uninstalled `three`, `@react-three/*`, and `@types/three`. Cleaned `scrollStore.ts` and `constants.ts`.
 8. **Chunk 8:** Mobile polish, responsive tuning, performance audit, and production deployment check (merge to main via a Vercel preview).
 
 ## Old journey.ts (replaced)

@@ -17,10 +17,6 @@ interface ScrollState {
   cursorState: CursorMode
   cursorText: string | null
 
-  // Real Asset Preloading State (3D project video textures)
-  videosLoadedCount: number
-  totalVideosToPreload: number
-
   lenis: Lenis | null
 
   setScrollProgress: (progress: number) => void
@@ -31,7 +27,6 @@ interface ScrollState {
   setIsLoaded: (loaded: boolean) => void
   setIsDebugOpen: (open: boolean | ((prev: boolean) => boolean)) => void
   setCursorState: (state: CursorMode, text?: string | null) => void
-  setVideosLoadedCount: (loaded: number, total?: number) => void
   setLenis: (lenis: Lenis | null) => void
   scrollToSection: (sectionId: SectionId) => void
 }
@@ -53,9 +48,6 @@ export const useScrollStore = create<ScrollState>((set, get) => ({
   cursorState: 'default',
   cursorText: null,
 
-  videosLoadedCount: 0,
-  totalVideosToPreload: 4,
-
   lenis: null,
 
   setScrollProgress: (progress) => set({ scrollProgress: progress }),
@@ -75,11 +67,6 @@ export const useScrollStore = create<ScrollState>((set, get) => ({
       isDebugOpen: typeof open === 'function' ? open(state.isDebugOpen) : open,
     })),
   setCursorState: (state, text = null) => set({ cursorState: state, cursorText: text }),
-  setVideosLoadedCount: (loaded, total = 4) =>
-    set((state) => ({
-      videosLoadedCount: Math.max(state.videosLoadedCount, loaded),
-      totalVideosToPreload: total,
-    })),
   setLenis: (lenis) => set({ lenis }),
 
   scrollToSection: (sectionId) => {
