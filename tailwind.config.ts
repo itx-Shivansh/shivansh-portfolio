@@ -12,8 +12,13 @@ const config: Config = {
       fontFamily: {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],
         body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
       },
       colors: {
+        surface: {
+          card: 'var(--color-surface-card)',
+          'card-hover': 'var(--color-surface-card-hover)',
+        },
         bg: {
           base: 'rgb(var(--color-bg-base) / <alpha-value>)',
           surface: 'rgb(var(--color-bg-surface) / <alpha-value>)',

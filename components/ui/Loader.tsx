@@ -210,7 +210,7 @@ export default function Loader() {
             return (
               <div
                 key={mod.id}
-                className="relative rounded-xl border border-white/10 bg-[#0d0d10]/90 p-4 flex flex-col items-center justify-center space-y-2 backdrop-blur-md transition-all"
+                className="relative rounded-xl border border-white/10 bg-surface-card p-4 flex flex-col items-center justify-center space-y-2 transition-all"
               >
                 {/* Module Corner Brackets */}
                 <span className="absolute top-1 left-1 text-[#F5B800] text-xs">┌</span>

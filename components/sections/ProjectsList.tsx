@@ -17,7 +17,7 @@ export default function ProjectsList() {
     <section id="projects" className="relative w-full space-y-6 scroll-mt-20">
       {/* Section Header / Chapter Badge */}
       <div className="flex items-center justify-between gap-4">
-        <div className="rounded-full border border-[#F5B800]/30 bg-[#121215]/80 px-4 py-1.5 backdrop-blur-md flex items-center gap-2.5 shadow-lg">
+        <div className="rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 flex items-center gap-2.5 shadow-lg">
           <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
           <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
             Projects
@@ -34,8 +34,8 @@ export default function ProjectsList() {
         </p>
       </div>
 
-      {/* HTML Cards List */}
-      <div className="space-y-4">
+      {/* HTML Cards List with lg hover-dimming */}
+      <div className="space-y-4 lg:group/projects">
         {projects.map((project) => (
           <div
             key={project.id}
@@ -49,7 +49,7 @@ export default function ProjectsList() {
               }
             }}
             onMouseEnter={() => sound.playHover()}
-            className="group relative block w-full rounded-2xl border border-white/10 bg-[#0d0d10] p-6 sm:p-7 text-left transition-all duration-300 hover:border-[#F5B800]/60 hover:shadow-[0_0_25px_rgba(245,184,0,0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] cursor-pointer"
+            className="group relative block w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 sm:p-7 text-left transition-all duration-300 hover:border-[#F5B800]/60 hover:shadow-[0_0_25px_rgba(245,184,0,0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] cursor-pointer lg:group-hover/projects:opacity-60 lg:hover:!opacity-100"
             aria-label={`Open project details for ${project.title}`}
           >
             <div className="space-y-3">

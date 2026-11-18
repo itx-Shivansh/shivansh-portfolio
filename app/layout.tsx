@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { displayFont, bodyFont } from './fonts'
+import { displayFont, bodyFont, monoFont } from './fonts'
 import CursorSpotlight from '@/components/ui/CursorSpotlight'
 import Cursor from '@/components/ui/Cursor'
 import Nav from '@/components/ui/Nav'
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${displayFont.variable} ${bodyFont.variable} bg-bg-base font-body text-text-primary antialiased`}
+      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} bg-bg-base font-body text-text-primary antialiased`}
     >
       <body className="min-h-screen bg-bg-base font-body text-text-primary antialiased selection:bg-accent-gold/20 selection:text-white">
         <SmoothScrollProvider>

@@ -62,7 +62,7 @@ export default function SkillsScene() {
         {/* ── Top Header Row ─────────────────────────────────────────── */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-[#F5B800]/30 bg-[#121215]/80 px-4 py-1.5 backdrop-blur-md shadow-lg">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 shadow-lg">
               <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
               <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
                 Skills &amp; Competencies
@@ -89,7 +89,7 @@ export default function SkillsScene() {
               className={`rounded-full border px-4 py-2 font-mono text-xs font-bold transition-all duration-200 ${
                 activeCategory === null
                   ? 'border-[#F5B800] bg-[#1a1710] text-[#F5B800] shadow-[0_0_12px_rgba(245,184,0,0.2)]'
-                  : 'border-white/10 bg-[#0e0e11]/80 text-neutral-400 hover:border-white/30 hover:text-white'
+                  : 'border-white/10 bg-surface-card hover:bg-surface-card-hover text-neutral-400 hover:border-white/30 hover:text-white'
               }`}
             >
               ALL ({skillGroups.length})
@@ -108,7 +108,7 @@ export default function SkillsScene() {
                   className={`rounded-full border px-4 py-2 font-mono text-xs font-semibold transition-all duration-200 ${
                     isSelected
                       ? 'border-[#F5B800] bg-[#1a1710] text-[#F5B800] shadow-[0_0_12px_rgba(245,184,0,0.2)]'
-                      : 'border-white/10 bg-[#0e0e11]/80 text-neutral-400 hover:border-white/30 hover:text-white'
+                      : 'border-white/10 bg-surface-card hover:bg-surface-card-hover text-neutral-400 hover:border-white/30 hover:text-white'
                   }`}
                 >
                   {group.category.toUpperCase()}
@@ -125,7 +125,7 @@ export default function SkillsScene() {
             {filteredGroups.map((group) => (
               <div
                 key={group.category}
-                className="group rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-6 shadow-2xl transition-all duration-300 hover:border-[#F5B800]/40 space-y-4"
+                className="group rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 shadow-2xl transition-all duration-300 hover:border-[#F5B800]/40 space-y-4"
               >
                 {/* Card Header */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
@@ -152,7 +152,7 @@ export default function SkillsScene() {
                     <div
                       key={idx}
                       onMouseEnter={() => sound.playHover()}
-                      className="rounded-xl border border-white/10 bg-[#121215] px-3.5 py-2 text-xs font-medium text-neutral-200 transition-all duration-200 hover:border-[#F5B800]/50 hover:text-[#F5B800] flex items-center justify-between gap-2"
+                      className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-3.5 py-2 text-xs font-medium text-neutral-200 transition-all duration-200 hover:border-[#F5B800]/50 hover:text-[#F5B800] flex items-center justify-between gap-2"
                     >
                       <span className="font-semibold text-white">{skill.name}</span>
                       {skill.level && (
@@ -170,7 +170,7 @@ export default function SkillsScene() {
           {/* Right Column: Skills Overview & Quote Stack */}
           <div className="lg:col-span-4 space-y-6">
             {/* Card 1: Skills Overview Card */}
-            <div className="rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-6 shadow-2xl space-y-5">
+            <div className="rounded-2xl border border-white/10 bg-surface-card p-6 shadow-2xl space-y-5">
               <div className="flex items-center gap-2.5 border-b border-white/10 pb-4">
                 <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -200,7 +200,7 @@ export default function SkillsScene() {
             </div>
 
             {/* Card 2: Quote Card */}
-            <div className="rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-6 shadow-2xl space-y-3">
+            <div className="rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover transition-colors p-6 shadow-2xl space-y-3">
               <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
               <p className="text-neutral-200 text-xs sm:text-sm italic font-normal leading-relaxed">
                 I focus on learning deeply, building consistently, and solving real-world problems with clean and efficient code.

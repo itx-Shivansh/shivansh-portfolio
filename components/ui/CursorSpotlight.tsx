@@ -11,6 +11,18 @@ import { useEffect, useRef, useState } from 'react'
  * Zero React re-renders during mouse movement; drives CSS custom properties
  * on a requestAnimationFrame lerp loop that idles when mouse stops.
  */
+
+// Radius of the ambient spotlight circle in pixels
+const SPOTLIGHT_RADIUS = 600
+// Opacity at the spotlight centre (gold rgba alpha)
+const SPOTLIGHT_ALPHA_CENTER = 0.07
+// Opacity at the mid-gradient stop (40% from centre)
+const SPOTLIGHT_ALPHA_MID = 0.035
+// Lerp factor — higher = snappier tracking (0.0–1.0)
+const SPOTLIGHT_LERP = 0.12
+// Idle threshold — RAF stops when delta below this (px)
+const SPOTLIGHT_IDLE_THRESHOLD = 0.2
+
 export default function CursorSpotlight() {
   const spotlightRef = useRef<HTMLDivElement>(null)
   const [isSupported, setIsSupported] = useState<boolean>(false)
@@ -53,9 +65,9 @@ export default function CursorSpotlight() {
       const dx = mousePos.current.x - currentPos.current.x
       const dy = mousePos.current.y - currentPos.current.y
 
-      // Lerp with 0.12 dampening factor for responsive, natural trailing
-      currentPos.current.x += dx * 0.12
-      currentPos.current.y += dy * 0.12
+      // Lerp with dampening factor for responsive, natural trailing
+      currentPos.current.x += dx * SPOTLIGHT_LERP
+      currentPos.current.y += dy * SPOTLIGHT_LERP
 
       if (spotlightRef.current) {
         spotlightRef.current.style.setProperty('--spot-x', `${currentPos.current.x.toFixed(1)}px`)
@@ -63,7 +75,7 @@ export default function CursorSpotlight() {
       }
 
       // If close enough to target, idle the loop to conserve CPU/GPU
-      if (Math.abs(dx) < 0.2 && Math.abs(dy) < 0.2) {
+      if (Math.abs(dx) < SPOTLIGHT_IDLE_THRESHOLD && Math.abs(dy) < SPOTLIGHT_IDLE_THRESHOLD) {
         currentPos.current.x = mousePos.current.x
         currentPos.current.y = mousePos.current.y
         if (spotlightRef.current) {
@@ -156,8 +168,7 @@ export default function CursorSpotlight() {
       className="fixed inset-0 pointer-events-none z-[1] transition-opacity duration-500 ease-out"
       style={{
         opacity: 0,
-        background:
-          'radial-gradient(600px circle at var(--spot-x, -9999px) var(--spot-y, -9999px), rgba(245, 184, 0, 0.07) 0%, rgba(245, 184, 0, 0.035) 40%, transparent 80%)',
+        background: `radial-gradient(${SPOTLIGHT_RADIUS}px circle at var(--spot-x, -9999px) var(--spot-y, -9999px), rgba(245, 184, 0, ${SPOTLIGHT_ALPHA_CENTER}) 0%, rgba(245, 184, 0, ${SPOTLIGHT_ALPHA_MID}) 40%, transparent 80%)`,
       }}
     />
   )

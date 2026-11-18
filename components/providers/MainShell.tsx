@@ -28,7 +28,7 @@ export default function MainShell({ children }: { children: React.ReactNode }) {
             {/* Top Identity Block */}
             <div className="space-y-5">
               {/* Badge Pill */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#F5B800]/30 bg-[#121215]/80 px-3.5 py-1 text-xs font-mono font-semibold text-[#F5B800] backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#F5B800]/30 bg-surface-card px-3.5 py-1 text-xs font-mono font-semibold text-[#F5B800]">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-pulse" />
                 <span>ENGINEERING &amp; AI · DTU</span>
               </div>
@@ -69,7 +69,7 @@ export default function MainShell({ children }: { children: React.ReactNode }) {
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="px-5 py-2.5 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-white font-mono text-xs font-medium backdrop-blur-md transition-all duration-200 hover:border-[#F5B800]/50 hover:text-[#F5B800] flex items-center gap-2 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800]"
+                  className="px-5 py-2.5 rounded-xl border border-white/20 bg-surface-card hover:bg-surface-card-hover text-white font-mono text-xs font-medium transition-all duration-200 hover:border-[#F5B800]/50 hover:text-[#F5B800] flex items-center gap-2 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800]"
                   aria-label="Download Resume PDF"
                 >
                   <span>RESUME</span>

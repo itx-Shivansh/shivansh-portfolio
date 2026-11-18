@@ -25,8 +25,8 @@
   - `postcss`: `^8`
   - `clsx`: `^2.1.1`
 - **Typography:**
-  - Active: Google Fonts via `next/font/google`: `Syne` (display variable), `Inter` (body)
-  - Unused local font files in `app/fonts/`: `GeistVF.woff`, `GeistMonoVF.woff`
+  - Active: Google Fonts via `next/font/google`: `Syne` (display variable), `Inter` (body), `JetBrains_Mono` (mono variable `--font-mono`)
+  - Local font files in `app/fonts/`: deleted (Geist fonts removed)
 - **Tooling & Linting:** TypeScript `^5`, ESLint `^8`, `eslint-config-next` `14.2.35`, Prettier `^3.3.3`
 
 ## Folder Structure
@@ -34,9 +34,6 @@
 Project_Shivansh/
 ├── app/
 │   ├── favicon.ico
-│   ├── fonts/
-│   │   ├── GeistMonoVF.woff
-│   │   └── GeistVF.woff
 │   ├── fonts.ts
 │   ├── globals.css
 │   ├── layout.tsx
@@ -76,7 +73,7 @@ Project_Shivansh/
 ├── content/
 │   ├── contact.ts
 │   ├── identity.ts
-│   ├── journey.ts (orphan - data not imported by JourneyScene)
+│   ├── journey.ts (active - educationHistory exported)
 │   ├── projects.ts
 │   └── skills.ts
 ├── docs/
@@ -123,7 +120,9 @@ Project_Shivansh/
 - **Surface & Backgrounds:**
   - Base pitch black: `#000000` (`--color-bg-base: 0 0 0`)
   - Deep dark surfaces: `#08090d` (`--color-bg-surface: 8 9 13`), `#0e1018` (`--color-bg-surface-elevated: 14 16 24`)
-  - Component glass cards: `#0d0d10`, `#121215`, `#16140e`, `#1a1710`, `#0c0c0e` with backdrop blur (16px–24px)
+  - Card surfaces: `rgba(255, 255, 255, 0.02)` (`--color-surface-card` / `surface.card`)
+  - Card hover surfaces: `rgba(255, 255, 255, 0.04)` (`--color-surface-card-hover` / `surface['card-hover']`)
+  - Backdrop blur eliminated from all scene cards and active lists; retained strictly on modal overlay (`ProjectDetailOverlay.tsx`) and mobile dock (`Nav.tsx`). `.glass-panel` removed.
 - **Borders & Glows:**
   - Subtle: `rgba(255, 255, 255, 0.06)` (`--color-border-subtle`)
   - Glow: `rgba(245, 184, 0, 0.3)` (`--color-border-glow`)
@@ -140,8 +139,8 @@ Project_Shivansh/
 ### Typography Tokens
 - Display font: `Syne` (variable font, `--font-display`)
 - Body font: `Inter` (variable font, `--font-body`)
-- Code / Mono: `var(--font-mono, monospace)`
-- *Note: Space Grotesk and JetBrains Mono are not loaded.*
+- Code / Mono: `JetBrains Mono` via `next/font/google` (`--font-mono`, `fontFamily.mono`)
+- *Note: Geist fonts deleted from `app/fonts/`.*
 - Fluid Clamp Scales (`globals.css`):
   - `display-xxl`: `clamp(2.75rem, 7.5vw, 7.5rem)`
   - `display-xl`: `clamp(2.2rem, 5.5vw, 5.5rem)`
@@ -169,7 +168,7 @@ Project_Shivansh/
 3. **Chunk 3 (Done):** Gold cursor spotlight (desktop-only interactive glow at `z-[1]`, 600px radial gradient, lerp 0.12, rAF with idle cutoff, zero mousemove React re-renders) + orange gradient clearance (`#E65100`, `#FFB300`).
 4. **Chunk 4 (Done):** Two-column shell — fixed left column (hero/identity/nav) + scrolling right column (normal document flow: About, HTML ProjectsList, Skills, Contact). Unmounted WebGL Scene, unmounted HeroScene and ProjectsScene, decoupled Loader to fixed 800ms sequence, updated SECTION_IDS to 4 canonical sections, replaced ScrollTriggers with IntersectionObserver.
 5. **Chunk 5 (Done):** About section with personal photo (`public/images/shivansh.jpg`) + consolidated education content into `content/journey.ts`.
-6. **Chunk 6:** Polish: solid card surfaces, remove backdrop-blur, hover states, spotlight tuning + font decision (moved from Chunk 5).
+6. **Chunk 6 (Done):** Polish: photo hygiene (real JPEG 1000x1000, 181 KB), card surfaces (`surface.card` & `surface['card-hover']`), removed backdrop-blur from all active scene cards, JetBrains Mono font integration, projects list hover dimming (lg+), CursorSpotlight constants extracted.
 7. **Chunk 7:** Cleanup: delete R3F canvas/scene files, orphans, /style-guide, uninstall three and @react-three/*, decide on GSAP/Lenis.
 8. **Chunk 8:** Mobile polish, responsive tuning, performance audit, and production deployment check (merge to main via a Vercel preview).
 
@@ -280,3 +279,11 @@ export const milestones: Milestone[] = [
   - **About Photo:** Added personal portrait to `components/scenes/JourneyScene.tsx` using `next/image` (`width={400}`, `height={500}`, portrait 4:5, `object-cover`, sizes configured). Treated with `rounded-xl`, 1px border `rgba(245,184,0,0.3)`, and an offset gold outline frame behind it (offset 12px via `translate-x-3 translate-y-3`, shifts to 8px on hover with `duration-300`). Sits in a sub-column (~1/3 width at `lg`) beside the quote card; collapses above quote card with `max-w-xs` below `lg`.
   - **Education Data Consolidation:** Preserved old `content/journey.ts` milestone data in `context.md`. Rewrote `content/journey.ts` to export typed `educationHistory` (`EducationItem[]`) matching the displayed education cards verbatim. `JourneyScene.tsx` now renders education cards dynamically.
   - **Roadmap Adjustment:** Fonts decision moved to Chunk 6.
+- **Chunk 6: Polish, Card Surfaces, JetBrains Mono & Photo Hygiene (2026-11-18):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Photo Hygiene:** `public/images/shivansh.jpg` was originally PNG data with `.jpg` extension (2.21 MB). Re-encoded via .NET System.Drawing into a genuine baseline JPEG at 1000x1000, 82 quality (magic bytes `FF D8 FF E0`, 181,825 bytes / ~178 KB). Deleted redundant `.png` duplicate.
+  - **Card Surfaces & Token Integration:** Defined `--color-surface-card: rgba(255, 255, 255, 0.02)` and `--color-surface-card-hover: rgba(255, 255, 255, 0.04)` in `globals.css` and `tailwind.config.ts`. Replaced all heavy backdrop blurs (`backdrop-blur-xl`, `backdrop-blur-md`, `backdrop-blur-2xl`) and hardcoded dark hex backgrounds across `JourneyScene`, `SkillsScene`, `ContactScene`, `ProjectsList`, and `MainShell` with flat `bg-surface-card` and `border border-white/10`. Deleted obsolete `.glass-panel` class. Preserved backdrop-blur strictly on modal (`ProjectDetailOverlay.tsx`) and mobile dock (`Nav.tsx`).
+  - **Typography (Mono):** Added `JetBrains_Mono` from `next/font/google` (`--font-mono`), exported from `app/fonts.ts`, mapped to `<html>` class in `app/layout.tsx`, and bound in `tailwind.config.ts`. Deleted unused legacy `GeistVF.woff` and `GeistMonoVF.woff`. All 60+ `font-mono` labels now render with JetBrains Mono.
+  - **Projects List Hover Interaction:** Added hover dimming at `lg:` in `ProjectsList.tsx`. Non-hovered project cards dim to 60% opacity while the actively hovered card retains 100% opacity.
+  - **Cursor Spotlight Constants:** Extracted inline numbers (`SPOTLIGHT_RADIUS = 600`, `SPOTLIGHT_ALPHA_CENTER = 0.07`, `SPOTLIGHT_ALPHA_MID = 0.035`, `SPOTLIGHT_LERP = 0.12`, `SPOTLIGHT_IDLE_THRESHOLD = 0.2`) to documented named constants at the top of `CursorSpotlight.tsx`.
+  - **Build Verification:** Production build verified with `npm run build` — 0 errors, 0 warnings. First Load JS remains lean at 154 kB.

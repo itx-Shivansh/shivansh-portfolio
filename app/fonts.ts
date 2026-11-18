@@ -1,4 +1,4 @@
-import { Syne, Inter } from 'next/font/google'
+import { Syne, Inter, JetBrains_Mono } from 'next/font/google'
 
 /**
  * Display face: Syne
@@ -32,6 +32,18 @@ export const bodyFont = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600'],
   variable: '--font-body',
+  display: 'swap',
+  preload: true,
+})
+
+/**
+ * Monospace face: JetBrains Mono
+ * Technical, crisp code and metadata typography.
+ */
+export const monoFont = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-mono',
   display: 'swap',
   preload: true,
 })

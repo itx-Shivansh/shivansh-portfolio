@@ -172,16 +172,16 @@ export default function StyleGuidePage() {
               </div>
             </div>
 
-            {/* Glass Panel */}
-            <div className="space-y-3 rounded-xl glass-panel p-5">
-              <div className="h-20 w-full rounded-lg glass-panel flex items-center justify-center">
-                <span className="text-caption text-accent-gold">Glass Backdrop</span>
+            {/* Card Surface */}
+            <div className="space-y-3 rounded-xl bg-surface-card border border-white/10 p-5">
+              <div className="h-20 w-full rounded-lg bg-surface-card border border-white/10 flex items-center justify-center">
+                <span className="text-caption text-accent-gold">Card Surface</span>
               </div>
               <div>
                 <p className="font-display text-body-md font-semibold text-text-primary">
-                  Glassmorphism
+                  Card Surface
                 </p>
-                <p className="text-caption text-text-muted">blur(16px) + 65% opacity</p>
+                <p className="text-caption text-text-muted">rgba(255, 255, 255, 0.02)</p>
               </div>
             </div>
           </div>
