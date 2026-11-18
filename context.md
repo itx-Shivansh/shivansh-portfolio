@@ -221,18 +221,7 @@ export const milestones: Milestone[] = [
   - Unmounted `<HeroScene />` and `<ProjectsScene />` from `app/page.tsx`.
   - Created `components/sections/ProjectsList.tsx` for HTML-based project cards with `ProjectDetailOverlay` modal.
   - Simplified `Loader.tsx`: eliminated 4-video preloading gate; replaced with fixed ~800ms progress sequence that preserves the cyberpunk diagnostic aesthetic.
-- **Legacy Files to Remove in Chunk 7:**
-  - `components/canvas/Scene.tsx`
-  - `components/canvas/CameraRig.tsx`
-  - `components/canvas/ProjectCard3D.tsx`
-  - `components/canvas/ProjectCarousel3D.tsx`
-  - `components/canvas/ScenePostProcessing.tsx`
-  - `components/canvas/ContactAtmosphere.tsx` (orphan)
-  - `components/canvas/HeroShaderBackground.tsx` (orphan)
-  - `components/canvas/Journey3DObjects.tsx` (orphan)
-  - `components/canvas/Skills3DConstellation.tsx` (orphan)
-  - `components/scenes/HeroScene.tsx`
-  - `components/scenes/ProjectsScene.tsx`
+- **Legacy Files (all removed in Chunk 7 — list complete).**
 
 ## Chunk Log
 - **Pre-Chunk Initial Inspection (2026-11-18):** Completed full baseline audit of codebase, architecture, background canvas engine, 3D WebGL scene, state management, routes, content data, and build status. `context.md` established.
@@ -291,6 +280,22 @@ export const milestones: Milestone[] = [
       - Skills pills & tags overflow: 0 overflows across all 6 cards and 22 pills at every viewport.
       - Screenshots captured to temp directory: `C:\Users\HP victos\AppData\Local\Temp\screenshots\viewport-{width}.png`.
     - *Reasoned:* CSS clamp behaviors outside tested discrete breakpoints.
+- **Chunk 7: Cleanup — Dead Code, Packages & Store (2026-11-18):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Commit:** `556ffaa` ("chunk 7: delete canvas, scenes, style-guide, uninstall three packages").
+  - **Files deleted (11 component files + 2 directories + 1 doc):**
+    - `components/canvas/` (entire directory): `CameraRig.tsx`, `ContactAtmosphere.tsx`, `HeroShaderBackground.tsx`, `Journey3DObjects.tsx`, `ProjectCard3D.tsx`, `ProjectCarousel3D.tsx`, `Scene.tsx`, `ScenePostProcessing.tsx`, `Skills3DConstellation.tsx` — 9 files, confirmed zero live importers via grep before deletion.
+    - `components/scenes/HeroScene.tsx` — confirmed zero live importers.
+    - `components/scenes/ProjectsScene.tsx` — confirmed zero live importers.
+    - `app/style-guide/page.tsx` (dev-only route, `app/style-guide/` directory gone).
+    - `docs/transitions.md` — 100% documented the removed 3D WebGL transitions (CameraRig lerps, shader backgrounds, 3D constellation); no live-code documentation.
+  - **Packages uninstalled:** `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing`, `@types/three`. Confirmed via `npm ls three` → `(empty)`, `node_modules/three` absent (was 23.41 MB / 1015 files).
+  - **Store cleanup (`lib/scrollStore.ts`):** Removed `videosLoadedCount`, `totalVideosToPreload`, `setVideosLoadedCount` (only consumed by deleted `ProjectCard3D.tsx` and old Loader video gate). Kept: `scrollY`/`setScrollY` (SmoothScrollProvider), `chapterProgress`/`setChapterProgress` (DebugHUD), `cursorState`/`cursorText`/`setCursorState` (Cursor + DebugHUD).
+  - **Constants cleanup (`lib/constants.ts`):** Removed `COLORS`, `BREAKPOINTS` (zero live importers — only the now-deleted `app/style-guide/page.tsx` used them). Kept: `SECTION_IDS`, `SectionId`, `SECTION_ORDER` (Nav, DebugHUD), `LENIS_OPTIONS` (SmoothScrollProvider). Note: first cleanup attempt accidentally removed `LENIS_OPTIONS`, causing a build error — immediately restored.
+  - **Comment cleanup:** Removed mention of "WebGL canvas elements" from `components/ui/CursorSpotlight.tsx`.
+  - **Build sizes:** Before: 154 kB First Load JS, 6 routes. After: 154 kB First Load JS, 5 routes (style-guide gone). `three` was already tree-shaken from the bundle before deletion (0 kB bundle impact), but `node_modules/three` disk footprint (23.41 MB) is now reclaimed.
+  - **Step 5 report-only findings (no changes):** GSAP (~27 kB) and Lenis (~15 kB) are actively used in SmoothScrollProvider, ProjectDetailOverlay, and Loader — both kept, deferred to Chunk 8. DebugHUD ships but returns null in production. Root dev assets (`active-theory-example.mp4`, `indiasignal_image.png`, `obsidian_image.png`) left untouched.
+  - **Verification:** `npm run build` → 0 errors, 0 warnings. `npm ls three` → empty. HTTP 200 on `localhost:3006`. Route `/style-guide` gone from build output.
 
 ## Known Layout Risks (Step 3 Audit)
 - **`JourneyScene.tsx` (Photo offset frame at 375px):** The offset gold outline frame behind the portrait photo uses absolute positioning with `translate-x-3 translate-y-3` (+12px). At 375px with 24px side padding (`px-6` = 48px), the container width is 327px. While `max-w-xs` is 320px, 320px + 12px = 332px, which risks slight right-side clipping if outer padding is tighter than 12px.
