@@ -4,11 +4,11 @@ import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
 import { gsap, ScrollTrigger } from '@/lib/motion'
 import { useScrollStore } from '@/lib/scrollStore'
-import { SECTION_ORDER, SectionId, LENIS_OPTIONS } from '@/lib/constants'
+import { SECTION_ORDER, SECTION_IDS, SectionId, LENIS_OPTIONS } from '@/lib/constants'
 
 export default function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null)
-  const { setScrollProgress, setActiveSection, setScrollY, setChapterProgress, setIsDebugOpen, setLenis } =
+  const { setScrollProgress, setActiveSection, setScrollY, setIsDebugOpen, setLenis } =
     useScrollStore()
 
   useEffect(() => {
@@ -37,6 +37,9 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
       ScrollTrigger.update()
       setScrollY(e.scroll)
       setScrollProgress(Math.max(0, Math.min(1, e.progress)))
+      if (e.scroll < 100) {
+        setActiveSection(SECTION_IDS.JOURNEY)
+      }
     })
 
     // 4. Set up ScrollTrigger scrollerProxy
@@ -57,40 +60,45 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
       },
     })
 
-    // 5. Build separate ScrollTriggers for (a) active-section detection and (b) chapter scrub progress.
-    //    These need different boundary ranges: active-section uses mid-viewport windows,
-    //    but chapter-progress must span the full scrollable extent of each section so that
-    //    hero-progress 0 = top of hero, 1 = hero fully scrolled past (matches HeroScene's GSAP scrub range).
-    const triggers: ScrollTrigger[] = []
+    // 5. Active section detection via IntersectionObserver on right-column sections
+    let activeObserver: IntersectionObserver | null = null
 
-    SECTION_ORDER.forEach((id: SectionId) => {
-      const el = document.getElementById(id)
-      if (!el) return
+    const setupObserver = () => {
+      const sectionElements = SECTION_ORDER.map((id) => document.getElementById(id)).filter(
+        Boolean
+      ) as HTMLElement[]
 
-      // Active-section detection trigger (60%/40% window)
-      const activeTrigger = ScrollTrigger.create({
-        trigger: el,
-        start: 'top 60%',
-        end: 'bottom 40%',
-        onToggle: (self) => {
-          if (self.isActive) {
-            setActiveSection(id)
+      if (sectionElements.length === 0) return
+
+      activeObserver = new IntersectionObserver(
+        (entries) => {
+          if (window.scrollY < 100) {
+            setActiveSection(SECTION_IDS.JOURNEY)
+            return
+          }
+
+          const visibleEntries = entries.filter((e) => e.isIntersecting)
+          if (visibleEntries.length > 0) {
+            visibleEntries.sort(
+              (a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top)
+            )
+            const topMost = visibleEntries[0]
+            if (topMost && topMost.target.id) {
+              setActiveSection(topMost.target.id as SectionId)
+            }
           }
         },
-      })
-      triggers.push(activeTrigger)
+        {
+          root: null,
+          rootMargin: '-20% 0px -40% 0px',
+          threshold: [0, 0.1, 0.3, 0.6],
+        }
+      )
 
-      // Chapter-progress scrub trigger (full section extent — matches HeroScene canonical range)
-      const progressTrigger = ScrollTrigger.create({
-        trigger: el,
-        start: 'top top',
-        end: 'bottom top',
-        onUpdate: (self) => {
-          setChapterProgress(id, self.progress)
-        },
-      })
-      triggers.push(progressTrigger)
-    })
+      sectionElements.forEach((el) => activeObserver?.observe(el))
+    }
+
+    const observerTimer = setTimeout(setupObserver, 100)
 
     ScrollTrigger.refresh()
 
@@ -116,16 +124,17 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
+      clearTimeout(observerTimer)
+      if (activeObserver) activeObserver.disconnect()
       if (resizeTimeout) clearTimeout(resizeTimeout)
       window.removeEventListener('resize', handleResizeOrOrientation)
       window.removeEventListener('orientationchange', handleResizeOrOrientation)
-      triggers.forEach((t) => t.kill())
       gsap.ticker.remove(updateRaf)
       lenis.destroy()
       setLenis(null)
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [setScrollProgress, setActiveSection, setScrollY, setChapterProgress, setIsDebugOpen, setLenis])
+  }, [setScrollProgress, setActiveSection, setScrollY, setIsDebugOpen, setLenis])
 
   return <>{children}</>
 }

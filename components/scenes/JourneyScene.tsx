@@ -10,15 +10,15 @@ export default function JourneyScene() {
     <section
       ref={sectionRef}
       id="journey"
-      className="relative w-full select-none py-16 sm:py-20 px-4 sm:px-12 md:px-20 lg:pl-32 lg:pr-16"
+      className="relative w-full select-none space-y-8 scroll-mt-20"
     >
-      <div className="w-full max-w-7xl mx-auto space-y-10 z-10 relative pointer-events-auto select-none">
+      <div className="w-full space-y-8 z-10 relative pointer-events-auto select-none">
         {/* ── Top Header Row: Chapter Badge & Download Resume Button ──── */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="rounded-full border border-[#F5B800]/30 bg-[#121215]/80 px-4 py-1.5 backdrop-blur-md flex items-center gap-2.5 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
             <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
-              CHAPTER 04 // ABOUT ME
+              About
             </span>
           </div>
 
@@ -38,10 +38,10 @@ export default function JourneyScene() {
         </div>
 
         {/* ── Hero Title & Quote Row ─────────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 gap-6 items-start">
           {/* Left Column: Heading, Subtitle & Bio */}
-          <div className="lg:col-span-7 space-y-5">
-            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+          <div className="space-y-5">
+            <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
               <span className="text-white">About </span>
               <span className="text-[#F5B800]">Me</span>
             </h2>
@@ -118,8 +118,8 @@ export default function JourneyScene() {
           </div>
 
           {/* Right Column: Quote Card */}
-          <div className="lg:col-span-5 flex justify-end">
-            <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-7 shadow-2xl space-y-4">
+          <div className="w-full">
+            <div className="w-full rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-7 shadow-2xl space-y-4">
               <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
               <p className="text-neutral-200 text-sm italic font-normal leading-relaxed">
                 Code is not just what I write, it&apos;s how I solve problems, create impact and make ideas real.
@@ -132,9 +132,9 @@ export default function JourneyScene() {
         </div>
 
         {/* ── Lower Section: What I Do Grid & Education Timeline ─────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-4">
+        <div className="grid grid-cols-1 gap-8 items-start pt-4">
           {/* Left Column: What I Do (6 Cards Grid) */}
-          <div className="lg:col-span-7 rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-6 sm:p-7 shadow-2xl space-y-6">
+          <div className="w-full rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-6 sm:p-7 shadow-2xl space-y-6">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -239,7 +239,7 @@ export default function JourneyScene() {
           </div>
 
           {/* Right Column: Education Timeline */}
-          <div className="lg:col-span-5 rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-6 sm:p-7 shadow-2xl space-y-6">
+          <div className="w-full rounded-2xl border border-white/10 bg-[#0d0d10]/80 backdrop-blur-xl p-6 sm:p-7 shadow-2xl space-y-6">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

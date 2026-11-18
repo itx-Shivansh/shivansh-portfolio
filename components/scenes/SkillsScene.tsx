@@ -56,19 +56,19 @@ export default function SkillsScene() {
   return (
     <section
       id="skills"
-      className="relative w-full select-none py-16 sm:py-20 px-4 sm:px-12 md:px-20 lg:pl-32 lg:pr-16"
+      className="relative w-full select-none space-y-8 scroll-mt-20"
     >
-      <div className="w-full max-w-7xl mx-auto space-y-10 z-10 relative pointer-events-auto select-none">
+      <div className="w-full space-y-8 z-10 relative pointer-events-auto select-none">
         {/* ── Top Header Row ─────────────────────────────────────────── */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2.5 rounded-full border border-[#F5B800]/30 bg-[#121215]/80 px-4 py-1.5 backdrop-blur-md shadow-lg">
               <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
               <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
-                CHAPTER 04 // TECHNICAL MATRIX
+                Skills &amp; Competencies
               </span>
             </div>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+            <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
               <span className="text-white">Skills &amp; </span>
               <span className="text-[#F5B800]">Competencies</span>
             </h2>

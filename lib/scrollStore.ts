@@ -9,7 +9,7 @@ interface ScrollState {
   scrollProgress: number
   activeSection: SectionId
   scrollY: number
-  chapterProgress: Record<SectionId, number>
+  chapterProgress: Record<string, number>
   selectedProject: Project | null
 
   isLoaded: boolean
@@ -26,7 +26,7 @@ interface ScrollState {
   setScrollProgress: (progress: number) => void
   setActiveSection: (section: SectionId) => void
   setScrollY: (y: number) => void
-  setChapterProgress: (section: SectionId, progress: number) => void
+  setChapterProgress: (section: string, progress: number) => void
   setSelectedProject: (project: Project | null) => void
   setIsLoaded: (loaded: boolean) => void
   setIsDebugOpen: (open: boolean | ((prev: boolean) => boolean)) => void
@@ -38,10 +38,9 @@ interface ScrollState {
 
 export const useScrollStore = create<ScrollState>((set, get) => ({
   scrollProgress: 0,
-  activeSection: SECTION_IDS.HERO,
+  activeSection: SECTION_IDS.JOURNEY,
   scrollY: 0,
   chapterProgress: {
-    [SECTION_IDS.HERO]: 0,
     [SECTION_IDS.JOURNEY]: 0,
     [SECTION_IDS.PROJECTS]: 0,
     [SECTION_IDS.SKILLS]: 0,

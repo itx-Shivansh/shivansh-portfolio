@@ -100,15 +100,15 @@ export default function ContactScene() {
   return (
     <section
       id="contact"
-      className="relative w-full select-none py-16 sm:py-20 px-4 sm:px-12 md:px-20 lg:pl-32 lg:pr-16"
+      className="relative w-full select-none space-y-8 scroll-mt-20"
     >
-      <div className="w-full max-w-7xl mx-auto space-y-10 z-10 relative pointer-events-auto select-none">
+      <div className="w-full space-y-8 z-10 relative pointer-events-auto select-none">
         {/* ── Top Header Row: Chapter Badge & Terminal Easter Egg Trigger ──── */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="rounded-full border border-[#F5B800]/30 bg-[#121215]/80 px-4 py-1.5 backdrop-blur-md flex items-center gap-2.5 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
             <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
-              CHAPTER 05 // LET&apos;S CONNECT
+              Contact
             </span>
           </div>
 
@@ -137,11 +137,11 @@ export default function ContactScene() {
         )}
 
         {/* ── Main Content Grid: Left Details + Right Form Card ─────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 gap-8 items-start">
           {/* Left Column: Heading, Direct Email & Social Buttons */}
-          <div className="lg:col-span-7 space-y-7">
+          <div className="w-full space-y-7">
             {/* Dual-Color Big Headline */}
-            <h2 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.05]">
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl tracking-tight leading-[1.05]">
               <span className="block text-white">Let&apos;s Build</span>
               <span className="block text-[#F5B800]">Something</span>
               <span className="block text-white">Extraordinary.</span>
@@ -246,7 +246,7 @@ export default function ContactScene() {
           </div>
 
           {/* Right Column: Transmission Interface Form Card */}
-          <div className="lg:col-span-5 flex justify-end">
+          <div className="w-full">
             <div className="w-full rounded-3xl border border-[#F5B800]/30 bg-[#0d0d10]/85 backdrop-blur-xl p-7 sm:p-8 shadow-2xl space-y-6">
               {formSubmitted ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center space-y-4 animate-in fade-in duration-300">

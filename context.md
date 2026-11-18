@@ -60,13 +60,16 @@ Project_Shivansh/
 │   │   └── TabTitleController.tsx
 │   ├── scenes/
 │   │   ├── ContactScene.tsx
-│   │   ├── HeroScene.tsx
+│   │   ├── HeroScene.tsx (unmounted - to delete in Chunk 7)
 │   │   ├── JourneyScene.tsx
 │   │   ├── ProjectDetailOverlay.tsx
-│   │   ├── ProjectsScene.tsx
+│   │   ├── ProjectsScene.tsx (unmounted - to delete in Chunk 7)
 │   │   └── SkillsScene.tsx
+│   ├── sections/
+│   │   └── ProjectsList.tsx
 │   └── ui/
 │       ├── Cursor.tsx
+│       ├── CursorSpotlight.tsx
 │       ├── DebugHUD.tsx
 │       ├── Loader.tsx
 │       └── Nav.tsx
@@ -163,12 +166,40 @@ Project_Shivansh/
 ## Tentative Redesign Roadmap
 1. **Chunk 1 (Done):** Safety branch, remove scroll-scrubbed frame background, delete 300 JPG frames, decouple preloader and store, establish solid black base `#000000`, register `--color-accent-gold: #F5B800`.
 2. **Chunk 2 (Done):** Palette swap to gold and black — defined gold (`#F5B800`) and dim gold (`#A67C00`), removed cyan and violet tokens, updated selection, cursor, HUD, CameraRig lighting, and contact button.
-3. **Chunk 3:** Gold cursor spotlight (desktop-only interactive glow).
-4. **Chunk 4:** Two-column shell — fixed left column (hero/identity/nav) + scrolling right column (experience, projects, skills, contact).
-5. **Chunk 5:** Dedicated About section with personal photo.
-6. **Chunk 6:** Clean HTML project cards with video/media previews to replace the WebGL 3D carousel.
-7. **Chunk 7:** Remove R3F canvas, Lenis, GSAP pinned viewport layout hacks, and unused orphan 3D components.
-8. **Chunk 8:** Mobile polish, responsive tuning, performance audit, and production deployment check.
+3. **Chunk 3 (Done):** Gold cursor spotlight (desktop-only interactive glow at `z-[1]`, 600px radial gradient, lerp 0.12, rAF with idle cutoff, zero mousemove React re-renders) + orange gradient clearance (`#E65100`, `#FFB300`).
+4. **Chunk 4 (Done):** Two-column shell — fixed left column (hero/identity/nav) + scrolling right column (normal document flow: About, HTML ProjectsList, Skills, Contact). Unmounted WebGL Scene, unmounted HeroScene and ProjectsScene, decoupled Loader to fixed 800ms sequence, updated SECTION_IDS to 4 canonical sections, replaced ScrollTriggers with IntersectionObserver.
+5. **Chunk 5:** About with photo + consolidate journey content + font decision.
+6. **Chunk 6:** Polish: solid card surfaces, remove backdrop-blur, hover states, spotlight tuning.
+7. **Chunk 7:** Cleanup: delete R3F canvas/scene files, orphans, /style-guide, uninstall three and @react-three/*, decide on GSAP/Lenis.
+8. **Chunk 8:** Mobile polish, responsive tuning, performance audit, and production deployment check (merge to main via a Vercel preview).
+
+## Chunk 4 Implementation Plan
+- **SECTION_IDS & SECTION_ORDER (`lib/constants.ts` & `lib/scrollStore.ts`):**
+  - Drop `HERO: 'hero'`. The 4 canonical sections are: `JOURNEY: 'journey'` (About), `PROJECTS: 'projects'`, `SKILLS: 'skills'`, `CONTACT: 'contact'`.
+  - `SECTION_ORDER`: `['journey', 'projects', 'skills', 'contact']`.
+  - In `scrollStore.ts`, initial `activeSection` is `SECTION_IDS.JOURNEY`. `chapterProgress` typed as `Record<string, number>` to avoid type friction with orphan files, initialized with 4 keys.
+- **Scroll & Active Section Detection (`SmoothScrollProvider.tsx`):**
+  - Grep audit revealed `chapterProgress` is only consumed by unmounted 3D canvas files (`HeroShaderBackground`, `Journey3DObjects`, `ProjectCarousel3D`) and `DebugHUD`. Whole-page `scrollProgress` is set by `lenis.on('scroll')` and is retained.
+  - Removed the per-section GSAP `ScrollTrigger` instances in `SmoothScrollProvider` that previously tracked section scrub and active toggle.
+  - Implemented an `IntersectionObserver` across the right-column section elements (`#journey`, `#projects`, `#skills`, `#contact`) with a `-20% 0px -40% 0px` rootMargin to write `activeSection` into `useScrollStore`.
+  - Kept Lenis smooth scroll engine, ticker, and `scrollerProxy` fully active.
+- **Unmounted Components & WebGL Teardown:**
+  - Unmounted `<Scene />` from `app/layout.tsx`.
+  - Unmounted `<HeroScene />` and `<ProjectsScene />` from `app/page.tsx`.
+  - Created `components/sections/ProjectsList.tsx` for HTML-based project cards with `ProjectDetailOverlay` modal.
+  - Simplified `Loader.tsx`: eliminated 4-video preloading gate; replaced with fixed ~800ms progress sequence that preserves the cyberpunk diagnostic aesthetic.
+- **Legacy Files to Remove in Chunk 7:**
+  - `components/canvas/Scene.tsx`
+  - `components/canvas/CameraRig.tsx`
+  - `components/canvas/ProjectCard3D.tsx`
+  - `components/canvas/ProjectCarousel3D.tsx`
+  - `components/canvas/ScenePostProcessing.tsx`
+  - `components/canvas/ContactAtmosphere.tsx` (orphan)
+  - `components/canvas/HeroShaderBackground.tsx` (orphan)
+  - `components/canvas/Journey3DObjects.tsx` (orphan)
+  - `components/canvas/Skills3DConstellation.tsx` (orphan)
+  - `components/scenes/HeroScene.tsx`
+  - `components/scenes/ProjectsScene.tsx`
 
 ## Chunk Log
 - **Pre-Chunk Initial Inspection (2026-11-18):** Completed full baseline audit of codebase, architecture, background canvas engine, 3D WebGL scene, state management, routes, content data, and build status. `context.md` established.
@@ -178,15 +209,20 @@ Project_Shivansh/
   - Removed frame sequence canvas engine and 300 JPEG frames. Decoupled loader progress calculation.
 - **Chunk 2: Palette Swap to Gold and Black (2026-11-18):**
   - **Branch:** `redesign-gold-minimal`.
-  - **Files Changed:**
-    - `app/globals.css`: defined `--color-accent-gold: #F5B800;`, `--color-accent-gold-dim: #A67C00;`, `--color-border-glow: rgba(245, 184, 0, 0.3);`, `--color-accent-glow: rgba(245, 184, 0, 0.15);`. Removed `--color-accent-cyan` and `--color-accent-violet`. Renamed `.glow-cyan`/`.glow-violet` to `.glow-gold`/`.glow-gold-dim`. Replaced gradient utility with gold-to-dim-gold. Set selection to `rgba(245, 184, 0, 0.25)`.
-    - `tailwind.config.ts`: replaced `cyan` and `violet` with `gold` and `'gold-dim'`.
-    - `app/layout.tsx`: changed selection class from `selection:bg-accent-cyan/20` to `selection:bg-accent-gold/20`.
-    - `components/ui/Cursor.tsx`: mapped cyan to gold and violet to gold-dim across dot and trailing ring.
-    - `components/ui/DebugHUD.tsx`: mapped text and progress bar gradient from cyan/violet to gold/gold-dim.
-    - `components/canvas/CameraRig.tsx`: mapped THREE.Color and directional lights to `#F5B800` and `#A67C00`. Replaced secondary amber `#f59e0b` with `#F5B800`.
-    - `components/scenes/ContactScene.tsx`: replaced gold-to-orange gradient submit button with solid `#F5B800` button with high-contrast black text (`11.7:1` contrast ratio).
-    - `app/style-guide/page.tsx`: mechanically mapped all tokens to gold/gold-dim and updated displayed color palette. *(Note: `/style-guide` route is marked as a candidate for deletion in a future chunk).*
-    - `docs/transitions.md`: updated color descriptions to gold and dim gold.
-    - `context.md`: updated tokens, chunk log, and roadmap.
-  - **Orphan Files Note:** Three unmounted canvas files (`HeroShaderBackground.tsx`, `Journey3DObjects.tsx`, `Skills3DConstellation.tsx`) intentionally retain legacy cyan/violet references until deleted in Chunk 7.
+  - **Commit:** `6bab6b1` ("chunk 2: gold and black palette swap").
+  - Defined gold (`#F5B800`) and dim gold (`#A67C00`), removed cyan and violet tokens, updated selection, cursor, HUD, CameraRig lighting, and contact button.
+- **Chunk 3: Gold Cursor Spotlight & Orange Clearance (2026-11-18):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Commit:** `afd881b` ("chunk 3: gold cursor spotlight and orange clearance").
+  - Cleared remaining orange gradients (`#E65100`, `#FFB300`) from `ProjectDetailOverlay.tsx` and `Loader.tsx`.
+  - Created `components/ui/CursorSpotlight.tsx` mounted at `z-[1]` in `app/layout.tsx` (600px radial, lerp 0.12, rAF idle cutoff, `pointer-events: none`).
+- **Chunk 4: Two-Column Shell & WebGL Unmount (2026-11-18):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Two-Column Shell:** Built in `components/providers/MainShell.tsx`. At `lg:`, left column is sticky (`lg:sticky lg:top-0 lg:h-dvh`, 44% width), right column scrolls (54% width). Below `lg`, single column with left content on top. Container max-width 1280px with generous padding (`px-6 sm:px-12 lg:px-16`). Transparent backgrounds ensure cursor spotlight shows through.
+  - **Left Column Content:** "SHIVANSH RAJ" headline with HeroScene display treatment, role line, tagline & short bio from `content/identity.ts`, resume download button, contact CTA, social links from `content/contact.ts`.
+  - **Nav Rail:** Built in `components/ui/Nav.tsx`. 4 items: About, Projects, Skills, Contact. Active item displays gold text with line expanding from 32px to 64px (`w-16 bg-[#F5B800]`); inactive items display muted text with line expanding on hover. Mobile bottom dock retained with 4 items.
+  - **Active Section Detection:** Removed per-section ScrollTriggers in `SmoothScrollProvider.tsx`; added `IntersectionObserver` observing right-column sections with `-20% 0px -40% 0px` rootMargin and top-of-page scroll check writing `activeSection` to store.
+  - **Sections Flow:** `app/page.tsx` renders in normal document flow: About (`JourneyScene`, de-pinned), Projects (`ProjectsList`, simple HTML cards linking to `ProjectDetailOverlay`), Skills (`SkillsScene`, de-pinned), Contact (`ContactScene`, de-pinned).
+  - **Constants & Store:** Removed `HERO` from `SECTION_IDS` and `SECTION_ORDER`. Default active section is `SECTION_IDS.JOURNEY`.
+  - **WebGL Teardown:** Unmounted `<Scene />` from `app/layout.tsx`, `<HeroScene />` and `<ProjectsScene />` from `app/page.tsx`.
+  - **Loader Decoupling:** Replaced 4-video preloading gate in `Loader.tsx` with a fixed ~800ms progress sequence preserving all diagnostic visuals. First Load JS dropped from 218 kB to 148 kB.

@@ -65,23 +65,11 @@ const MODULES = [
   },
 ]
 
-const PROJECT_VIDEOS = [
-  '/videos/aria_vid.mp4',
-  '/videos/ind_sig.mp4',
-  '/videos/shivantra_vid.mp4',
-  '/videos/obsidian_vid.mp4',
-]
-
 export default function Loader() {
-  const {
-    setIsLoaded,
-    videosLoadedCount,
-    totalVideosToPreload,
-    setVideosLoadedCount,
-  } = useScrollStore()
+  const setIsLoaded = useScrollStore((state) => state.setIsLoaded)
 
   const [progress, setProgress] = useState<number>(0)
-  const [statusMessage, setStatusMessage] = useState<string>('Preloading core WebGL shaders and modules...')
+  const [statusMessage, setStatusMessage] = useState<string>('Initializing system modules...')
   const [shouldRender, setShouldRender] = useState<boolean>(true)
   const [dotIndex, setDotIndex] = useState<number>(0)
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -95,102 +83,50 @@ export default function Loader() {
     return () => clearInterval(dotInterval)
   }, [])
 
-  // 1. Preload 4 Project Videos (wait for loadeddata / canplay)
-  useEffect(() => {
-    let cancelled = false
-    const readyVideos = new Set<string>()
-
-    const videoElements = PROJECT_VIDEOS.map((src) => {
-      const vid = document.createElement('video')
-      vid.muted = true
-      vid.playsInline = true
-      vid.preload = 'auto'
-      vid.src = src
-
-      const markReady = () => {
-        if (cancelled) return
-        if (!readyVideos.has(src)) {
-          readyVideos.add(src)
-          setVideosLoadedCount(readyVideos.size, PROJECT_VIDEOS.length)
-        }
-      }
-
-      if (vid.readyState >= 2) {
-        markReady()
-      } else {
-        vid.addEventListener('loadeddata', markReady)
-        vid.addEventListener('canplay', markReady)
-        vid.addEventListener('error', markReady) // Treat error as fallback ready to avoid blocking
-      }
-
-      vid.load()
-      return { vid, markReady }
-    })
-
-    return () => {
-      cancelled = true
-      videoElements.forEach(({ vid, markReady }) => {
-        vid.removeEventListener('loadeddata', markReady)
-        vid.removeEventListener('canplay', markReady)
-        vid.removeEventListener('error', markReady)
-        try { vid.pause() } catch { /* ignore */ }
-        try { vid.removeAttribute('src') } catch { /* ignore */ }
-      })
-    }
-  }, [setVideosLoadedCount])
-
-  // 2. Real Asset Loading Calculation & Progress Ticker
+  // Fixed ~800ms progress sequence
   useEffect(() => {
     let animId: number
-    let forceComplete = false
+    const durationMs = 800
+    const startTime = performance.now()
 
-    // Safety timeout: 10s max so flaky network connections never lock the UI
-    const timeoutId = setTimeout(() => {
-      forceComplete = true
-    }, 10000)
+    const update = (now: number) => {
+      const elapsed = now - startTime
+      const rawProgress = Math.min(1, elapsed / durationMs)
+      const currentProgress = Math.min(100, Math.floor(rawProgress * 100))
 
-    const update = () => {
-      const videosRatio = Math.min(1, videosLoadedCount / Math.max(1, totalVideosToPreload))
+      setProgress(currentProgress)
 
-      let target = Math.floor(videosRatio * 100)
-      if (forceComplete) target = 100
-
-      // Smooth step towards target progress
-      setProgress((prev) => {
-        if (prev >= 100 && !isCompletingRef.current) {
-          isCompletingRef.current = true
-          setTimeout(() => {
-            if (overlayRef.current) {
-              gsap.to(overlayRef.current, {
-                opacity: 0,
-                scale: 1.03,
-                duration: duration.slow,
-                ease: ease.cinematic,
-                onComplete: () => {
-                  setIsLoaded(true)
-                  setShouldRender(false)
-                },
-              })
-            } else {
-              setIsLoaded(true)
-              setShouldRender(false)
-            }
-          }, 400)
-          return 100
-        }
-
-        if (prev < target) {
-          const next = prev + Math.max(1, Math.floor((target - prev) * 0.25))
-          return Math.min(100, next)
-        }
-        return prev
-      })
-
-      // Update HUD status text based on active preloading focus
-      if (videosLoadedCount < totalVideosToPreload) {
-        setStatusMessage(`Preloading 3D Project Videos (${videosLoadedCount}/${totalVideosToPreload})...`)
+      if (currentProgress < 25) {
+        setStatusMessage('Initializing system modules...')
+      } else if (currentProgress < 50) {
+        setStatusMessage('Calibrating core interface...')
+      } else if (currentProgress < 80) {
+        setStatusMessage('Mounting layout architecture...')
       } else {
         setStatusMessage('Redirecting to experience...')
+      }
+
+      if (rawProgress >= 1 && !isCompletingRef.current) {
+        isCompletingRef.current = true
+        setProgress(100)
+        setTimeout(() => {
+          if (overlayRef.current) {
+            gsap.to(overlayRef.current, {
+              opacity: 0,
+              scale: 1.03,
+              duration: duration.slow,
+              ease: ease.cinematic,
+              onComplete: () => {
+                setIsLoaded(true)
+                setShouldRender(false)
+              },
+            })
+          } else {
+            setIsLoaded(true)
+            setShouldRender(false)
+          }
+        }, 150)
+        return
       }
 
       if (!isCompletingRef.current) {
@@ -202,13 +138,8 @@ export default function Loader() {
 
     return () => {
       cancelAnimationFrame(animId)
-      clearTimeout(timeoutId)
     }
-  }, [
-    videosLoadedCount,
-    totalVideosToPreload,
-    setIsLoaded,
-  ])
+  }, [setIsLoaded])
 
   if (!shouldRender) return null
 

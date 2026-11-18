@@ -1,20 +1,18 @@
-import HeroScene from '@/components/scenes/HeroScene'
 import JourneyScene from '@/components/scenes/JourneyScene'
-import ProjectsScene from '@/components/scenes/ProjectsScene'
+import ProjectsList from '@/components/sections/ProjectsList'
 import SkillsScene from '@/components/scenes/SkillsScene'
 import ContactScene from '@/components/scenes/ContactScene'
 
 /**
- * Single-page scroll experience.
- * Each scene component renders one <section id="..."> chapter.
- * Chunk 2 will wire up Lenis smooth scroll + GSAP ScrollTrigger here.
+ * Single-page scrolling right column.
+ * Rendered inside MainShell's two-column layout.
+ * Sections flow naturally: About (Journey) -> Projects -> Skills -> Contact.
  */
 export default function Home() {
   return (
     <>
-      <HeroScene />
       <JourneyScene />
-      <ProjectsScene />
+      <ProjectsList />
       <SkillsScene />
       <ContactScene />
     </>

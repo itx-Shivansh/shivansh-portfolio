@@ -1,6 +1,5 @@
-// Section IDs — used to target DOM sections and drive scroll triggers
+// Section IDs — used to target DOM sections and drive scroll triggers / in-page nav
 export const SECTION_IDS = {
-  HERO: 'hero',
   JOURNEY: 'journey',
   PROJECTS: 'projects',
   SKILLS: 'skills',
@@ -11,7 +10,6 @@ export type SectionId = (typeof SECTION_IDS)[keyof typeof SECTION_IDS]
 
 // Ordered list for sequential navigation
 export const SECTION_ORDER: SectionId[] = [
-  SECTION_IDS.HERO,
   SECTION_IDS.JOURNEY,
   SECTION_IDS.PROJECTS,
   SECTION_IDS.SKILLS,
