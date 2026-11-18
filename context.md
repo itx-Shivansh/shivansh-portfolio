@@ -169,6 +169,7 @@ Project_Shivansh/
 4. **Chunk 4 (Done):** Two-column shell — fixed left column (hero/identity/nav) + scrolling right column (normal document flow: About, HTML ProjectsList, Skills, Contact). Unmounted WebGL Scene, unmounted HeroScene and ProjectsScene, decoupled Loader to fixed 800ms sequence, updated SECTION_IDS to 4 canonical sections, replaced ScrollTriggers with IntersectionObserver.
 5. **Chunk 5 (Done):** About section with personal photo (`public/images/shivansh.jpg`) + consolidated education content into `content/journey.ts`.
 6. **Chunk 6 (Done):** Polish: photo hygiene (real JPEG 1000x1000, 181 KB), card surfaces (`surface.card` & `surface['card-hover']`), removed backdrop-blur from all active scene cards, JetBrains Mono font integration, projects list hover dimming (lg+), CursorSpotlight constants extracted.
+6b. **Chunk 6b (Done):** Layout fixes: Name container query clamp `clamp(2rem, 10.5cqw, 4.5rem)` in left column; Skills section re-layout (stacked header, wrapping filter pills, full-width compact stats row, responsive category grid with unbreakable tags/pills, quote card relocated below grid).
 7. **Chunk 7:** Cleanup: delete R3F canvas/scene files, orphans, /style-guide, uninstall three and @react-three/*, decide on GSAP/Lenis.
 8. **Chunk 8:** Mobile polish, responsive tuning, performance audit, and production deployment check (merge to main via a Vercel preview).
 
@@ -287,3 +288,26 @@ export const milestones: Milestone[] = [
   - **Projects List Hover Interaction:** Added hover dimming at `lg:` in `ProjectsList.tsx`. Non-hovered project cards dim to 60% opacity while the actively hovered card retains 100% opacity.
   - **Cursor Spotlight Constants:** Extracted inline numbers (`SPOTLIGHT_RADIUS = 600`, `SPOTLIGHT_ALPHA_CENTER = 0.07`, `SPOTLIGHT_ALPHA_MID = 0.035`, `SPOTLIGHT_LERP = 0.12`, `SPOTLIGHT_IDLE_THRESHOLD = 0.2`) to documented named constants at the top of `CursorSpotlight.tsx`.
   - **Build Verification:** Production build verified with `npm run build` — 0 errors, 0 warnings. First Load JS remains lean at 154 kB.
+- **Chunk 6b: Layout Bug Fixes (Name Sizing & Skills Re-layout) (2026-11-18):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Left Column Name Overflow:** Set `container-inline` (`container-type: inline-size`) on identity container and `min-w-0` on `<header>` and right column in `components/providers/MainShell.tsx`. Set name headline font-size to `text-[clamp(2rem,10.5cqw,4.5rem)]` with `leading-[0.9]` and `whitespace-nowrap` per line (`SHIVANSH` / `RAJ`). Value `10.5cqw` was chosen as Syne black letterforms fill ~89% of the track width, maintaining ~11% side margin across all viewports from 375px through 1920px.
+  - **Skills Section Re-layout:** In `components/scenes/SkillsScene.tsx`:
+    - Header (badge, title, subtitle) stacks at full width.
+    - Category filter pills form a wrapping row directly under header (`flex flex-wrap gap-2`).
+    - Overview card converted to a compact, full-width responsive 3-stat bar with 1px white border divider.
+    - Category cards arranged in `grid grid-cols-1 xl:grid-cols-2 gap-4`, each card `min-w-0`.
+    - Card headers contain icon + wrapping title + `shrink-0` mono count tag (replacing the protruding superscript).
+    - Skill pills given `max-w-full flex flex-wrap items-center justify-between gap-x-2 gap-y-1`, skill names `min-w-0 break-words`, and level tags `shrink-0`, guaranteeing zero card boundary overflow.
+    - Quote card moved below category grid at full width.
+  - **Verification vs Reasoning:**
+    - *Verified via Real Headless Chrome (CDP)* at 375, 768, 1024, 1280, 1440, and 1920px:
+      - `document.documentElement.scrollWidth <= window.innerWidth`: Passed (0px horizontal overflow at all viewports).
+      - `SHIVANSH` line fits column: Verified (375px: 327px/327px, 768px: 657px/657px, 1024px: 374px/374px, 1280px: 488.9px/488.9px, 1440px+: 495.7px/495.7px).
+      - Skills pills & tags overflow: 0 overflows across all 6 cards and 22 pills at every viewport.
+      - Screenshots captured to temp directory: `C:\Users\HP victos\AppData\Local\Temp\screenshots\viewport-{width}.png`.
+    - *Reasoned:* CSS clamp behaviors outside tested discrete breakpoints.
+
+## Known Layout Risks (Step 3 Audit)
+- **`JourneyScene.tsx` (Photo offset frame at 375px):** The offset gold outline frame behind the portrait photo uses absolute positioning with `translate-x-3 translate-y-3` (+12px). At 375px with 24px side padding (`px-6` = 48px), the container width is 327px. While `max-w-xs` is 320px, 320px + 12px = 332px, which risks slight right-side clipping if outer padding is tighter than 12px.
+- **`ContactScene.tsx` (Direct email address on narrow mobile):** `shivanshrajoo@gmail.com` is rendered as an unbroken 23-character string with font size `text-lg sm:text-xl font-bold`. Inside a `p-5` card (40px horizontal padding) at 375px viewport (327px track), the email link takes ~280px out of 287px available. If viewport drops below 360px without word break, it risks pushing card bounds.
+- **`Loader.tsx` (100% counter box at 375px):** The main percentage display box inside `Loader.tsx` uses `px-10 py-4` (80px horizontal padding) and `text-7xl` font size. On screens narrower than 360px, the bracketed box width approaches the screen margin before the 800ms dismissal.

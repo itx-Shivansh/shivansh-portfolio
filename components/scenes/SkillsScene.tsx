@@ -59,156 +59,150 @@ export default function SkillsScene() {
       className="relative w-full select-none space-y-8 scroll-mt-20"
     >
       <div className="w-full space-y-8 z-10 relative pointer-events-auto select-none">
-        {/* ── Top Header Row ─────────────────────────────────────────── */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 shadow-lg">
-              <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
-              <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
-                Skills &amp; Competencies
-              </span>
-            </div>
-            <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
-              <span className="text-white">Skills &amp; </span>
-              <span className="text-[#F5B800]">Competencies</span>
-            </h2>
-            <div className="flex items-center gap-3 text-neutral-300 text-sm font-normal tracking-wide">
-              <span className="w-6 h-[2px] bg-[#F5B800] rounded-full inline-block" />
-              <p>A curated overview of my technical expertise across different domains and technologies.</p>
-            </div>
+        {/* ── Top Header Row: Stacked Full Width ──────────────────────── */}
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
+            <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
+              Skills &amp; Competencies
+            </span>
           </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 lg:pt-0">
-            <button
-              onClick={() => {
-                sound.playClick()
-                setActiveCategory(null)
-              }}
-              onMouseEnter={() => sound.playHover()}
-              className={`rounded-full border px-4 py-2 font-mono text-xs font-bold transition-all duration-200 ${
-                activeCategory === null
-                  ? 'border-[#F5B800] bg-[#1a1710] text-[#F5B800] shadow-[0_0_12px_rgba(245,184,0,0.2)]'
-                  : 'border-white/10 bg-surface-card hover:bg-surface-card-hover text-neutral-400 hover:border-white/30 hover:text-white'
-              }`}
-            >
-              ALL ({skillGroups.length})
-            </button>
-
-            {skillGroups.map((group) => {
-              const isSelected = activeCategory === group.category
-              return (
-                <button
-                  key={group.category}
-                  onClick={() => {
-                    sound.playClick()
-                    setActiveCategory(isSelected ? null : group.category)
-                  }}
-                  onMouseEnter={() => sound.playHover()}
-                  className={`rounded-full border px-4 py-2 font-mono text-xs font-semibold transition-all duration-200 ${
-                    isSelected
-                      ? 'border-[#F5B800] bg-[#1a1710] text-[#F5B800] shadow-[0_0_12px_rgba(245,184,0,0.2)]'
-                      : 'border-white/10 bg-surface-card hover:bg-surface-card-hover text-neutral-400 hover:border-white/30 hover:text-white'
-                  }`}
-                >
-                  {group.category.toUpperCase()}
-                </button>
-              )
-            })}
+          <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
+            <span className="text-white">Skills &amp; </span>
+            <span className="text-[#F5B800]">Competencies</span>
+          </h2>
+          <div className="flex items-center gap-3 text-neutral-300 text-sm font-normal tracking-wide">
+            <span className="w-6 h-[2px] bg-[#F5B800] rounded-full inline-block" />
+            <p>A curated overview of my technical expertise across different domains and technologies.</p>
           </div>
         </div>
 
-        {/* ── Main Content Grid: 6 Skill Cards + Right Overview Stack ──── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: 6 Category Skill Cards Grid (2 Columns) */}
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredGroups.map((group) => (
-              <div
-                key={group.category}
-                className="group rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 shadow-2xl transition-all duration-300 hover:border-[#F5B800]/40 space-y-4"
-              >
-                {/* Card Header */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#1b1912] border border-[#F5B800]/30 flex items-center justify-center shrink-0">
-                      {CATEGORY_ICONS[group.category] || (
-                        <svg className="w-5 h-5 text-[#F5B800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <circle cx="12" cy="12" r="8" />
-                        </svg>
-                      )}
-                    </div>
-                    <h3 className="font-display text-base font-bold text-white">
-                      {group.category}
-                    </h3>
-                  </div>
-                  <span className="font-mono text-[10px] font-bold text-[#F5B800] uppercase tracking-wider">
-                    {group.skills.length} MODULES
-                  </span>
-                </div>
+        {/* ── Category Filter Pills: Wrapping Row ───────────────────── */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => {
+              sound.playClick()
+              setActiveCategory(null)
+            }}
+            onMouseEnter={() => sound.playHover()}
+            className={`rounded-full border px-4 py-2 font-mono text-xs font-bold transition-all duration-200 ${
+              activeCategory === null
+                ? 'border-[#F5B800] bg-[#1a1710] text-[#F5B800] shadow-[0_0_12px_rgba(245,184,0,0.2)]'
+                : 'border-white/10 bg-surface-card hover:bg-surface-card-hover text-neutral-400 hover:border-white/30 hover:text-white'
+            }`}
+          >
+            ALL ({skillGroups.length})
+          </button>
 
-                {/* Skill Pills */}
-                <div className="flex flex-wrap gap-2.5 pt-1">
-                  {group.skills.map((skill, idx) => (
-                    <div
-                      key={idx}
-                      onMouseEnter={() => sound.playHover()}
-                      className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-3.5 py-2 text-xs font-medium text-neutral-200 transition-all duration-200 hover:border-[#F5B800]/50 hover:text-[#F5B800] flex items-center justify-between gap-2"
-                    >
-                      <span className="font-semibold text-white">{skill.name}</span>
-                      {skill.level && (
-                        <span className="font-mono text-[10px] font-bold text-neutral-400 uppercase tracking-tight opacity-75">
-                          {skill.level}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+          {skillGroups.map((group) => {
+            const isSelected = activeCategory === group.category
+            return (
+              <button
+                key={group.category}
+                onClick={() => {
+                  sound.playClick()
+                  setActiveCategory(isSelected ? null : group.category)
+                }}
+                onMouseEnter={() => sound.playHover()}
+                className={`rounded-full border px-4 py-2 font-mono text-xs font-semibold transition-all duration-200 ${
+                  isSelected
+                    ? 'border-[#F5B800] bg-[#1a1710] text-[#F5B800] shadow-[0_0_12px_rgba(245,184,0,0.2)]'
+                    : 'border-white/10 bg-surface-card hover:bg-surface-card-hover text-neutral-400 hover:border-white/30 hover:text-white'
+                }`}
+              >
+                {group.category.toUpperCase()}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* ── Skills Overview: Compact Full-Width Stat Row ─────────────── */}
+        <div className="w-full rounded-2xl border border-white/10 bg-surface-card p-5 sm:p-6 shadow-2xl space-y-4">
+          <div className="flex items-center gap-2.5 border-b border-white/10 pb-3">
+            <div className="w-7 h-7 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <h3 className="font-display text-sm sm:text-base font-bold text-[#F5B800]">Skills Overview</h3>
           </div>
 
-          {/* Right Column: Skills Overview & Quote Stack */}
-          <div className="lg:col-span-4 space-y-6">
-            {/* Card 1: Skills Overview Card */}
-            <div className="rounded-2xl border border-white/10 bg-surface-card p-6 shadow-2xl space-y-5">
-              <div className="flex items-center gap-2.5 border-b border-white/10 pb-4">
-                <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+            {/* Stat 1 */}
+            <div className="space-y-0.5">
+              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">6</div>
+              <div className="text-xs text-neutral-400 font-medium">Categories</div>
+            </div>
+
+            {/* Stat 2 */}
+            <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
+              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">22+</div>
+              <div className="text-xs text-neutral-400 font-medium">Technologies</div>
+            </div>
+
+            {/* Stat 3 */}
+            <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
+              <div className="font-display text-lg sm:text-xl font-bold text-[#F5B800]">Advanced</div>
+              <div className="text-xs text-neutral-400 font-medium">In Problem Solving &amp; Building Solutions</div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Category Skill Cards Grid ───────────────────────────────── */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+          {filteredGroups.map((group) => (
+            <div
+              key={group.category}
+              className="group min-w-0 rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-5 sm:p-6 shadow-2xl transition-all duration-300 hover:border-[#F5B800]/40 space-y-4"
+            >
+              {/* Card Header */}
+              <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#1b1912] border border-[#F5B800]/30 flex items-center justify-center shrink-0">
+                    {CATEGORY_ICONS[group.category] || (
+                      <svg className="w-5 h-5 text-[#F5B800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <circle cx="12" cy="12" r="8" />
+                      </svg>
+                    )}
+                  </div>
+                  <h3 className="font-display text-base font-bold text-white min-w-0 break-words">
+                    {group.category}
+                  </h3>
                 </div>
-                <h3 className="font-display text-base font-bold text-[#F5B800]">Skills Overview</h3>
+                <span className="shrink-0 font-mono text-[10px] font-bold text-[#F5B800] uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#1a1710] border border-[#F5B800]/20">
+                  {group.skills.length}
+                </span>
               </div>
 
-              {/* Stat 1 */}
-              <div className="space-y-0.5">
-                <div className="font-display text-3xl font-extrabold text-white">6</div>
-                <div className="text-xs text-neutral-400 font-medium">Categories</div>
-              </div>
-
-              {/* Stat 2 */}
-              <div className="space-y-0.5 pt-2 border-t border-white/5">
-                <div className="font-display text-3xl font-extrabold text-white">22+</div>
-                <div className="text-xs text-neutral-400 font-medium">Technologies</div>
-              </div>
-
-              {/* Stat 3 */}
-              <div className="space-y-0.5 pt-2 border-t border-white/5">
-                <div className="font-display text-xl font-bold text-[#F5B800]">Advanced</div>
-                <div className="text-xs text-neutral-400 font-medium">In Problem Solving &amp; Building Solutions</div>
+              {/* Skill Pills */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {group.skills.map((skill, idx) => (
+                  <div
+                    key={idx}
+                    onMouseEnter={() => sound.playHover()}
+                    className="max-w-full rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-3 py-1.5 text-xs font-medium text-neutral-200 transition-all duration-200 hover:border-[#F5B800]/50 hover:text-[#F5B800] flex flex-wrap items-center justify-between gap-x-2 gap-y-1"
+                  >
+                    <span className="font-semibold text-white min-w-0 break-words">{skill.name}</span>
+                    {skill.level && (
+                      <span className="font-mono text-[10px] font-bold text-neutral-400 uppercase tracking-tight opacity-75 shrink-0">
+                        {skill.level}
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
+          ))}
+        </div>
 
-            {/* Card 2: Quote Card */}
-            <div className="rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover transition-colors p-6 shadow-2xl space-y-3">
-              <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
-              <p className="text-neutral-200 text-xs sm:text-sm italic font-normal leading-relaxed">
-                I focus on learning deeply, building consistently, and solving real-world problems with clean and efficient code.
-              </p>
-              <div className="font-mono text-xs font-bold text-[#F5B800] pt-1">
-                &mdash; Shivansh Raj
-              </div>
-            </div>
+        {/* ── Quote Card (Full Width Below Grid) ─────────────────────── */}
+        <div className="w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover transition-colors p-6 shadow-2xl space-y-3">
+          <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
+          <p className="text-neutral-200 text-xs sm:text-sm italic font-normal leading-relaxed">
+            I focus on learning deeply, building consistently, and solving real-world problems with clean and efficient code.
+          </p>
+          <div className="font-mono text-xs font-bold text-[#F5B800] pt-1">
+            &mdash; Shivansh Raj
           </div>
         </div>
       </div>

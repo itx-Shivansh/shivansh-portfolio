@@ -24,19 +24,19 @@ export default function MainShell({ children }: { children: React.ReactNode }) {
       <div className="mx-auto max-w-[1280px] px-6 sm:px-12 lg:px-16 bg-transparent">
         <div className="lg:flex lg:justify-between lg:gap-12 bg-transparent">
           {/* ── Fixed Left Column (Sticky at lg and up) ──────────────────── */}
-          <header className="lg:sticky lg:top-0 lg:flex lg:max-h-dvh lg:h-dvh lg:w-[44%] lg:flex-col lg:justify-between lg:py-20 xl:py-24 pt-16 pb-10 bg-transparent select-none">
+          <header className="lg:sticky lg:top-0 lg:flex lg:max-h-dvh lg:h-dvh lg:w-[44%] lg:flex-col lg:justify-between lg:py-20 xl:py-24 pt-16 pb-10 bg-transparent select-none min-w-0">
             {/* Top Identity Block */}
-            <div className="space-y-5">
+            <div className="space-y-5 container-inline min-w-0">
               {/* Badge Pill */}
               <div className="inline-flex items-center gap-2 rounded-full border border-[#F5B800]/30 bg-surface-card px-3.5 py-1 text-xs font-mono font-semibold text-[#F5B800]">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-pulse" />
                 <span>ENGINEERING &amp; AI · DTU</span>
               </div>
 
-              {/* Name Headline (Treatment from HeroScene) */}
-              <h1 className="font-display font-black uppercase tracking-tight leading-[0.9] text-5xl sm:text-6xl xl:text-7xl">
-                <span className="block text-white">SHIVANSH</span>
-                <span className="block text-[#F5B800]">RAJ</span>
+              {/* Name Headline */}
+              <h1 className="font-display font-black uppercase tracking-tight leading-[0.9] text-[clamp(2rem,10.5cqw,4.5rem)]">
+                <span className="block text-white whitespace-nowrap">SHIVANSH</span>
+                <span className="block text-[#F5B800] whitespace-nowrap">RAJ</span>
               </h1>
 
               {/* Role Line */}
@@ -157,7 +157,7 @@ export default function MainShell({ children }: { children: React.ReactNode }) {
           </header>
 
           {/* ── Scrolling Right Column (Normal Document Flow) ───────────── */}
-          <div className="lg:w-[54%] py-12 lg:py-20 xl:py-24 bg-transparent space-y-24 sm:space-y-32">
+          <div className="lg:w-[54%] min-w-0 py-12 lg:py-20 xl:py-24 bg-transparent space-y-24 sm:space-y-32">
             {children}
           </div>
         </div>

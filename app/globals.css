@@ -149,6 +149,11 @@
     background-size: 80px 80px;
   }
 
+  /* Container query utilities */
+  .container-inline {
+    container-type: inline-size;
+  }
+
   .text-mono-meta {
     font-family: var(--font-mono, monospace);
     font-size: 0.65rem;
