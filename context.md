@@ -41,20 +41,20 @@ Project_Shivansh/
 │   ├── globals.css
 │   ├── layout.tsx
 │   ├── page.tsx
-│   └── style-guide/
+│   └── style-guide/ (candidate for deletion in future chunk)
 │       └── page.tsx
 ├── components/
 │   ├── canvas/
 │   │   ├── CameraRig.tsx
-│   │   ├── ContactAtmosphere.tsx (orphan)
-│   │   ├── HeroShaderBackground.tsx (orphan)
-│   │   ├── Journey3DObjects.tsx (orphan)
+│   │   ├── ContactAtmosphere.tsx (orphan - to delete in Chunk 7)
+│   │   ├── HeroShaderBackground.tsx (orphan - to delete in Chunk 7)
+│   │   ├── Journey3DObjects.tsx (orphan - to delete in Chunk 7)
 │   │   ├── ProjectCard3D.tsx
 │   │   ├── ProjectCarousel3D.tsx
 │   │   ├── Scene.tsx
 │   │   ├── ScenePostProcessing.tsx
-│   │   └── Skills3DConstellation.tsx (orphan)
-├── providers/
+│   │   └── Skills3DConstellation.tsx (orphan - to delete in Chunk 7)
+│   ├── providers/
 │   │   ├── MainShell.tsx
 │   │   ├── SmoothScrollProvider.tsx
 │   │   └── TabTitleController.tsx
@@ -113,22 +113,26 @@ Project_Shivansh/
   - Defined in `globals.css`: `--color-accent-gold: #F5B800;`
   - Defined in `tailwind.config.ts`: `accent.gold: 'var(--color-accent-gold)'`
   - Consistently used across scene cards, loader accents, nav highlights, and interactive borders.
-- **Pending Replacement (Cyan & Violet):**
-  - Cyan (`#00d9ff`, `--color-accent-cyan`, `accent-cyan`, `--color-border-glow`, `--color-accent-glow`)
-  - Violet (`#8b5cf6`, `--color-accent-violet`, `accent-violet`)
-  - *To be replaced in Chunk 2.*
+- **Secondary Accent (Dim Gold):** `#A67C00`
+  - Defined in `globals.css`: `--color-accent-gold-dim: #A67C00;`
+  - Defined in `tailwind.config.ts`: `accent['gold-dim']: 'var(--color-accent-gold-dim)'`
+  - Used in gradients, second light channels, and secondary interactive states where dual accents were formerly used.
 - **Surface & Backgrounds:**
   - Base pitch black: `#000000` (`--color-bg-base: 0 0 0`)
   - Deep dark surfaces: `#08090d` (`--color-bg-surface: 8 9 13`), `#0e1018` (`--color-bg-surface-elevated: 14 16 24`)
   - Component glass cards: `#0d0d10`, `#121215`, `#16140e`, `#1a1710`, `#0c0c0e` with backdrop blur (16px–24px)
-- **Borders:**
+- **Borders & Glows:**
   - Subtle: `rgba(255, 255, 255, 0.06)` (`--color-border-subtle`)
-  - Glow: `rgba(0, 217, 255, 0.3)` (`--color-border-glow`)
+  - Glow: `rgba(245, 184, 0, 0.3)` (`--color-border-glow`)
+  - Accent glow: `rgba(245, 184, 0, 0.15)` (`--color-accent-glow`)
+  - Utilities: `.glow-gold` (`box-shadow: 0 0 35px -5px rgba(245, 184, 0, 0.3)`), `.glow-gold-dim` (`box-shadow: 0 0 35px -5px rgba(166, 124, 0, 0.3)`)
   - Amber border accents: `#F5B800/30`, `#F5B800/40`, `#F5B800/60`
+- **Selection:** `rgba(245, 184, 0, 0.25)`
 - **Text:**
   - Primary: `#f8fafc` (`--color-text-primary`)
   - Secondary: `#94a3b8` (`--color-text-secondary`)
   - Muted: `#475569` (`--color-text-muted`)
+- **Cyan & Violet Status:** Fully eliminated from active UI, layout, store, and Tailwind configuration. Three orphan unmounted components (`HeroShaderBackground.tsx`, `Journey3DObjects.tsx`, `Skills3DConstellation.tsx`) intentionally retain legacy values until deletion in Chunk 7.
 
 ### Typography Tokens
 - Display font: `Syne` (variable font, `--font-display`)
@@ -158,7 +162,7 @@ Project_Shivansh/
 
 ## Tentative Redesign Roadmap
 1. **Chunk 1 (Done):** Safety branch, remove scroll-scrubbed frame background, delete 300 JPG frames, decouple preloader and store, establish solid black base `#000000`, register `--color-accent-gold: #F5B800`.
-2. **Chunk 2:** Palette swap — systematically replace cyan and violet tokens with gold and neutral monochrome.
+2. **Chunk 2 (Done):** Palette swap to gold and black — defined gold (`#F5B800`) and dim gold (`#A67C00`), removed cyan and violet tokens, updated selection, cursor, HUD, CameraRig lighting, and contact button.
 3. **Chunk 3:** Gold cursor spotlight (desktop-only interactive glow).
 4. **Chunk 4:** Two-column shell — fixed left column (hero/identity/nav) + scrolling right column (experience, projects, skills, contact).
 5. **Chunk 5:** Dedicated About section with personal photo.
@@ -170,18 +174,19 @@ Project_Shivansh/
 - **Pre-Chunk Initial Inspection (2026-11-18):** Completed full baseline audit of codebase, architecture, background canvas engine, 3D WebGL scene, state management, routes, content data, and build status. `context.md` established.
 - **Chunk 1: Remove Frame Background & Decouple Loader (2026-11-18):**
   - **Branch:** `redesign-gold-minimal`.
+  - **Commit:** `569de4d` ("chunk 1: remove frame background, flat base").
+  - Removed frame sequence canvas engine and 300 JPEG frames. Decoupled loader progress calculation.
+- **Chunk 2: Palette Swap to Gold and Black (2026-11-18):**
+  - **Branch:** `redesign-gold-minimal`.
   - **Files Changed:**
-    - `app/layout.tsx`: removed `ScrollVideoBackground` import and JSX mount.
-    - `components/canvas/Scene.tsx`: cleaned up file header comment to remove scroll video references.
-    - `components/ui/Loader.tsx`: decoupled preloader progress from frame count; now gates solely on project video preloading (`videosRatio * 100`).
-    - `lib/scrollStore.ts`: removed `framesLoaded`, `totalFramesToPreload`, `setFramesLoaded`, `videoStatus`, `videoDuration`, `setVideoStatus`, and `VideoStatus` type. Kept `videosLoadedCount` and its setter.
-    - `app/globals.css`: registered `--color-accent-gold: #F5B800;` in `:root`. Verified solid black base `--color-bg-base: 0 0 0;` on `html` and `body`.
-    - `tailwind.config.ts`: registered `accent.gold: 'var(--color-accent-gold)'`.
-    - `context.md`: updated documentation, tokens, roadmap, and chunk log.
-  - **Files Deleted:**
-    - `components/canvas/ScrollVideoBackground.tsx`
-    - `public/frames/` (directory containing 300 JPG frames, freeing ~7.23 MB).
-  - **Decisions Made:**
-    - Verified that `Loader.tsx` preloads the 4 project videos (`PROJECT_VIDEOS`) for Three.js video textures; kept that gate intact while dropping the frame counter.
-    - Verified zero remaining references to `ScrollVideoBackground`, `framesLoaded`, `/frames/`, or `ezgif-frame` in the repository.
-    - Verified build passes with 0 errors and 0 warnings.
+    - `app/globals.css`: defined `--color-accent-gold: #F5B800;`, `--color-accent-gold-dim: #A67C00;`, `--color-border-glow: rgba(245, 184, 0, 0.3);`, `--color-accent-glow: rgba(245, 184, 0, 0.15);`. Removed `--color-accent-cyan` and `--color-accent-violet`. Renamed `.glow-cyan`/`.glow-violet` to `.glow-gold`/`.glow-gold-dim`. Replaced gradient utility with gold-to-dim-gold. Set selection to `rgba(245, 184, 0, 0.25)`.
+    - `tailwind.config.ts`: replaced `cyan` and `violet` with `gold` and `'gold-dim'`.
+    - `app/layout.tsx`: changed selection class from `selection:bg-accent-cyan/20` to `selection:bg-accent-gold/20`.
+    - `components/ui/Cursor.tsx`: mapped cyan to gold and violet to gold-dim across dot and trailing ring.
+    - `components/ui/DebugHUD.tsx`: mapped text and progress bar gradient from cyan/violet to gold/gold-dim.
+    - `components/canvas/CameraRig.tsx`: mapped THREE.Color and directional lights to `#F5B800` and `#A67C00`. Replaced secondary amber `#f59e0b` with `#F5B800`.
+    - `components/scenes/ContactScene.tsx`: replaced gold-to-orange gradient submit button with solid `#F5B800` button with high-contrast black text (`11.7:1` contrast ratio).
+    - `app/style-guide/page.tsx`: mechanically mapped all tokens to gold/gold-dim and updated displayed color palette. *(Note: `/style-guide` route is marked as a candidate for deletion in a future chunk).*
+    - `docs/transitions.md`: updated color descriptions to gold and dim gold.
+    - `context.md`: updated tokens, chunk log, and roadmap.
+  - **Orphan Files Note:** Three unmounted canvas files (`HeroShaderBackground.tsx`, `Journey3DObjects.tsx`, `Skills3DConstellation.tsx`) intentionally retain legacy cyan/violet references until deleted in Chunk 7.

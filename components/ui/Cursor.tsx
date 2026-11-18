@@ -106,8 +106,8 @@ export default function Cursor() {
       {/* Inner Dot */}
       <div
         ref={dotRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[99998] rounded-full bg-accent-cyan transition-all duration-fast ${
-          isHover ? 'h-3 w-3 bg-accent-violet' : isText ? 'h-5 w-1 rounded-sm bg-accent-cyan' : 'h-2 w-2'
+        className={`fixed top-0 left-0 pointer-events-none z-[99998] rounded-full bg-accent-gold transition-all duration-fast ${
+          isHover ? 'h-3 w-3 bg-accent-gold-dim' : isText ? 'h-5 w-1 rounded-sm bg-accent-gold' : 'h-2 w-2'
         }`}
         style={{ willChange: 'transform' }}
       />
@@ -117,15 +117,15 @@ export default function Cursor() {
         ref={ringRef}
         className={`fixed top-0 left-0 pointer-events-none z-[99998] flex items-center justify-center rounded-full border transition-all duration-base ease-snap ${
           isHover
-            ? 'h-14 w-14 border-accent-cyan/80 bg-accent-cyan/10 glow-cyan scale-110'
+            ? 'h-14 w-14 border-accent-gold/80 bg-accent-gold/10 glow-gold scale-110'
             : isText
-            ? 'h-8 w-8 border-accent-violet/40 bg-accent-violet/5'
+            ? 'h-8 w-8 border-accent-gold-dim/40 bg-accent-gold-dim/5'
             : 'h-8 w-8 border-white/30 bg-transparent'
         }`}
         style={{ willChange: 'transform' }}
       >
         {cursorText && (
-          <span className="font-mono text-[9px] uppercase tracking-wider text-accent-cyan animate-in fade-in duration-150">
+          <span className="font-mono text-[9px] uppercase tracking-wider text-accent-gold animate-in fade-in duration-150">
             {cursorText}
           </span>
         )}

@@ -362,7 +362,7 @@ export default function ContactScene() {
                     type="submit"
                     disabled={isSubmitting}
                     onMouseEnter={() => sound.playHover()}
-                    className="w-full rounded-2xl bg-gradient-to-r from-[#F5B800] to-[#E65100] hover:brightness-110 disabled:opacity-50 py-3.5 px-6 font-mono text-xs font-extrabold text-black tracking-wider shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2"
+                    className="w-full rounded-2xl bg-[#F5B800] hover:brightness-110 disabled:opacity-50 py-3.5 px-6 font-mono text-xs font-extrabold text-black tracking-wider shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>

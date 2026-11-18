@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${displayFont.variable} ${bodyFont.variable} bg-bg-base font-body text-text-primary antialiased`}
     >
-      <body className="min-h-screen bg-bg-base font-body text-text-primary antialiased selection:bg-accent-cyan/20 selection:text-white">
+      <body className="min-h-screen bg-bg-base font-body text-text-primary antialiased selection:bg-accent-gold/20 selection:text-white">
         <SmoothScrollProvider>
           {/* Persistent WebGL canvas — rendered fixed behind all content */}
           <Scene />

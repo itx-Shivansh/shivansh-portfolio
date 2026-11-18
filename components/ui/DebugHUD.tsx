@@ -64,14 +64,14 @@ export default function DebugHUD() {
       {isDebugOpen && (
         <div className="mt-2 w-72 rounded-xl border border-border-subtle bg-bg-glass p-4 backdrop-blur-xl space-y-3 shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="flex items-center justify-between border-b border-border-subtle/50 pb-2">
-            <span className="font-bold text-accent-cyan">SYSTEM DEBUG HUD</span>
+            <span className="font-bold text-accent-gold">SYSTEM DEBUG HUD</span>
             <span className="text-text-muted">{fps} FPS</span>
           </div>
 
           <div className="space-y-1.5">
             <div className="flex justify-between">
               <span className="text-text-muted">Active Chapter:</span>
-              <span className="font-semibold text-accent-cyan uppercase">{activeSection}</span>
+              <span className="font-semibold text-accent-gold uppercase">{activeSection}</span>
             </div>
 
             <div className="flex justify-between">
@@ -86,7 +86,7 @@ export default function DebugHUD() {
 
             <div className="flex justify-between">
               <span className="text-text-muted">Cursor Mode:</span>
-              <span className="text-accent-violet">{cursorState}</span>
+              <span className="text-accent-gold-dim">{cursorState}</span>
             </div>
           </div>
 
@@ -104,7 +104,7 @@ export default function DebugHUD() {
                   </div>
                   <div className="h-1 w-full overflow-hidden rounded-full bg-bg-base">
                     <div
-                      className="h-full bg-gradient-to-r from-accent-cyan to-accent-violet transition-all duration-fast"
+                      className="h-full bg-gradient-to-r from-accent-gold to-accent-gold-dim transition-all duration-fast"
                       style={{ width: `${prog * 100}%` }}
                     ></div>
                   </div>

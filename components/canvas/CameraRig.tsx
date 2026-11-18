@@ -20,10 +20,9 @@ export default function CameraRig() {
 
   // Pre-allocated THREE vectors and colors to avoid GC allocation overhead
   const targetCamPos = useRef(new THREE.Vector3(0, 0, 8))
-  const colorCyan = useRef(new THREE.Color('#00d9ff'))
-  const colorViolet = useRef(new THREE.Color('#8b5cf6'))
-  const colorGold = useRef(new THREE.Color('#f59e0b'))
-  const currentLightColor = useRef(new THREE.Color('#00d9ff'))
+  const colorGold = useRef(new THREE.Color('#F5B800'))
+  const colorGoldDim = useRef(new THREE.Color('#A67C00'))
+  const currentLightColor = useRef(new THREE.Color('#F5B800'))
 
   useFrame((_, delta) => {
     // If a project is selected, let ProjectCarousel3D handle camera positioning
@@ -40,7 +39,7 @@ export default function CameraRig() {
         THREE.MathUtils.lerp(0, -0.6, t),
         THREE.MathUtils.lerp(8, 7.2, t)
       )
-      currentLightColor.current.copy(colorCyan.current).lerp(colorViolet.current, t)
+      currentLightColor.current.copy(colorGold.current).lerp(colorGoldDim.current, t)
     } else if (p < 0.48) {
       // Journey chapter (0.22 -> 0.48)
       const t = (p - 0.22) / 0.26
@@ -49,7 +48,7 @@ export default function CameraRig() {
         THREE.MathUtils.lerp(-0.6, 0.8, t),
         THREE.MathUtils.lerp(7.2, 6.4, t)
       )
-      currentLightColor.current.copy(colorViolet.current).lerp(colorCyan.current, t)
+      currentLightColor.current.copy(colorGoldDim.current).lerp(colorGold.current, t)
     } else if (p < 0.75) {
       // Projects chapter (0.48 -> 0.75)
       const t = (p - 0.48) / 0.27
@@ -58,7 +57,7 @@ export default function CameraRig() {
         THREE.MathUtils.lerp(0.8, 1.0, t),
         THREE.MathUtils.lerp(6.4, 7.5, t)
       )
-      currentLightColor.current.copy(colorCyan.current).lerp(colorViolet.current, t)
+      currentLightColor.current.copy(colorGold.current).lerp(colorGoldDim.current, t)
     } else {
       // Skills -> Contact finale (0.75 -> 1.00)
       const t = (p - 0.75) / 0.25
@@ -67,7 +66,7 @@ export default function CameraRig() {
         THREE.MathUtils.lerp(1.0, -0.4, t),
         THREE.MathUtils.lerp(7.5, 6.2, t)
       )
-      currentLightColor.current.copy(colorViolet.current).lerp(colorGold.current, t)
+      currentLightColor.current.copy(colorGoldDim.current).lerp(colorGold.current, t)
     }
 
     // 2. Smoothly lerp camera position
@@ -86,13 +85,13 @@ export default function CameraRig() {
         ref={dirLight1Ref}
         position={[10, 10, 5]}
         intensity={1}
-        color="#00d9ff"
+        color="#F5B800"
       />
       <directionalLight
         ref={dirLight2Ref}
         position={[-10, -10, -5]}
         intensity={0.5}
-        color="#8b5cf6"
+        color="#A67C00"
       />
     </>
   )

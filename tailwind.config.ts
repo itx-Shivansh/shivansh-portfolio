@@ -24,9 +24,8 @@ const config: Config = {
           glow: 'var(--color-border-glow)',
         },
         accent: {
-          cyan: 'var(--color-accent-cyan)',
-          violet: 'var(--color-accent-violet)',
           gold: 'var(--color-accent-gold)',
+          'gold-dim': 'var(--color-accent-gold-dim)',
         },
         text: {
           primary: 'var(--color-text-primary)',
