@@ -5,14 +5,6 @@ export interface ProjectCapability {
   keyConcepts: string[]
 }
 
-export interface ProjectMediaItem {
-  label: string
-  src?: string
-  type?: 'video' | 'image'
-}
-
-export type ProjectMedia = ProjectMediaItem | string
-
 export interface Project {
   id: string
   title: string
@@ -20,7 +12,7 @@ export interface Project {
   role: string
   highlights: string[]
   technologies: string[]
-  media: ProjectMedia[]
+  previewVideo?: string
   links: {
     github?: string
     live?: string
@@ -47,14 +39,9 @@ export const projects: Project[] = [
       'Focused on creating a personalized productivity assistant.',
     ],
     technologies: ['Python', 'REST APIs', 'AI', 'Automation'],
-    media: [
-      { label: 'Hero Overview', src: '/videos/aria_vid.mp4', type: 'video' },
-      'Dashboard Screenshot',
-      'Architecture Diagram',
-      'Demo Video',
-    ],
+    previewVideo: '/videos/aria_vid.mp4',
     links: {
-      github: '#',
+      github: 'https://github.com/itx-Shivansh/aria',
       live: '#',
     },
     sectionTitle: 'What ARIA Can Do',
@@ -108,14 +95,9 @@ export const projects: Project[] = [
       'Developed modern UI focused on data visualization.',
     ],
     technologies: ['React', 'Next.js', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB', 'Leaflet', 'REST APIs'],
-    media: [
-      { label: 'Hero Overview', src: '/videos/ind_sig.mp4', type: 'video' },
-      'Landing Page',
-      'Interactive Map',
-      'Dashboard',
-    ],
+    previewVideo: '/videos/ind_sig.mp4',
     links: {
-      github: '#',
+      github: 'https://github.com/itx-Shivansh/indiasignal',
       live: '#',
     },
     sectionTitle: 'What IndiaSignal Can Do',
@@ -170,13 +152,9 @@ export const projects: Project[] = [
       'Focused on creating a human-like AI experience.',
     ],
     technologies: ['Flutter', 'FastAPI', 'Dart', 'Python', 'Gemini', 'Groq', 'LLaMA', 'REST APIs', 'Speech Recognition', 'TTS'],
-    media: [
-      { label: 'Live Demo', src: '/videos/shivantra_vid.mp4', type: 'video' },
-      'Conversation Demo',
-      'Voice Animation',
-    ],
+    previewVideo: '/videos/shivantra_vid.mp4',
     links: {
-      github: '#',
+      github: 'https://github.com/itx-Shivansh/Shivantra',
     },
     sectionTitle: 'What Shivantra Can Do',
     capabilities: [
@@ -231,13 +209,9 @@ export const projects: Project[] = [
       'Developed scalable architecture for future features.',
     ],
     technologies: ['TypeScript', 'React', 'Next.js', 'Gemini', 'Groq', 'LLaMA', 'Supabase', 'SSE', 'REST APIs'],
-    media: [
-      { label: 'Hero Overview', src: '/videos/obsidian_vid.mp4', type: 'video' },
-      'Homepage',
-      'Chat Interface',
-    ],
+    previewVideo: '/videos/obsidian_vid.mp4',
     links: {
-      github: '#',
+      github: 'https://github.com/itx-Shivansh/Project_Obsidian',
       live: 'https://askobsidian.vercel.app',
     },
     sectionTitle: 'What Makes Obsidian Different',

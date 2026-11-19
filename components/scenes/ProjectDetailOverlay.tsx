@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Project } from '@/content/projects'
 import { gsap, ease, duration } from '@/lib/motion'
@@ -10,6 +10,57 @@ import { useScrollStore } from '@/lib/scrollStore'
 interface ProjectDetailOverlayProps {
   project: Project | null
   onClose: () => void
+}
+
+function ProjectPreviewVideo({ project }: { project: Project }) {
+  const [error, setError] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const prefersReduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  useEffect(() => {
+    setError(false)
+    const videoNode = videoRef.current
+    return () => {
+      if (videoNode) {
+        videoNode.pause()
+        videoNode.src = ''
+        videoNode.load()
+      }
+    }
+  }, [project.id])
+
+  if (!project.previewVideo) return null
+
+  return (
+    <div className="space-y-4 border-t border-white/10 pt-8">
+      <h3 className="font-display text-lg font-bold text-white">
+        Project Preview
+      </h3>
+      <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black flex items-center justify-center">
+        {error ? (
+          <p className="font-mono text-xs text-neutral-500">Preview unavailable</p>
+        ) : (
+          <video
+            key={project.id}
+            ref={videoRef}
+            src={project.previewVideo}
+            autoPlay={!prefersReduced}
+            muted
+            loop
+            playsInline
+            controls
+            preload="metadata"
+            aria-label={`Preview of ${project.title}`}
+            onError={() => setError(true)}
+            className="h-full w-full object-contain"
+          />
+        )}
+      </div>
+    </div>
+  )
 }
 
 export default function ProjectDetailOverlay({ project, onClose }: ProjectDetailOverlayProps) {
@@ -245,48 +296,8 @@ export default function ProjectDetailOverlay({ project, onClose }: ProjectDetail
           </div>
         )}
 
-        {/* Media Preview Grid */}
-        <div className="space-y-4 border-t border-white/10 pt-8">
-          <h3 className="font-display text-lg font-bold text-white">
-            Media &amp; Artifacts
-          </h3>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {project.media.map((mediaItem, idx) => {
-              const isObject = typeof mediaItem === 'object' && mediaItem !== null
-              const label = isObject ? mediaItem.label : mediaItem
-              const src = isObject ? mediaItem.src : undefined
-              const type = isObject ? mediaItem.type : undefined
-              const isVideo = type === 'video' && src
-
-              return (
-                <div
-                  key={idx}
-                  className="group relative flex h-48 flex-col justify-end overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#121215] to-[#0c0c0e] transition-all duration-300 hover:border-[#F5B800]/50 shadow-xl"
-                >
-                  {isVideo ? (
-                    <video
-                      src={src}
-                      className="absolute inset-0 h-full w-full object-cover"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
-                  <div className="relative z-10 p-5 flex flex-col justify-end h-full">
-                    <span className="font-mono text-xs font-bold text-[#F5B800] mb-1">
-                      0{idx + 1} &frasl;&frasl; {isVideo ? 'VIDEO PREVIEW' : 'MEDIA ARTIFACT'}
-                    </span>
-                    <span className="font-display text-sm font-bold text-white">
-                      {label}
-                    </span>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
+        {/* Project Preview Video */}
+        <ProjectPreviewVideo project={project} />
 
         {/* Footer Actions / Links */}
         <div className="flex flex-wrap items-center gap-4 border-t border-white/10 pt-8">
@@ -304,14 +315,14 @@ export default function ProjectDetailOverlay({ project, onClose }: ProjectDetail
             </a>
           )}
 
-          {project.links.live && project.links.live !== '#' && (
+          {project.links.live && project.links.live !== '#' && project.links.live.trim() !== '' && (
             <a
               href={project.links.live}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-2xl bg-[#F5B800] hover:brightness-110 px-7 py-3.5 text-xs font-mono font-extrabold text-black transition-all shadow-lg hover:scale-[1.02]"
             >
-              <span>View Live Demo</span>
+              <span>Visit Live Demo</span>
               <span className="transition-transform group-hover:translate-x-1">
                 ↗
               </span>

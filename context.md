@@ -156,7 +156,8 @@ Project_Shivansh/
 6. **Chunk 6 (Done):** Polish: photo hygiene (real JPEG 1000x1000, 181 KB), card surfaces (`surface.card` & `surface['card-hover']`), removed backdrop-blur from all active scene cards, JetBrains Mono font integration, projects list hover dimming (lg+), CursorSpotlight constants extracted.
 6b. **Chunk 6b (Done):** Layout fixes: Name container query clamp `clamp(2rem, 10.5cqw, 4.5rem)` in left column; Skills section re-layout (stacked header, wrapping filter pills, full-width compact stats row, responsive category grid with unbreakable tags/pills, quote card relocated below grid).
 7. **Chunk 7 (Done):** Cleanup: deleted 9 WebGL canvas files, deleted `components/canvas/`, deleted `HeroScene.tsx` & `ProjectsScene.tsx`, deleted `app/style-guide/`, deleted `docs/transitions.md`. Uninstalled `three`, `@react-three/*`, and `@types/three`. Cleaned `scrollStore.ts` and `constants.ts`.
-8. **Chunk 8 (Done — Ready for preview deploy):** Mobile polish (photo frame offset, email clamp & break, loader mobile sizing), gated DebugHUD (`NODE_ENV`), loader session storage & reduced-motion skip, metadataBase & dynamic opengraph-image, single-column skills grid refinement, accessibility skip link & single h1 & semantic footer, Lighthouse audit (Perf 85, A11y 96, Best Practices 100, SEO 100), updated README. Ready for Vercel preview deploy.
+8. **Chunk 8 (Done):** Mobile polish (photo frame offset, email clamp & break, loader mobile sizing), gated DebugHUD (`NODE_ENV`), loader session storage & reduced-motion skip, metadataBase & dynamic opengraph-image, single-column skills grid refinement, accessibility skip link & single h1 & semantic footer, Lighthouse audit (Perf 85, A11y 96, Best Practices 100, SEO 100), updated README.
+9. **Chunk 9 (Done — Ready for preview deploy):** Project Preview video per project in detail modal, real GitHub links on modal and project cards, clean removal of legacy media grid & placeholders, hidden inactive live demo buttons. Ready for Vercel preview deploy.
 
 ## Old journey.ts (replaced)
 ```ts
@@ -330,6 +331,38 @@ export const milestones: Milestone[] = [
     - DEBUG MODE button absent in production build.
     - Exactly one `<h1>` in document.
     - Saved screenshots to `C:\Users\HP victos\AppData\Local\Temp\screenshots_chunk8\`.
+- **Chunk 9: Project Preview Video & Real GitHub Links (2026-11-19):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Files Changed:** `content/projects.ts`, `components/scenes/ProjectDetailOverlay.tsx`, `components/sections/ProjectsList.tsx`, `context.md`.
+  - **Data Refactoring (`content/projects.ts`):**
+    - Added `previewVideo?: string` to `Project` interface.
+    - Explicit video mapping:
+      - `aria`: `/videos/aria_vid.mp4`
+      - `india-signal`: `/videos/ind_sig.mp4`
+      - `shivantra`: `/videos/shivantra_vid.mp4`
+      - `obsidian`: `/videos/obsidian_vid.mp4`
+    - Real GitHub repository links:
+      - `aria`: `https://github.com/itx-Shivansh/aria`
+      - `india-signal`: `https://github.com/itx-Shivansh/indiasignal`
+      - `shivantra`: `https://github.com/itx-Shivansh/Shivantra`
+      - `obsidian`: `https://github.com/itx-Shivansh/Project_Obsidian`
+    - Removed unused `ProjectMediaItem`, `ProjectMedia`, and `media: ProjectMedia[]` fields & placeholder strings.
+  - **Modal Detail Overlay (`components/scenes/ProjectDetailOverlay.tsx`):**
+    - Replaced "Media & Artifacts" grid with a dedicated "Project Preview" section.
+    - Single video container: `aspect-video`, black background, `object-contain`, `rounded-xl`, `border border-white/10`.
+    - Video attributes: `muted`, `loop`, `playsInline`, `controls`, `preload="metadata"`, `autoPlay` (only when reduced-motion not set).
+    - Lifecycle: mounts strictly while modal is open, keyed by `project.id`, pauses and releases decoder (`src = ''`, `.load()`) on close/unmount. Zero leftover video elements in DOM.
+    - Error handling: fallback to `<p>Preview unavailable</p>` on `onError`.
+    - GitHub button: opens real repo link in a new tab with `rel="noopener noreferrer"`.
+    - "Visit Live Demo" button: hidden on projects where `links.live` is `#` or empty (`aria`, `india-signal`, `shivantra`); visible strictly on `obsidian` (`https://askobsidian.vercel.app/`).
+  - **Project Cards Secondary Link (`components/sections/ProjectsList.tsx`):**
+    - Implemented W3C accessible card pattern: card container acts as wrapper with an absolute inset button as primary click target, and a sibling `GitHub ↗` link in the top-right header row.
+    - Zero nested interactive elements (no button inside link / link inside button).
+    - Card click, keyboard Enter/Space focus ring (`has-[:focus-visible]`), and hover-dimming (`lg:hover:!opacity-100`) fully preserved.
+  - **Verification:**
+    - `npm run lint` & `npm run build`: 0 errors, 0 warnings.
+    - Grep for old media strings: 0 matches.
+    - Real Headless Chrome (CDP): All 4 videos verified (`readyState: 4`, correct dimensions, zero console errors). 0px overflow at 375px and 1280px. Screenshots saved to `C:\Users\HP victos\AppData\Local\Temp\screenshots_chunk9\`.
 
 ## Known Layout Risks (Step 3 Audit)
 - **All Previous Risks Resolved in Chunk 8:**

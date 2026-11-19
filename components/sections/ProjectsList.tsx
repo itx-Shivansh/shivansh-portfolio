@@ -39,30 +39,49 @@ export default function ProjectsList() {
         {projects.map((project) => (
           <div
             key={project.id}
-            role="button"
-            tabIndex={0}
-            onClick={() => handleCardClick(project)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                handleCardClick(project)
-              }
-            }}
             onMouseEnter={() => sound.playHover()}
-            className="group relative block w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 sm:p-7 text-left transition-all duration-300 hover:border-[#F5B800]/60 hover:shadow-[0_0_25px_rgba(245,184,0,0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B800] cursor-pointer lg:group-hover/projects:opacity-60 lg:hover:!opacity-100"
-            aria-label={`Open project details for ${project.title}`}
+            className="group relative block w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 sm:p-7 text-left transition-all duration-300 hover:border-[#F5B800]/60 hover:shadow-[0_0_25px_rgba(245,184,0,0.12)] has-[:focus-visible]:border-[#F5B800] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#F5B800] cursor-pointer lg:group-hover/projects:opacity-60 lg:hover:!opacity-100"
           >
-            <div className="space-y-3">
-              {/* Role Line & Arrow Indicator */}
+            {/* Primary Clickable Area for opening project details (sibling to external links, no nesting) */}
+            <button
+              type="button"
+              onClick={() => handleCardClick(project)}
+              className="absolute inset-0 z-0 h-full w-full rounded-2xl focus:outline-none"
+              aria-label={`Open project details for ${project.title}`}
+            />
+
+            {/* Card Content Area */}
+            <div className="relative z-[1] pointer-events-none space-y-3">
+              {/* Role Line & Links / Arrow Indicator */}
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[11px] font-semibold text-[#F5B800] tracking-wide uppercase">
                   {project.role}
                 </span>
-                <span className="text-neutral-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-[#F5B800]">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
-                  </svg>
-                </span>
+
+                <div className="flex items-center gap-3">
+                  {project.links.github && (
+                    <a
+                      href={project.links.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        sound.playClick()
+                      }}
+                      className="pointer-events-auto inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-neutral-300 transition-colors hover:border-[#F5B800]/50 hover:text-[#F5B800] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#F5B800]"
+                      aria-label={`${project.title} GitHub repository (opens in a new tab)`}
+                    >
+                      <span>GitHub</span>
+                      <span className="text-[#F5B800] font-bold">↗</span>
+                    </a>
+                  )}
+
+                  <span className="text-neutral-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-[#F5B800]">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </span>
+                </div>
               </div>
 
               {/* Title */}
