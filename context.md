@@ -410,6 +410,15 @@ export const milestones: Milestone[] = [
     - **Photo & About:** Added cybernetic HUD brackets (`[ SYS // 01 ]`), offset gold outline frame glow, and spotlight card wraps.
     - **Contact & Terminal:** Full macOS terminal window styling with dot controls, live prompt with blinking cursor `▋`, and spotlight-wrapped transmission form.
   - **Verification:** `npm run lint` → 0 errors, `npm run build` → 0 errors, `next dev` responding with 200 on `http://localhost:3000`.
+- **Chunk 10c: Fix Grid & Flex Layout Nesting in SpotlightCard (2026-11-19):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Files Changed:** `components/scenes/JourneyScene.tsx`, `components/scenes/ContactScene.tsx`, `components/scenes/SkillsScene.tsx`, `context.md`.
+  - **Root Cause Confirmed:** In `JourneyScene.tsx`, the 4-item Quick Info bar had grid layout classes (`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 divide-y sm:divide-y-0 md:divide-x`) placed on the outer `SpotlightCard`. Because `SpotlightCard` wraps `{children}` in a single inner `div` to layer it above the mouse spotlights, that single `div` became the only child of the 4-column grid, causing all 4 items to collapse vertically into the first 25% column on the left.
+  - **Fix Applied:**
+    - `JourneyScene.tsx`: Restored the inner `<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 divide-y sm:divide-y-0 md:divide-x divide-white/10">` directly wrapping the 4 info items, spreading them horizontally across the card width.
+    - `ContactScene.tsx`: Added inner `<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">` in the Direct Email card to guarantee horizontal flex alignment between email info and the copy button.
+    - `SkillsScene.tsx`: Ensured all `space-y-*` layout classes are placed on direct parents of the intended child elements.
+  - **Verification:** `npm run lint` → 0 errors, `npm run build` → 0 errors. Dev server live on `http://localhost:3000`.
 
 ## Known Layout Risks (Step 3 Audit)
 - **All Previous Risks Resolved in Chunk 8:**

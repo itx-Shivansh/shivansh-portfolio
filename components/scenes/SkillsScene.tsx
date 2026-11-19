@@ -156,40 +156,42 @@ export default function SkillsScene() {
           transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
           spotlightColor="rgba(245, 184, 0, 0.15)"
           borderColor="rgba(245, 184, 0, 0.4)"
-          className="w-full p-5 sm:p-6 shadow-2xl space-y-4"
+          className="w-full p-5 sm:p-6 shadow-2xl"
         >
-          <div className="flex items-center gap-2.5 border-b border-white/10 pb-3">
-            <div className="w-7 h-7 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-              </svg>
-            </div>
-            <h3 className="font-display text-sm sm:text-base font-bold text-[#F5B800]">Skills Overview</h3>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
-            {/* Stat 1 */}
-            <div className="space-y-0.5">
-              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">
-                <CountUp to={6} />
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5 border-b border-white/10 pb-3">
+              <div className="w-7 h-7 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
               </div>
-              <div className="text-xs text-neutral-400 font-medium">Categories</div>
+              <h3 className="font-display text-sm sm:text-base font-bold text-[#F5B800]">Skills Overview</h3>
             </div>
 
-            {/* Stat 2 */}
-            <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">
-                <CountUp to={22} suffix="+" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+              {/* Stat 1 */}
+              <div className="space-y-0.5">
+                <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">
+                  <CountUp to={6} />
+                </div>
+                <div className="text-xs text-neutral-400 font-medium">Categories</div>
               </div>
-              <div className="text-xs text-neutral-400 font-medium">Technologies</div>
-            </div>
 
-            {/* Stat 3 */}
-            <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="font-display text-lg sm:text-xl font-bold text-[#F5B800]">
-                Advanced
+              {/* Stat 2 */}
+              <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
+                <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">
+                  <CountUp to={22} suffix="+" />
+                </div>
+                <div className="text-xs text-neutral-400 font-medium">Technologies</div>
               </div>
-              <div className="text-xs text-neutral-400 font-medium">In Problem Solving &amp; Building Solutions</div>
+
+              {/* Stat 3 */}
+              <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
+                <div className="font-display text-lg sm:text-xl font-bold text-[#F5B800]">
+                  Advanced
+                </div>
+                <div className="text-xs text-neutral-400 font-medium">In Problem Solving &amp; Building Solutions</div>
+              </div>
             </div>
           </div>
         </SpotlightCard>
@@ -207,45 +209,47 @@ export default function SkillsScene() {
                 transition={{ duration: prefersReduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
                 spotlightColor="rgba(245, 184, 0, 0.12)"
                 borderColor="rgba(245, 184, 0, 0.35)"
-                className="group min-w-0 p-5 sm:p-6 shadow-2xl space-y-4"
+                className="group min-w-0 p-5 sm:p-6 shadow-2xl"
               >
-                {/* Card Header */}
-                <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-[#1b1912] border border-[#F5B800]/30 flex items-center justify-center shrink-0 group-hover:border-[#F5B800] group-hover:shadow-[0_0_12px_rgba(245,184,0,0.3)] transition-all duration-300">
-                      {CATEGORY_ICONS[group.category] || (
-                        <svg className="w-5 h-5 text-[#F5B800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <circle cx="12" cy="12" r="8" />
-                        </svg>
-                      )}
+                <div className="space-y-4">
+                  {/* Card Header */}
+                  <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-[#1b1912] border border-[#F5B800]/30 flex items-center justify-center shrink-0 group-hover:border-[#F5B800] group-hover:shadow-[0_0_12px_rgba(245,184,0,0.3)] transition-all duration-300">
+                        {CATEGORY_ICONS[group.category] || (
+                          <svg className="w-5 h-5 text-[#F5B800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <circle cx="12" cy="12" r="8" />
+                          </svg>
+                        )}
+                      </div>
+                      <h3 className="font-display text-base font-bold text-white min-w-0 break-words group-hover:text-[#F5B800] transition-colors">
+                        {group.category}
+                      </h3>
                     </div>
-                    <h3 className="font-display text-base font-bold text-white min-w-0 break-words group-hover:text-[#F5B800] transition-colors">
-                      {group.category}
-                    </h3>
+                    <span className="shrink-0 font-mono text-[10px] font-bold text-[#F5B800] uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#1a1710] border border-[#F5B800]/20">
+                      {group.skills.length}
+                    </span>
                   </div>
-                  <span className="shrink-0 font-mono text-[10px] font-bold text-[#F5B800] uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#1a1710] border border-[#F5B800]/20">
-                    {group.skills.length}
-                  </span>
-                </div>
 
-                {/* Skill Pills */}
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {group.skills.map((skill, idx) => (
-                    <motion.div
-                      key={idx}
-                      whileHover={prefersReduced ? {} : { scale: 1.04, y: -1 }}
-                      transition={{ duration: 0.15 }}
-                      onMouseEnter={() => sound.playHover()}
-                      className="max-w-full rounded-xl border border-white/10 bg-surface-card hover:bg-[#1a1710] px-3 py-1.5 text-xs font-medium text-neutral-200 transition-all duration-200 hover:border-[#F5B800]/70 hover:text-[#F5B800] hover:shadow-[0_0_15px_rgba(245,184,0,0.25)] flex flex-wrap items-center justify-between gap-x-2 gap-y-1 cursor-default"
-                    >
-                      <span className="font-semibold text-white min-w-0 break-words">{skill.name}</span>
-                      {skill.level && (
-                        <span className="font-mono text-[10px] font-bold text-neutral-400 uppercase tracking-tight opacity-75 shrink-0">
-                          {skill.level}
-                        </span>
-                      )}
-                    </motion.div>
-                  ))}
+                  {/* Skill Pills */}
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {group.skills.map((skill, idx) => (
+                      <motion.div
+                        key={idx}
+                        whileHover={prefersReduced ? {} : { scale: 1.04, y: -1 }}
+                        transition={{ duration: 0.15 }}
+                        onMouseEnter={() => sound.playHover()}
+                        className="max-w-full rounded-xl border border-white/10 bg-surface-card hover:bg-[#1a1710] px-3 py-1.5 text-xs font-medium text-neutral-200 transition-all duration-200 hover:border-[#F5B800]/70 hover:text-[#F5B800] hover:shadow-[0_0_15px_rgba(245,184,0,0.25)] flex flex-wrap items-center justify-between gap-x-2 gap-y-1 cursor-default"
+                      >
+                        <span className="font-semibold text-white min-w-0 break-words">{skill.name}</span>
+                        {skill.level && (
+                          <span className="font-mono text-[10px] font-bold text-neutral-400 uppercase tracking-tight opacity-75 shrink-0">
+                            {skill.level}
+                          </span>
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </SpotlightCard>
             ))}
@@ -259,14 +263,16 @@ export default function SkillsScene() {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
           spotlightColor="rgba(245, 184, 0, 0.1)"
-          className="w-full p-6 shadow-2xl space-y-3"
+          className="w-full p-6 shadow-2xl"
         >
-          <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
-          <p className="text-neutral-200 text-xs sm:text-sm italic font-normal leading-relaxed">
-            I focus on learning deeply, building consistently, and solving real-world problems with clean and efficient code.
-          </p>
-          <div className="font-mono text-xs font-bold text-[#F5B800] pt-1">
-            &mdash; Shivansh Raj
+          <div className="space-y-3">
+            <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
+            <p className="text-neutral-200 text-xs sm:text-sm italic font-normal leading-relaxed">
+              I focus on learning deeply, building consistently, and solving real-world problems with clean and efficient code.
+            </p>
+            <div className="font-mono text-xs font-bold text-[#F5B800] pt-1">
+              &mdash; Shivansh Raj
+            </div>
           </div>
         </SpotlightCard>
       </div>
