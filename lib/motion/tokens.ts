@@ -49,6 +49,15 @@ export const easingCSS = {
   spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
 } as const
 
+// ─── Easing — Motion / Framer Motion cubic-bezier tuples ───────────────────────
+// Typed as readonly 4-number tuples for full TypeScript compatibility with motion.
+export const motionEase = {
+  cinematic: [0.76, 0, 0.24, 1] as const,
+  snap: [0.16, 1, 0.3, 1] as const,
+  enter: [0.33, 1, 0.68, 1] as const,
+  exit: [0.32, 0, 0.67, 0] as const,
+} as const
+
 // ─── Duration Scale — seconds (GSAP) ──────────────────────────────────────────
 export const duration = {
   /** Immediate UI feedback — hover glow, cursor: 150ms */

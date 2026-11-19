@@ -4,6 +4,7 @@ import { SectionId } from '@/lib/constants'
 import { useScrollStore } from '@/lib/scrollStore'
 import { sound } from '@/lib/sound'
 import clsx from 'clsx'
+import { motion, useReducedMotion } from 'motion/react'
 
 export interface NavRailItem {
   id: string
@@ -42,6 +43,7 @@ export const NAV_ITEMS: NavRailItem[] = [
  */
 export function NavRail() {
   const { activeSection, scrollToSection } = useScrollStore()
+  const prefersReduced = useReducedMotion()
 
   const handleNavClick = (target: SectionId) => {
     sound.playClick()
@@ -59,18 +61,25 @@ export function NavRail() {
               <button
                 onClick={() => handleNavClick(item.targetSection)}
                 onMouseEnter={() => sound.playHover()}
-                className="group flex items-center py-2 text-xs font-mono tracking-widest uppercase transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5B800] rounded-sm"
+                className="group flex items-center py-2 text-xs font-mono tracking-widest uppercase transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5B800] rounded-sm"
                 aria-label={`Jump to ${item.label} section`}
               >
-                {/* Horizontal Indicator Line */}
-                <span
-                  className={clsx(
-                    'mr-4 h-[2px] rounded-full transition-all duration-300 ease-out',
-                    isActive
-                      ? 'w-16 bg-[#F5B800] shadow-[0_0_8px_rgba(245,184,0,0.5)]'
-                      : 'w-8 bg-neutral-600 group-hover:w-16 group-hover:bg-neutral-200'
+                {/* Horizontal Indicator Line Container */}
+                <span className="relative mr-4 h-[2px] w-16 flex items-center">
+                  {isActive ? (
+                    <motion.span
+                      layoutId="navRailActiveLine"
+                      className="absolute inset-y-0 left-0 h-[2px] w-16 rounded-full bg-[#F5B800] shadow-[0_0_8px_rgba(245,184,0,0.5)]"
+                      transition={
+                        prefersReduced
+                          ? { duration: 0 }
+                          : { type: 'spring', stiffness: 380, damping: 30 }
+                      }
+                    />
+                  ) : (
+                    <span className="h-[2px] w-8 rounded-full bg-neutral-600 transition-all duration-300 ease-out group-hover:w-16 group-hover:bg-neutral-200" />
                   )}
-                />
+                </span>
                 {/* Label */}
                 <span
                   className={clsx(
@@ -98,6 +107,7 @@ export function NavRail() {
  */
 export default function Nav() {
   const { activeSection, scrollToSection, selectedProject } = useScrollStore()
+  const prefersReduced = useReducedMotion()
 
   if (selectedProject) return null
 
@@ -135,18 +145,24 @@ export default function Nav() {
             <button
               key={item.id}
               onClick={() => handleNavClick(item.targetSection)}
-              className={clsx(
-                'min-w-[48px] min-h-[44px] px-3.5 py-2 rounded-full flex flex-col items-center justify-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5B800]',
-                isActive
-                  ? 'bg-[#1c180e] border border-[#F5B800]/50 text-[#F5B800] shadow-[0_0_10px_rgba(245,184,0,0.2)]'
-                  : 'text-neutral-400 hover:text-white'
-              )}
+              className="relative min-w-[48px] min-h-[44px] px-3.5 py-2 rounded-full flex flex-col items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5B800]"
               aria-label={`Navigate to ${item.label}`}
             >
+              {isActive && (
+                <motion.span
+                  layoutId="mobileNavActivePill"
+                  className="absolute inset-0 rounded-full bg-[#1c180e] border border-[#F5B800]/50 shadow-[0_0_10px_rgba(245,184,0,0.2)]"
+                  transition={
+                    prefersReduced
+                      ? { duration: 0 }
+                      : { type: 'spring', stiffness: 400, damping: 32 }
+                  }
+                />
+              )}
               <span
                 className={clsx(
-                  'text-[10px] font-mono tracking-tight uppercase',
-                  isActive ? 'text-[#F5B800] font-bold' : 'text-neutral-400'
+                  'relative z-10 text-[10px] font-mono tracking-tight uppercase transition-colors',
+                  isActive ? 'text-[#F5B800] font-bold' : 'text-neutral-400 hover:text-white'
                 )}
               >
                 {item.label}

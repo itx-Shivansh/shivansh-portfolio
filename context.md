@@ -13,6 +13,7 @@
 - **3D & Graphics:** 
   - Uninstalled in Chunk 7: `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing`, `@types/three` (all 3D WebGL runtime code removed)
 - **Animation & Scrolling:**
+  - `motion`: `^14.14.0` (via `motion/react`)
   - `gsap`: `^3.12.5`
   - `@gsap/react`: `^2.1.1`
   - `lenis`: `^1.1.14`
@@ -383,6 +384,19 @@ export const milestones: Milestone[] = [
     - *Switching project without page reload:* smooth video switch, `readyState: 4`, `paused: false`.
     - *Console errors:* 0 errors in both dev and production.
     - *Negative test:* When pointed to non-existent video `/videos/nonexistent_file_test.mp4`, properly catches 404 error and renders `<p>Preview unavailable</p>`. Reverted immediately.
+- **Chunk 10: Motion.dev UI Enhancement (2026-11-19):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Files Changed:** `package.json`, `package-lock.json`, `lib/motion/tokens.ts`, `lib/motion/index.ts`, `components/providers/MainShell.tsx`, `components/ui/Nav.tsx`, `components/sections/ProjectsList.tsx`, `components/scenes/SkillsScene.tsx`, `components/scenes/JourneyScene.tsx`, `components/scenes/ContactScene.tsx`, `context.md`.
+  - **Installed:** `motion@^14.14.0` (using imports from `motion/react`).
+  - **Motion Tokens (`lib/motion/tokens.ts` & `index.ts`):** Added `motionEase` with `as const` typed cubic-bezier tuples (`cinematic`, `snap`, `enter`, `exit`) for TypeScript compatibility with Motion's `Easing` type in `Variants`.
+  - **Left Column & Header (`MainShell.tsx`):** Added staggered entrance sequence for identity block (badge, h1, role, tagline), smooth hover and tap micro-interactions on CTA buttons and social links (`whileHover={{ scale: 1.03 }}`, `whileTap={{ scale: 0.98 }}`).
+  - **Navigation (`Nav.tsx`):** Added shared-layout spring transitions (`layoutId="navRailActiveLine"` on desktop nav rail, `layoutId="mobileNavActivePill"` on mobile bottom dock).
+  - **Projects List (`ProjectsList.tsx`):** Smooth `whileInView` entrance with staggered delay per card (`index * 0.08`), subtle card hover lift (`whileHover={{ y: -3 }}`).
+  - **Skills Section (`SkillsScene.tsx`):** Animated category pill selector using `layoutId="activeSkillCategoryFilter"`, smooth grid filter transitions powered by `AnimatePresence mode="popLayout"`, interactive hover lifts on individual skill pills.
+  - **About Section (`JourneyScene.tsx`):** Viewport reveal on identity intro, personal portrait subtle hover scale (`whileHover={{ scale: 1.02 }}`), and interactive hover translation on "What I Do" and Education timeline items (`whileHover={{ x: 3 }}`).
+  - **Contact Section (`ContactScene.tsx`):** Animated terminal drawer opening/closing via `AnimatePresence`, copy email button label flip ("COPY EMAIL" ↔ "✓ COPIED") using `AnimatePresence mode="wait"`, interactive hover on social links and submit button.
+  - **Reduced Motion:** Every animation strictly guards against `useReducedMotion()` — transitions and transforms are disabled when `prefersReduced` is active.
+  - **Verification:** `npm run lint` → 0 errors, 0 warnings; `npm run build` → 0 errors; production server HTTP 200.
 
 ## Known Layout Risks (Step 3 Audit)
 - **All Previous Risks Resolved in Chunk 8:**

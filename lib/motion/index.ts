@@ -6,7 +6,7 @@
 
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ease, duration, stagger, delay } from './tokens'
+import { ease, motionEase, duration, stagger, delay } from './tokens'
 
 // Register plugins once at module level
 if (typeof window !== 'undefined') {
@@ -51,4 +51,4 @@ export function sectionTimeline(
   })
 }
 
-export { gsap, ScrollTrigger, ease, duration, stagger, delay }
+export { gsap, ScrollTrigger, ease, motionEase, duration, stagger, delay }

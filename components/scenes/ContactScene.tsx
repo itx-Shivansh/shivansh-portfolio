@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { contact } from '@/content/contact'
 import { useScrollStore } from '@/lib/scrollStore'
 import { sound } from '@/lib/sound'
 
 export default function ContactScene() {
   const { activeSection } = useScrollStore()
+  const prefersReduced = useReducedMotion()
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -104,7 +106,13 @@ export default function ContactScene() {
     >
       <div className="w-full space-y-8 z-10 relative pointer-events-auto select-none">
         {/* ── Top Header Row: Chapter Badge & Terminal Easter Egg Trigger ──── */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-wrap items-center justify-between gap-4"
+        >
           <div className="rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 flex items-center gap-2.5 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
             <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
@@ -112,34 +120,50 @@ export default function ContactScene() {
             </span>
           </div>
 
-          <button
+          <motion.button
             onClick={() => {
               sound.playClick()
               setShowTerminalEasterEgg((prev) => !prev)
             }}
             onMouseEnter={() => sound.playHover()}
+            whileHover={prefersReduced ? {} : { scale: 1.03 }}
+            whileTap={prefersReduced ? {} : { scale: 0.97 }}
             className="font-mono text-xs font-semibold text-[#F5B800] hover:underline flex items-center gap-2"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>[ SYSTEM : TERMINAL_READY ]</span>
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
         {/* Easter Egg Terminal Drawer */}
-        {showTerminalEasterEgg && (
-          <div className="rounded-2xl border border-[#F5B800]/40 bg-surface-card p-6 shadow-2xl font-mono text-xs text-[#F5B800] space-y-1 animate-in fade-in duration-200">
-            <p className="font-bold text-white">$ shivansh --status</p>
-            <p className="text-neutral-300">
-              Shivansh Raj (DTU Engineering Edition) &mdash; {contact.availability}
-            </p>
-            <p className="text-neutral-400">Direct Email: {directEmail}</p>
-          </div>
-        )}
+        <AnimatePresence>
+          {showTerminalEasterEgg && (
+            <motion.div
+              initial={prefersReduced ? false : { opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden rounded-2xl border border-[#F5B800]/40 bg-surface-card p-6 shadow-2xl font-mono text-xs text-[#F5B800] space-y-1"
+            >
+              <p className="font-bold text-white">$ shivansh --status</p>
+              <p className="text-neutral-300">
+                Shivansh Raj (DTU Engineering Edition) &mdash; {contact.availability}
+              </p>
+              <p className="text-neutral-400">Direct Email: {directEmail}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ── Main Content Grid: Left Details + Right Form Card ─────────── */}
         <div className="grid grid-cols-1 gap-8 items-start">
           {/* Left Column: Heading, Direct Email & Social Buttons */}
-          <div className="w-full space-y-7">
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full space-y-7"
+          >
             {/* Dual-Color Big Headline */}
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl tracking-tight leading-[1.05]">
               <span className="block text-white">Let&apos;s Build</span>
@@ -177,16 +201,29 @@ export default function ContactScene() {
                 </div>
               </div>
 
-              <button
+              <motion.button
                 onClick={copyEmailToClipboard}
                 onMouseEnter={() => sound.playHover()}
-                className="rounded-xl border border-white/20 bg-surface-card hover:bg-surface-card-hover px-4 py-2 text-xs font-mono font-medium text-white transition-all hover:border-white/40 flex items-center gap-2 self-start sm:self-center"
+                whileHover={prefersReduced ? {} : { scale: 1.03 }}
+                whileTap={prefersReduced ? {} : { scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                className="rounded-xl border border-white/20 bg-surface-card hover:bg-surface-card-hover px-4 py-2 text-xs font-mono font-medium text-white transition-colors hover:border-white/40 flex items-center gap-2 self-start sm:self-center"
               >
-                <span>{copiedEmail ? '✓ COPIED' : 'COPY EMAIL'}</span>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={copiedEmail ? 'copied' : 'copy'}
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {copiedEmail ? '✓ COPIED' : 'COPY EMAIL'}
+                  </motion.span>
+                </AnimatePresence>
                 <svg className="w-3.5 h-3.5 text-[#F5B800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
-              </button>
+              </motion.button>
             </div>
 
             {/* Connect & Network Buttons */}
@@ -195,28 +232,34 @@ export default function ContactScene() {
                 CONNECT &amp; NETWORK
               </span>
               <div className="flex flex-wrap items-center gap-4">
-                <a
+                <motion.a
                   href="https://www.linkedin.com/in/shivansh-raj-429733229/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-6 py-3 text-xs font-semibold text-white transition-all duration-200 hover:border-[#F5B800]/60 hover:text-[#F5B800] flex items-center gap-3 shadow-lg"
+                  whileHover={prefersReduced ? {} : { y: -3 }}
+                  whileTap={prefersReduced ? {} : { scale: 0.97 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                  className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-6 py-3 text-xs font-semibold text-white transition-colors hover:border-[#F5B800]/60 hover:text-[#F5B800] flex items-center gap-3 shadow-lg"
                 >
                   <svg className="w-4 h-4 fill-current text-[#F5B800]" viewBox="0 0 24 24">
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
                   </svg>
                   <span>LinkedIn</span>
                   <span className="text-[#F5B800] font-bold">↗</span>
-                </a>
+                </motion.a>
 
-                <a
+                <motion.a
                   href="https://www.instagram.com/only.shivanshhh/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-6 py-3 text-xs font-semibold text-white transition-all duration-200 hover:border-[#F5B800]/60 hover:text-[#F5B800] flex items-center gap-3 shadow-lg"
+                  whileHover={prefersReduced ? {} : { y: -3 }}
+                  whileTap={prefersReduced ? {} : { scale: 0.97 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                  className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-6 py-3 text-xs font-semibold text-white transition-colors hover:border-[#F5B800]/60 hover:text-[#F5B800] flex items-center gap-3 shadow-lg"
                 >
                   <svg className="w-4 h-4 stroke-current text-[#F5B800] fill-none" strokeWidth={2} viewBox="0 0 24 24">
                     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
@@ -225,29 +268,38 @@ export default function ContactScene() {
                   </svg>
                   <span>Instagram</span>
                   <span className="text-[#F5B800] font-bold">↗</span>
-                </a>
+                </motion.a>
 
-                <a
+                <motion.a
                   href="https://github.com/itx-Shivansh"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-6 py-3 text-xs font-semibold text-white transition-all duration-200 hover:border-[#F5B800]/60 hover:text-[#F5B800] flex items-center gap-3 shadow-lg"
+                  whileHover={prefersReduced ? {} : { y: -3 }}
+                  whileTap={prefersReduced ? {} : { scale: 0.97 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                  className="rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-6 py-3 text-xs font-semibold text-white transition-colors hover:border-[#F5B800]/60 hover:text-[#F5B800] flex items-center gap-3 shadow-lg"
                 >
                   <svg className="w-4 h-4 fill-current text-[#F5B800]" viewBox="0 0 24 24">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                   </svg>
                   <span>GitHub</span>
                   <span className="text-[#F5B800] font-bold">↗</span>
-                </a>
+                </motion.a>
               </div>
             </div>
 
-          </div>
+          </motion.div>
 
           {/* Right Column: Transmission Interface Form Card */}
-          <div className="w-full">
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+          >
             <div className="w-full rounded-3xl border border-[#F5B800]/30 bg-surface-card p-7 sm:p-8 shadow-2xl space-y-6">
               {formSubmitted ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center space-y-4 animate-in fade-in duration-300">
@@ -359,11 +411,14 @@ export default function ContactScene() {
                   </div>
 
                   {/* Submit Button */}
-                  <button
+                  <motion.button
                     type="submit"
                     disabled={isSubmitting}
                     onMouseEnter={() => sound.playHover()}
-                    className="w-full rounded-2xl bg-[#F5B800] hover:brightness-110 disabled:opacity-50 py-3.5 px-6 font-mono text-xs font-extrabold text-black tracking-wider shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2"
+                    whileHover={prefersReduced ? {} : { scale: 1.01 }}
+                    whileTap={prefersReduced ? {} : { scale: 0.98 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                    className="w-full rounded-2xl bg-[#F5B800] hover:brightness-110 disabled:opacity-50 py-3.5 px-6 font-mono text-xs font-extrabold text-black tracking-wider shadow-lg transition-all flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
@@ -378,11 +433,11 @@ export default function ContactScene() {
                         </svg>
                       </>
                     )}
-                  </button>
+                  </motion.button>
                 </form>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

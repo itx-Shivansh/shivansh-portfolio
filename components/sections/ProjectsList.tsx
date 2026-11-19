@@ -1,5 +1,6 @@
 'use client'
 
+import { motion, useReducedMotion } from 'motion/react'
 import { projects, Project } from '@/content/projects'
 import { useScrollStore } from '@/lib/scrollStore'
 import { sound } from '@/lib/sound'
@@ -7,6 +8,7 @@ import ProjectDetailOverlay from '@/components/scenes/ProjectDetailOverlay'
 
 export default function ProjectsList() {
   const { selectedProject, setSelectedProject } = useScrollStore()
+  const prefersReduced = useReducedMotion()
 
   const handleCardClick = (project: Project) => {
     sound.playClick()
@@ -16,31 +18,48 @@ export default function ProjectsList() {
   return (
     <section id="projects" className="relative w-full space-y-6 scroll-mt-20">
       {/* Section Header / Chapter Badge */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 flex items-center gap-2.5 shadow-lg">
-          <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
-          <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
-            Projects
-          </span>
+      <motion.div
+        initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="space-y-4"
+      >
+        <div className="flex items-center justify-between gap-4">
+          <div className="rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 flex items-center gap-2.5 shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
+            <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
+              Projects
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div className="space-y-2">
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-          Featured Work
-        </h2>
-        <p className="text-xs sm:text-sm text-neutral-400">
-          Selected AI, full-stack, and automation applications. Click any project to inspect architecture and details.
-        </p>
-      </div>
+        <div className="space-y-2">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+            Featured Work
+          </h2>
+          <p className="text-xs sm:text-sm text-neutral-400">
+            Selected AI, full-stack, and automation applications. Click any project to inspect architecture and details.
+          </p>
+        </div>
+      </motion.div>
 
       {/* HTML Cards List with lg hover-dimming */}
       <div className="space-y-4 lg:group/projects">
-        {projects.map((project) => (
-          <div
+        {projects.map((project, index) => (
+          <motion.div
             key={project.id}
+            initial={prefersReduced ? false : { opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.12 }}
+            transition={{
+              duration: prefersReduced ? 0 : 0.5,
+              delay: prefersReduced ? 0 : index * 0.08,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            whileHover={prefersReduced ? {} : { y: -3 }}
             onMouseEnter={() => sound.playHover()}
-            className="group relative block w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 sm:p-7 text-left transition-all duration-300 hover:border-[#F5B800]/60 hover:shadow-[0_0_25px_rgba(245,184,0,0.12)] has-[:focus-visible]:border-[#F5B800] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#F5B800] cursor-pointer lg:group-hover/projects:opacity-60 lg:hover:!opacity-100"
+            className="group relative block w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 sm:p-7 text-left transition-colors duration-300 hover:border-[#F5B800]/60 hover:shadow-[0_0_25px_rgba(245,184,0,0.12)] has-[:focus-visible]:border-[#F5B800] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#F5B800] cursor-pointer lg:group-hover/projects:opacity-60 lg:hover:!opacity-100"
           >
             {/* Primary Clickable Area for opening project details (sibling to external links, no nesting) */}
             <button
@@ -99,14 +118,14 @@ export default function ProjectsList() {
                 {project.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] text-neutral-300"
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] text-neutral-300 transition-colors group-hover:border-white/20"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 

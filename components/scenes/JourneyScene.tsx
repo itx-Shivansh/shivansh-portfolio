@@ -2,11 +2,13 @@
 
 import { useRef } from 'react'
 import Image from 'next/image'
+import { motion, useReducedMotion } from 'motion/react'
 import { sound } from '@/lib/sound'
 import { educationHistory } from '@/content/journey'
 
 export default function JourneyScene() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const prefersReduced = useReducedMotion()
 
   return (
     <section
@@ -16,7 +18,13 @@ export default function JourneyScene() {
     >
       <div className="w-full space-y-8 z-10 relative pointer-events-auto select-none">
         {/* ── Top Header Row: Chapter Badge & Download Resume Button ──── */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-wrap items-center justify-between gap-4"
+        >
           <div className="rounded-full border border-[#F5B800]/30 bg-surface-card px-4 py-1.5 flex items-center gap-2.5 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-pulse" />
             <span className="font-mono text-xs font-bold text-[#F5B800] tracking-widest uppercase">
@@ -24,23 +32,32 @@ export default function JourneyScene() {
             </span>
           </div>
 
-          <a
+          <motion.a
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => sound.playClick()}
             onMouseEnter={() => sound.playHover()}
-            className="rounded-full border border-white/20 bg-surface-card hover:bg-surface-card-hover px-5 py-2 text-xs font-mono font-medium text-white transition-all duration-200 hover:border-white/40 flex items-center gap-2 shadow-lg hover:scale-105"
+            whileHover={prefersReduced ? {} : { scale: 1.03 }}
+            whileTap={prefersReduced ? {} : { scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="rounded-full border border-white/20 bg-surface-card hover:bg-surface-card-hover px-5 py-2 text-xs font-mono font-medium text-white transition-colors hover:border-white/40 flex items-center gap-2 shadow-lg"
           >
             <span>DOWNLOAD RESUME</span>
             <svg className="w-4 h-4 text-[#F5B800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
 
         {/* ── Hero Title & Quote Row ─────────────────────────────────── */}
-        <div className="grid grid-cols-1 gap-6 items-start">
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="grid grid-cols-1 gap-6 items-start"
+        >
           {/* Left Column: Heading, Subtitle & Bio */}
           <div className="space-y-5">
             <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
@@ -124,7 +141,11 @@ export default function JourneyScene() {
             {/* Left Photo Sub-Column (~1/3 at lg, max-w-xs on mobile) */}
             <div className="w-full max-w-xs lg:max-w-none mx-auto lg:mx-0 lg:col-span-5 p-2 sm:p-3 flex items-center justify-center">
               {/* overflow-hidden clips the offset frame so it can't push past the container */}
-              <div className="group relative w-full aspect-[4/5] rounded-xl overflow-hidden sm:overflow-visible">
+              <motion.div
+                whileHover={prefersReduced ? {} : { scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                className="group relative w-full aspect-[4/5] rounded-xl overflow-hidden sm:overflow-visible"
+              >
                 {/* Offset Gold Outline Frame Behind Photo — 8px at <sm to stay within overflow-visible clipping zone */}
                 <div
                   aria-hidden="true"
@@ -142,7 +163,7 @@ export default function JourneyScene() {
                     sizes="(max-width: 768px) 320px, (max-width: 1024px) 320px, 260px"
                   />
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Right Quote Card (~2/3 at lg) */}
@@ -158,10 +179,16 @@ export default function JourneyScene() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* ── Lower Section: What I Do Grid & Education Timeline ─────── */}
-        <div className="grid grid-cols-1 gap-8 items-start pt-4">
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="grid grid-cols-1 gap-8 items-start pt-4"
+        >
           {/* Left Column: What I Do (6 Cards Grid) */}
           <div className="w-full rounded-2xl border border-white/10 bg-surface-card p-6 sm:p-7 shadow-2xl space-y-6">
             <div className="flex items-center gap-2.5">
@@ -281,7 +308,12 @@ export default function JourneyScene() {
             {/* Vertical Timeline List */}
             <div className="relative pl-6 space-y-7 border-l border-[#F5B800]/30 ml-2">
               {educationHistory.map((item) => (
-                <div key={item.id} className="relative space-y-1">
+                <motion.div
+                  key={item.id}
+                  whileHover={prefersReduced ? {} : { x: 3 }}
+                  transition={{ duration: 0.2 }}
+                  className="relative space-y-1"
+                >
                   <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#F5B800] shadow-[0_0_8px_#F5B800]" />
                   <h4 className="text-xs font-bold text-white">{item.institution}</h4>
                   <p className="text-[11px] text-neutral-300 font-medium">{item.degree}</p>
@@ -293,11 +325,11 @@ export default function JourneyScene() {
                       {item.period}
                     </span>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
