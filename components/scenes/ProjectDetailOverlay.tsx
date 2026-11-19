@@ -23,16 +23,40 @@ function ProjectPreviewVideo({ project }: { project: Project }) {
   useEffect(() => {
     setError(false)
     const videoNode = videoRef.current
+
+    if (videoNode && !prefersReduced) {
+      const playPromise = videoNode.play()
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          // Ignore AbortError and NotAllowedError from autoplay policy or interruption
+          if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
+            console.warn('Video play warning:', err)
+          }
+        })
+      }
+    }
+
     return () => {
       if (videoNode) {
         videoNode.pause()
-        videoNode.src = ''
-        videoNode.load()
       }
     }
-  }, [project.id])
+  }, [project.id, prefersReduced])
 
   if (!project.previewVideo) return null
+
+  const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    const video = e.currentTarget
+    const currentSrc = video.currentSrc || video.src || ''
+
+    // Ignore empty-source error or missing video.error
+    if (!currentSrc || currentSrc.endsWith('/') || !video.error) {
+      return
+    }
+
+    // Only set error on real failure with non-empty src
+    setError(true)
+  }
 
   return (
     <div className="space-y-4 border-t border-white/10 pt-8">
@@ -54,7 +78,7 @@ function ProjectPreviewVideo({ project }: { project: Project }) {
             controls
             preload="metadata"
             aria-label={`Preview of ${project.title}`}
-            onError={() => setError(true)}
+            onError={handleVideoError}
             className="h-full w-full object-contain"
           />
         )}

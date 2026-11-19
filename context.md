@@ -157,7 +157,12 @@ Project_Shivansh/
 6b. **Chunk 6b (Done):** Layout fixes: Name container query clamp `clamp(2rem, 10.5cqw, 4.5rem)` in left column; Skills section re-layout (stacked header, wrapping filter pills, full-width compact stats row, responsive category grid with unbreakable tags/pills, quote card relocated below grid).
 7. **Chunk 7 (Done):** Cleanup: deleted 9 WebGL canvas files, deleted `components/canvas/`, deleted `HeroScene.tsx` & `ProjectsScene.tsx`, deleted `app/style-guide/`, deleted `docs/transitions.md`. Uninstalled `three`, `@react-three/*`, and `@types/three`. Cleaned `scrollStore.ts` and `constants.ts`.
 8. **Chunk 8 (Done):** Mobile polish (photo frame offset, email clamp & break, loader mobile sizing), gated DebugHUD (`NODE_ENV`), loader session storage & reduced-motion skip, metadataBase & dynamic opengraph-image, single-column skills grid refinement, accessibility skip link & single h1 & semantic footer, Lighthouse audit (Perf 85, A11y 96, Best Practices 100, SEO 100), updated README.
-9. **Chunk 9 (Done — Ready for preview deploy):** Project Preview video per project in detail modal, real GitHub links on modal and project cards, clean removal of legacy media grid & placeholders, hidden inactive live demo buttons. Ready for Vercel preview deploy.
+9. **Chunk 9 (Done):** Project Preview video per project in detail modal, real GitHub links on modal and project cards, clean removal of legacy media grid & placeholders, hidden inactive live demo buttons.
+9c. **Chunk 9c (Done):** Fix preview video error state in dev mode (React 18 Strict Mode cleanup collision). Verified in both `next dev` and `next start`.
+
+## Development & Testing Rules
+- Verify video and animation changes in `next dev` as well as `next start` (Strict Mode behaves differently: simulated unmount -> remount runs effect cleanups in dev).
+- Always ensure headless CDP browser tests verify both production and dev server environments when touching media or animation lifecycles.
 
 ## Old journey.ts (replaced)
 ```ts
@@ -363,6 +368,21 @@ export const milestones: Milestone[] = [
     - `npm run lint` & `npm run build`: 0 errors, 0 warnings.
     - Grep for old media strings: 0 matches.
     - Real Headless Chrome (CDP): All 4 videos verified (`readyState: 4`, correct dimensions, zero console errors). 0px overflow at 375px and 1280px. Screenshots saved to `C:\Users\HP victos\AppData\Local\Temp\screenshots_chunk9\`.
+- **Chunk 9c: Fix Preview Video Error State in Dev (2026-11-19):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Files Changed:** `components/scenes/ProjectDetailOverlay.tsx`, `context.md`.
+  - **Root Cause Confirmed:** In React 18 Strict Mode (`next dev`), `useEffect` runs mount -> cleanup -> remount on initial render. The old cleanup handler executed `videoNode.src = ''` followed by `videoNode.load()`. Clearing the `src` attribute on an element that remains in the DOM triggers an invalid source error event (`code: 4, MEDIA_ELEMENT_ERROR: Empty src attribute`). Because the `onError` handler had no guard against empty sources, it immediately flipped `error = true`, unmounting `<video>` and permanently rendering `<p>Preview unavailable</p>`. In production (`next start`), Strict Mode is inactive, so simulated unmount never fired and videos played correctly.
+  - **Fix Applied (`components/scenes/ProjectDetailOverlay.tsx`):**
+    - Removed `src = ''` and `load()` from effect cleanup; retained strictly `videoNode.pause()`. Browsers automatically release decoder resources when an unmounted element is garbage collected.
+    - Added guards in `handleVideoError`: ignores events where `src` is empty, ends in `/`, or `video.error` is null.
+    - Wrapped `video.play()` in a promise `.catch()` handler that silently ignores benign `AbortError` and `NotAllowedError`.
+    - Retained all accessibility and playback attributes: `muted`, `loop`, `playsInline`, `controls`, `preload="metadata"`, `autoPlay={!prefersReduced}`, and `aria-label`.
+  - **Verification across Both Modes (`next dev` on 3011, `next start` on 3012):**
+    - *All 4 projects (`aria`, `india-signal`, `shivantra`, `obsidian`):* `previewUnavailableShowing: false`, `readyState: 4`, `paused: false`, 0 leftover videos in DOM after close.
+    - *Rapid reopen (3x fast close/open cycle):* `readyState: 4`, `paused: false` on every cycle.
+    - *Switching project without page reload:* smooth video switch, `readyState: 4`, `paused: false`.
+    - *Console errors:* 0 errors in both dev and production.
+    - *Negative test:* When pointed to non-existent video `/videos/nonexistent_file_test.mp4`, properly catches 404 error and renders `<p>Preview unavailable</p>`. Reverted immediately.
 
 ## Known Layout Risks (Step 3 Audit)
 - **All Previous Risks Resolved in Chunk 8:**
