@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { skillGroups } from '@/content/skills'
 import { sound } from '@/lib/sound'
+import SpotlightCard from '@/components/ui/SpotlightCard'
+import CountUp from '@/components/ui/CountUp'
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   Programming: (
@@ -146,13 +148,15 @@ export default function SkillsScene() {
           })}
         </div>
 
-        {/* ── Skills Overview: Compact Full-Width Stat Row ─────────────── */}
-        <motion.div
+        {/* ── Skills Overview: Compact Full-Width Stat Row with Dynamic CountUp ── */}
+        <SpotlightCard
           initial={prefersReduced ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full rounded-2xl border border-white/10 bg-surface-card p-5 sm:p-6 shadow-2xl space-y-4"
+          spotlightColor="rgba(245, 184, 0, 0.15)"
+          borderColor="rgba(245, 184, 0, 0.4)"
+          className="w-full p-5 sm:p-6 shadow-2xl space-y-4"
         >
           <div className="flex items-center gap-2.5 border-b border-white/10 pb-3">
             <div className="w-7 h-7 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
@@ -166,48 +170,56 @@ export default function SkillsScene() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
             {/* Stat 1 */}
             <div className="space-y-0.5">
-              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">6</div>
+              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">
+                <CountUp to={6} />
+              </div>
               <div className="text-xs text-neutral-400 font-medium">Categories</div>
             </div>
 
             {/* Stat 2 */}
             <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">22+</div>
+              <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">
+                <CountUp to={22} suffix="+" />
+              </div>
               <div className="text-xs text-neutral-400 font-medium">Technologies</div>
             </div>
 
             {/* Stat 3 */}
             <div className="space-y-0.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="font-display text-lg sm:text-xl font-bold text-[#F5B800]">Advanced</div>
+              <div className="font-display text-lg sm:text-xl font-bold text-[#F5B800]">
+                Advanced
+              </div>
               <div className="text-xs text-neutral-400 font-medium">In Problem Solving &amp; Building Solutions</div>
             </div>
           </div>
-        </motion.div>
+        </SpotlightCard>
 
-        {/* ── Category Skill Cards Grid (Single column for generous card width) ── */}
+        {/* ── Category Skill Cards Grid (Single column with mouse-tracking spotlights) ── */}
         <motion.div layout className="grid grid-cols-1 gap-4">
           <AnimatePresence mode="popLayout">
             {filteredGroups.map((group) => (
-              <motion.div
+              <SpotlightCard
                 layout
                 key={group.category}
                 initial={prefersReduced ? false : { opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: prefersReduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="group min-w-0 rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-5 sm:p-6 shadow-2xl transition-colors duration-300 hover:border-[#F5B800]/40 space-y-4"
+                spotlightColor="rgba(245, 184, 0, 0.12)"
+                borderColor="rgba(245, 184, 0, 0.35)"
+                className="group min-w-0 p-5 sm:p-6 shadow-2xl space-y-4"
               >
                 {/* Card Header */}
                 <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-[#1b1912] border border-[#F5B800]/30 flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#1b1912] border border-[#F5B800]/30 flex items-center justify-center shrink-0 group-hover:border-[#F5B800] group-hover:shadow-[0_0_12px_rgba(245,184,0,0.3)] transition-all duration-300">
                       {CATEGORY_ICONS[group.category] || (
                         <svg className="w-5 h-5 text-[#F5B800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <circle cx="12" cy="12" r="8" />
                         </svg>
                       )}
                     </div>
-                    <h3 className="font-display text-base font-bold text-white min-w-0 break-words">
+                    <h3 className="font-display text-base font-bold text-white min-w-0 break-words group-hover:text-[#F5B800] transition-colors">
                       {group.category}
                     </h3>
                   </div>
@@ -221,10 +233,10 @@ export default function SkillsScene() {
                   {group.skills.map((skill, idx) => (
                     <motion.div
                       key={idx}
-                      whileHover={prefersReduced ? {} : { scale: 1.03 }}
+                      whileHover={prefersReduced ? {} : { scale: 1.04, y: -1 }}
                       transition={{ duration: 0.15 }}
                       onMouseEnter={() => sound.playHover()}
-                      className="max-w-full rounded-xl border border-white/10 bg-surface-card hover:bg-surface-card-hover px-3 py-1.5 text-xs font-medium text-neutral-200 transition-colors duration-200 hover:border-[#F5B800]/50 hover:text-[#F5B800] flex flex-wrap items-center justify-between gap-x-2 gap-y-1"
+                      className="max-w-full rounded-xl border border-white/10 bg-surface-card hover:bg-[#1a1710] px-3 py-1.5 text-xs font-medium text-neutral-200 transition-all duration-200 hover:border-[#F5B800]/70 hover:text-[#F5B800] hover:shadow-[0_0_15px_rgba(245,184,0,0.25)] flex flex-wrap items-center justify-between gap-x-2 gap-y-1 cursor-default"
                     >
                       <span className="font-semibold text-white min-w-0 break-words">{skill.name}</span>
                       {skill.level && (
@@ -235,18 +247,19 @@ export default function SkillsScene() {
                     </motion.div>
                   ))}
                 </div>
-              </motion.div>
+              </SpotlightCard>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {/* ── Quote Card (Full Width Below Grid) ─────────────────────── */}
-        <motion.div
+        {/* ── Quote Card (Full Width Below Grid with spotlight) ─────────────── */}
+        <SpotlightCard
           initial={prefersReduced ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover transition-colors p-6 shadow-2xl space-y-3"
+          spotlightColor="rgba(245, 184, 0, 0.1)"
+          className="w-full p-6 shadow-2xl space-y-3"
         >
           <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
           <p className="text-neutral-200 text-xs sm:text-sm italic font-normal leading-relaxed">
@@ -255,7 +268,7 @@ export default function SkillsScene() {
           <div className="font-mono text-xs font-bold text-[#F5B800] pt-1">
             &mdash; Shivansh Raj
           </div>
-        </motion.div>
+        </SpotlightCard>
       </div>
     </section>
   )

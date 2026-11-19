@@ -56,28 +56,39 @@ export default function MainShell({ children }: { children: React.ReactNode }) {
               animate={isLoaded ? 'visible' : 'hidden'}
               className="space-y-5 container-inline min-w-0"
             >
-              {/* Badge Pill */}
-              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 rounded-full border border-[#F5B800]/30 bg-surface-card px-3.5 py-1 text-xs font-mono font-semibold text-[#F5B800]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-pulse" />
+              {/* Badge Pill with Radar Ping */}
+              <motion.div variants={itemVariants} className="inline-flex items-center gap-2.5 rounded-full border border-[#F5B800]/40 bg-surface-card px-3.5 py-1 text-xs font-mono font-semibold text-[#F5B800] shadow-[0_0_15px_rgba(245,184,0,0.15)]">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F5B800] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F5B800]" />
+                </span>
                 <span>ENGINEERING &amp; AI · DTU</span>
               </motion.div>
 
-              {/* Name Headline */}
-              <motion.h1 variants={itemVariants} className="font-display font-black uppercase tracking-tight leading-[0.9] text-[clamp(2rem,10.5cqw,4.5rem)]">
-                <span className="block text-white whitespace-nowrap">SHIVANSH</span>
-                <span className="block text-[#F5B800] whitespace-nowrap">RAJ</span>
+              {/* Name Headline with dynamic glow on hover */}
+              <motion.h1
+                variants={itemVariants}
+                className="group/name font-display font-black uppercase tracking-tight leading-[0.9] text-[clamp(2rem,10.5cqw,4.5rem)] cursor-default"
+              >
+                <span className="block text-white whitespace-nowrap transition-all duration-300 group-hover/name:text-neutral-100">
+                  SHIVANSH
+                </span>
+                <span className="block text-[#F5B800] whitespace-nowrap transition-all duration-300 group-hover/name:drop-shadow-[0_0_25px_rgba(245,184,0,0.5)]">
+                  RAJ
+                </span>
               </motion.h1>
 
               {/* Role Line */}
-              <motion.p variants={itemVariants} className="font-mono text-sm sm:text-base font-semibold text-neutral-200 tracking-wide">
-                Software Engineer &amp; AI Developer
+              <motion.p variants={itemVariants} className="font-mono text-sm sm:text-base font-semibold text-neutral-200 tracking-wide flex items-center gap-2">
+                <span className="text-[#F5B800] font-bold">&gt;</span>
+                <span>Software Engineer &amp; AI Developer</span>
               </motion.p>
 
               {/* Tagline & Short Bio */}
               <motion.div variants={itemVariants} className="space-y-3 pt-1 max-w-md">
                 <p className="text-sm font-medium text-neutral-300">
                   Building intelligent software solutions for{' '}
-                  <span className="text-[#F5B800] font-semibold">real-world</span> impact.
+                  <span className="text-[#F5B800] font-semibold underline decoration-[#F5B800]/40 underline-offset-4">real-world</span> impact.
                 </p>
                 <p className="text-xs sm:text-sm text-neutral-400 font-normal leading-relaxed">
                   {identity.positioningStatement}

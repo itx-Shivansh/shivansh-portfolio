@@ -72,6 +72,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <SmoothScrollProvider>
+          {/* Subtle technical background grid overlay — z-[0] */}
+          <div
+            className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(rgba(245,184,0,0.07)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_75%_60%_at_50%_15%,#000_60%,transparent_100%)] opacity-70"
+            aria-hidden="true"
+          />
+
           {/* Gold ambient cursor spotlight — z-[1], above black base, below all content */}
           <CursorSpotlight />
 

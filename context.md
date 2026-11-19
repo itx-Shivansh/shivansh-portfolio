@@ -397,6 +397,19 @@ export const milestones: Milestone[] = [
   - **Contact Section (`ContactScene.tsx`):** Animated terminal drawer opening/closing via `AnimatePresence`, copy email button label flip ("COPY EMAIL" ↔ "✓ COPIED") using `AnimatePresence mode="wait"`, interactive hover on social links and submit button.
   - **Reduced Motion:** Every animation strictly guards against `useReducedMotion()` — transitions and transforms are disabled when `prefersReduced` is active.
   - **Verification:** `npm run lint` → 0 errors, 0 warnings; `npm run build` → 0 errors; production server HTTP 200.
+- **Chunk 10b: High-Impact Visual & Dynamic Spotlight Polish (2026-11-19):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **New Components:**
+    - `components/ui/SpotlightCard.tsx`: Dynamic Linear-style interactive mouse spotlight and glowing border tracking at 60fps via `useMotionValue` and `useMotionTemplate`.
+    - `components/ui/CountUp.tsx`: Snappy animated numerical counters that dynamically roll up when scrolled into view.
+  - **Visual Upgrades:**
+    - **Background Grid:** Added subtle technical blueprint dot matrix overlay with radial fade (`[radial-gradient(rgba(245,184,0,0.07)_1px,transparent_1px)] [background-size:28px_28px]`).
+    - **Identity & Name:** Double-ring radar ping on DTU badge (`animate-ping`), glowing text drop-shadow on name hover (`drop-shadow-[0_0_25px_rgba(245,184,0,0.5)]`).
+    - **Project Cards:** SpotlightCard tracking with glowing project index tags (`// 01` etc.), glowing title hover drop-shadow, interactive arrow button hover states.
+    - **Skills Overview:** Numbers `6` Categories and `22+` Technologies count up smoothly from 0. Individual skill pills feature glowing gold hover shadows (`shadow-[0_0_15px_rgba(245,184,0,0.25)]`).
+    - **Photo & About:** Added cybernetic HUD brackets (`[ SYS // 01 ]`), offset gold outline frame glow, and spotlight card wraps.
+    - **Contact & Terminal:** Full macOS terminal window styling with dot controls, live prompt with blinking cursor `▋`, and spotlight-wrapped transmission form.
+  - **Verification:** `npm run lint` → 0 errors, `npm run build` → 0 errors, `next dev` responding with 200 on `http://localhost:3000`.
 
 ## Known Layout Risks (Step 3 Audit)
 - **All Previous Risks Resolved in Chunk 8:**

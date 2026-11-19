@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion, useReducedMotion } from 'motion/react'
 import { sound } from '@/lib/sound'
 import { educationHistory } from '@/content/journey'
+import SpotlightCard from '@/components/ui/SpotlightCard'
 
 export default function JourneyScene() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -79,9 +80,13 @@ export default function JourneyScene() {
               </p>
             </div>
 
-            {/* 4-Item Quick Info Grid Bar */}
+            {/* 4-Item Quick Info Grid Bar with mouse-tracking spotlight */}
             <div className="pt-2">
-              <div className="rounded-2xl border border-white/10 bg-surface-card p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 divide-y sm:divide-y-0 md:divide-x divide-white/10 shadow-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(245, 184, 0, 0.12)"
+                borderColor="rgba(245, 184, 0, 0.35)"
+                className="p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 divide-y sm:divide-y-0 md:divide-x divide-white/10 shadow-2xl"
+              >
                 {/* Item 1 */}
                 <div className="flex flex-col items-start space-y-1.5 pr-2 pt-2 md:pt-0">
                   <div className="text-[#F5B800]">
@@ -132,7 +137,7 @@ export default function JourneyScene() {
                   <span className="text-xs font-bold text-white leading-tight">Builder</span>
                   <span className="text-[11px] text-neutral-400 font-medium">By Passion</span>
                 </div>
-              </div>
+              </SpotlightCard>
             </div>
           </div>
 
@@ -146,29 +151,41 @@ export default function JourneyScene() {
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
                 className="group relative w-full aspect-[4/5] rounded-xl overflow-hidden sm:overflow-visible"
               >
-                {/* Offset Gold Outline Frame Behind Photo — 8px at <sm to stay within overflow-visible clipping zone */}
+                {/* Offset Gold Outline Frame Behind Photo */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3 rounded-xl border border-[#F5B800]/20 pointer-events-none transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:translate-y-1 sm:group-hover:translate-x-2 sm:group-hover:translate-y-2"
+                  className="absolute inset-0 translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3 rounded-xl border border-[#F5B800]/30 pointer-events-none transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:translate-y-1 sm:group-hover:translate-x-2 sm:group-hover:translate-y-2 shadow-[0_0_15px_rgba(245,184,0,0.15)]"
                 />
 
-                {/* Photo Image Card */}
-                <div className="relative h-full w-full overflow-hidden rounded-xl border border-[#F5B800]/30 bg-[#0d0d10] shadow-xl">
+                {/* Photo Image Card with cybernetic HUD brackets */}
+                <div className="relative h-full w-full overflow-hidden rounded-xl border border-[#F5B800]/40 bg-[#0d0d10] shadow-2xl">
+                  {/* Cyber HUD accents */}
+                  <span className="absolute top-2.5 left-2.5 font-mono text-[9px] font-bold text-[#F5B800] z-20 px-1.5 py-0.5 rounded bg-black/60 border border-[#F5B800]/30 backdrop-blur-sm">
+                    SYS // 01
+                  </span>
+                  <span className="absolute bottom-2.5 right-2.5 font-mono text-[9px] font-bold text-white/80 z-20 px-1.5 py-0.5 rounded bg-black/60 border border-white/20 backdrop-blur-sm">
+                    DTU · AE
+                  </span>
+
                   <Image
                     src="/images/shivansh.jpg"
                     alt="Shivansh Raj"
                     width={400}
                     height={500}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 768px) 320px, (max-width: 1024px) 320px, 260px"
                   />
                 </div>
               </motion.div>
             </div>
 
-            {/* Right Quote Card (~2/3 at lg) */}
+            {/* Right Quote Card (~2/3 at lg) with mouse-tracking spotlight */}
             <div className="w-full lg:col-span-7 flex">
-              <div className="w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover transition-colors p-7 shadow-2xl space-y-4 flex flex-col justify-between">
+              <SpotlightCard
+                spotlightColor="rgba(245, 184, 0, 0.12)"
+                borderColor="rgba(245, 184, 0, 0.35)"
+                className="w-full p-7 shadow-2xl space-y-4 flex flex-col justify-between"
+              >
                 <div className="text-[#F5B800] font-serif text-4xl leading-none">&ldquo;</div>
                 <p className="text-neutral-200 text-sm italic font-normal leading-relaxed">
                   Code is not just what I write, it&apos;s how I solve problems, create impact and make ideas real.
@@ -176,7 +193,7 @@ export default function JourneyScene() {
                 <div className="font-mono text-xs font-bold text-[#F5B800] pt-2">
                   &mdash; Shivansh Raj
                 </div>
-              </div>
+              </SpotlightCard>
             </div>
           </div>
         </motion.div>
@@ -190,9 +207,13 @@ export default function JourneyScene() {
           className="grid grid-cols-1 gap-8 items-start pt-4"
         >
           {/* Left Column: What I Do (6 Cards Grid) */}
-          <div className="w-full rounded-2xl border border-white/10 bg-surface-card p-6 sm:p-7 shadow-2xl space-y-6">
+          <SpotlightCard
+            spotlightColor="rgba(245, 184, 0, 0.1)"
+            borderColor="rgba(245, 184, 0, 0.35)"
+            className="w-full p-6 sm:p-7 shadow-2xl space-y-6"
+          >
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
+              <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] shadow-[0_0_10px_rgba(245,184,0,0.2)]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -292,12 +313,16 @@ export default function JourneyScene() {
                 </div>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
 
-          {/* Right Column: Education Timeline */}
-          <div className="w-full rounded-2xl border border-white/10 bg-surface-card p-6 sm:p-7 shadow-2xl space-y-6">
+          {/* Right Column: Education Timeline with Spotlight */}
+          <SpotlightCard
+            spotlightColor="rgba(245, 184, 0, 0.1)"
+            borderColor="rgba(245, 184, 0, 0.35)"
+            className="w-full p-6 sm:p-7 shadow-2xl space-y-6"
+          >
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800]">
+              <div className="w-8 h-8 rounded-lg bg-[#1a1710] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] shadow-[0_0_10px_rgba(245,184,0,0.2)]">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
                 </svg>
@@ -314,7 +339,7 @@ export default function JourneyScene() {
                   transition={{ duration: 0.2 }}
                   className="relative space-y-1"
                 >
-                  <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#F5B800] shadow-[0_0_8px_#F5B800]" />
+                  <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#F5B800] shadow-[0_0_10px_#F5B800] animate-pulse" />
                   <h4 className="text-xs font-bold text-white">{item.institution}</h4>
                   <p className="text-[11px] text-neutral-300 font-medium">{item.degree}</p>
                   {item.specialization && (
@@ -328,7 +353,7 @@ export default function JourneyScene() {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </SpotlightCard>
         </motion.div>
       </div>
     </section>

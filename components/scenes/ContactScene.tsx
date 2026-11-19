@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { contact } from '@/content/contact'
 import { useScrollStore } from '@/lib/scrollStore'
 import { sound } from '@/lib/sound'
+import SpotlightCard from '@/components/ui/SpotlightCard'
 
 export default function ContactScene() {
   const { activeSection } = useScrollStore()
@@ -135,7 +136,7 @@ export default function ContactScene() {
           </motion.button>
         </motion.div>
 
-        {/* Easter Egg Terminal Drawer */}
+        {/* Easter Egg Terminal Drawer with macOS styling & blinking cursor */}
         <AnimatePresence>
           {showTerminalEasterEgg && (
             <motion.div
@@ -143,13 +144,32 @@ export default function ContactScene() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25 }}
-              className="overflow-hidden rounded-2xl border border-[#F5B800]/40 bg-surface-card p-6 shadow-2xl font-mono text-xs text-[#F5B800] space-y-1"
+              className="overflow-hidden rounded-2xl border border-[#F5B800]/40 bg-[#07080c] p-5 sm:p-6 shadow-[0_0_30px_rgba(245,184,0,0.15)] font-mono text-xs space-y-3"
             >
-              <p className="font-bold text-white">$ shivansh --status</p>
-              <p className="text-neutral-300">
-                Shivansh Raj (DTU Engineering Edition) &mdash; {contact.availability}
-              </p>
-              <p className="text-neutral-400">Direct Email: {directEmail}</p>
+              <div className="flex items-center justify-between border-b border-white/10 pb-2 text-neutral-400 text-[10px]">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
+                  <span className="ml-2 text-neutral-300 font-mono">bash — 80x24</span>
+                </div>
+                <span className="text-[#F5B800] font-semibold tracking-wider">● CONNECTED</span>
+              </div>
+              <div className="space-y-1.5 pt-1 text-xs">
+                <p className="text-white">
+                  <span className="text-[#F5B800] font-semibold">shivansh@dtu</span>:
+                  <span className="text-blue-400">~</span>$ shivansh --status
+                </p>
+                <p className="text-emerald-400">● SYSTEM STATUS: ONLINE &amp; OPERATIONAL</p>
+                <p className="text-neutral-300">Identity: Shivansh Raj &mdash; Software Engineer &amp; AI Developer</p>
+                <p className="text-neutral-400">Institution: Delhi Technological University (DTU, 2024&ndash;2028)</p>
+                <p className="text-neutral-400">Availability: {contact.availability}</p>
+                <p className="text-neutral-400">Direct Comms: {directEmail}</p>
+                <p className="text-white flex items-center gap-1 pt-1">
+                  <span className="text-[#F5B800] font-semibold">shivansh@dtu</span>:
+                  <span className="text-blue-400">~</span>$ <span className="animate-pulse text-[#F5B800]">▋</span>
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -177,8 +197,12 @@ export default function ContactScene() {
               <p>Open to Software Development, AI, and Full-Stack Internship Opportunities.</p>
             </div>
 
-            {/* Direct Email Card */}
-            <div className="rounded-2xl border border-[#F5B800]/40 bg-surface-card p-5 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            {/* Direct Email Card with Spotlight */}
+            <SpotlightCard
+              spotlightColor="rgba(245, 184, 0, 0.16)"
+              borderColor="rgba(245, 184, 0, 0.5)"
+              className="p-5 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-[#F5B800]/40"
+            >
               <div className="flex items-center gap-4 min-w-0">
                 <div className="w-12 h-12 rounded-full bg-[#1c180e] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] shrink-0">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -224,7 +248,7 @@ export default function ContactScene() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </motion.button>
-            </div>
+            </SpotlightCard>
 
             {/* Connect & Network Buttons */}
             <div className="space-y-3 pt-2">
@@ -300,7 +324,11 @@ export default function ContactScene() {
             transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="w-full"
           >
-            <div className="w-full rounded-3xl border border-[#F5B800]/30 bg-surface-card p-7 sm:p-8 shadow-2xl space-y-6">
+            <SpotlightCard
+              spotlightColor="rgba(245, 184, 0, 0.12)"
+              borderColor="rgba(245, 184, 0, 0.4)"
+              className="w-full p-7 sm:p-8 shadow-2xl space-y-6"
+            >
               {formSubmitted ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center space-y-4 animate-in fade-in duration-300">
                   <div className="w-14 h-14 rounded-full bg-[#1c180e] border border-[#F5B800] flex items-center justify-center text-[#F5B800] text-2xl shadow-[0_0_20px_#F5B800]">
@@ -436,7 +464,7 @@ export default function ContactScene() {
                   </motion.button>
                 </form>
               )}
-            </div>
+            </SpotlightCard>
           </motion.div>
         </div>
       </div>

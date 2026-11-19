@@ -5,6 +5,7 @@ import { projects, Project } from '@/content/projects'
 import { useScrollStore } from '@/lib/scrollStore'
 import { sound } from '@/lib/sound'
 import ProjectDetailOverlay from '@/components/scenes/ProjectDetailOverlay'
+import SpotlightCard from '@/components/ui/SpotlightCard'
 
 export default function ProjectsList() {
   const { selectedProject, setSelectedProject } = useScrollStore()
@@ -44,10 +45,10 @@ export default function ProjectsList() {
         </div>
       </motion.div>
 
-      {/* HTML Cards List with lg hover-dimming */}
+      {/* HTML Cards List with lg hover-dimming & dynamic spotlight */}
       <div className="space-y-4 lg:group/projects">
         {projects.map((project, index) => (
-          <motion.div
+          <SpotlightCard
             key={project.id}
             initial={prefersReduced ? false : { opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -57,9 +58,11 @@ export default function ProjectsList() {
               delay: prefersReduced ? 0 : index * 0.08,
               ease: [0.16, 1, 0.3, 1],
             }}
-            whileHover={prefersReduced ? {} : { y: -3 }}
+            whileHover={prefersReduced ? {} : { y: -4 }}
             onMouseEnter={() => sound.playHover()}
-            className="group relative block w-full rounded-2xl border border-white/10 bg-surface-card hover:bg-surface-card-hover p-6 sm:p-7 text-left transition-colors duration-300 hover:border-[#F5B800]/60 hover:shadow-[0_0_25px_rgba(245,184,0,0.12)] has-[:focus-visible]:border-[#F5B800] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#F5B800] cursor-pointer lg:group-hover/projects:opacity-60 lg:hover:!opacity-100"
+            spotlightColor="rgba(245, 184, 0, 0.14)"
+            borderColor="rgba(245, 184, 0, 0.45)"
+            className="group relative block w-full p-6 sm:p-7 text-left transition-all duration-300 hover:border-[#F5B800]/50 hover:shadow-[0_0_30px_rgba(245,184,0,0.12)] has-[:focus-visible]:border-[#F5B800] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#F5B800] cursor-pointer lg:group-hover/projects:opacity-60 lg:hover:!opacity-100"
           >
             {/* Primary Clickable Area for opening project details (sibling to external links, no nesting) */}
             <button
@@ -70,14 +73,19 @@ export default function ProjectsList() {
             />
 
             {/* Card Content Area */}
-            <div className="relative z-[1] pointer-events-none space-y-3">
-              {/* Role Line & Links / Arrow Indicator */}
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[11px] font-semibold text-[#F5B800] tracking-wide uppercase">
-                  {project.role}
-                </span>
+            <div className="relative z-[1] pointer-events-none space-y-3.5">
+              {/* Header: Project Index, Role Line & Links / Arrow Indicator */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="font-mono text-xs font-bold text-[#F5B800] tracking-wider px-2 py-0.5 rounded-md bg-[#1a1710] border border-[#F5B800]/30 shrink-0">
+                    {'// 0' + (index + 1)}
+                  </span>
+                  <span className="font-mono text-[11px] font-semibold text-neutral-300 tracking-wide uppercase truncate">
+                    {project.role}
+                  </span>
+                </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5 shrink-0">
                   {project.links.github && (
                     <a
                       href={project.links.github}
@@ -95,37 +103,37 @@ export default function ProjectsList() {
                     </a>
                   )}
 
-                  <span className="text-neutral-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-[#F5B800]">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-white/10 bg-white/5 text-neutral-400 transition-all duration-300 group-hover:border-[#F5B800]/50 group-hover:bg-[#1a1710] group-hover:text-[#F5B800] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
                     </svg>
                   </span>
                 </div>
               </div>
 
-              {/* Title */}
-              <h3 className="font-display text-lg sm:text-xl font-bold text-white group-hover:text-[#F5B800] transition-colors">
+              {/* Title with glow effect on hover */}
+              <h3 className="font-display text-xl sm:text-2xl font-bold text-white group-hover:text-[#F5B800] transition-colors duration-300 group-hover:drop-shadow-[0_0_12px_rgba(245,184,0,0.3)]">
                 {project.title}
               </h3>
 
               {/* Hook / Description */}
-              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed group-hover:text-neutral-300 transition-colors">
                 {project.hook}
               </p>
 
               {/* Technologies Pills */}
-              <div className="flex flex-wrap gap-2 pt-2">
+              <div className="flex flex-wrap gap-2 pt-1">
                 {project.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] text-neutral-300 transition-colors group-hover:border-white/20"
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] text-neutral-300 transition-all duration-200 group-hover:border-[#F5B800]/30 group-hover:text-white group-hover:bg-[#1a1710]/60"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
             </div>
-          </motion.div>
+          </SpotlightCard>
         ))}
       </div>
 
