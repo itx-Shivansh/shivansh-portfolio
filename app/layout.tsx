@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { displayFont, bodyFont, monoFont } from './fonts'
 import CursorSpotlight from '@/components/ui/CursorSpotlight'
@@ -10,17 +10,51 @@ import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider'
 import MainShell from '@/components/providers/MainShell'
 import TabTitleController from '@/components/providers/TabTitleController'
 
+// ── Single constant for the canonical deployment URL ──────────────────────────
+// Change this when the domain changes; nothing else needs updating.
+export const SITE_URL = 'https://shivanshraj-portfolio.vercel.app'
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'Shivansh Raj — Software Engineer & AI Developer',
   description:
-    'Cinematic portfolio of Shivansh Raj — Software Engineer, AI Developer, and Full-Stack builder at Delhi Technological University.',
+    'Portfolio of Shivansh Raj — Software Engineer, AI Developer, and Full-Stack builder at Delhi Technological University (DTU).',
   keywords: ['Shivansh Raj', 'Software Engineer', 'AI Developer', 'Full-Stack', 'DTU', 'Portfolio'],
   openGraph: {
     title: 'Shivansh Raj — Software Engineer & AI Developer',
     description:
-      'Immersive, scroll-driven portfolio showcasing AI applications, full-stack projects, and software engineering at DTU.',
+      'Portfolio of Shivansh Raj — Software Engineer, AI Developer, and Full-Stack builder at Delhi Technological University (DTU).',
+    url: SITE_URL,
+    siteName: 'Shivansh Raj',
     type: 'website',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Shivansh Raj — Software Engineer & AI Developer',
+      },
+    ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Shivansh Raj — Software Engineer & AI Developer',
+    description:
+      'Portfolio of Shivansh Raj — Software Engineer, AI Developer, and Full-Stack builder at Delhi Technological University (DTU).',
+    images: ['/opengraph-image'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  icons: {
+    icon: '/favicon.ico',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#000000',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -30,6 +64,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} bg-bg-base font-body text-text-primary antialiased`}
     >
       <body className="min-h-screen bg-bg-base font-body text-text-primary antialiased selection:bg-accent-gold/20 selection:text-white">
+        {/* Skip to main content — accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded focus:bg-[#F5B800] focus:px-4 focus:py-2 focus:text-black focus:font-mono focus:text-sm focus:font-bold"
+        >
+          Skip to main content
+        </a>
         <SmoothScrollProvider>
           {/* Gold ambient cursor spotlight — z-[1], above black base, below all content */}
           <CursorSpotlight />

@@ -12,11 +12,16 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     useScrollStore()
 
   useEffect(() => {
-    // 1. Initialize Lenis Smooth Scroll
+    // Check reduced motion preference
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // 1. Initialize Lenis Smooth Scroll (disabled/immediate when reduced motion preferred)
     const lenis = new Lenis({
-      duration: LENIS_OPTIONS.duration,
+      duration: prefersReduced ? 0 : LENIS_OPTIONS.duration,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Lenis smooth cubic curve
-      smoothWheel: true,
+      smoothWheel: !prefersReduced,
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
     })

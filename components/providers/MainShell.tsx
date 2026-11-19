@@ -14,6 +14,7 @@ export default function MainShell({ children }: { children: React.ReactNode }) {
 
   return (
     <main
+      id="main-content"
       className={clsx(
         'relative transition-opacity duration-500 bg-transparent',
         !isLoaded || selectedProject

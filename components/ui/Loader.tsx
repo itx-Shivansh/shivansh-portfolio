@@ -75,16 +75,46 @@ export default function Loader() {
   const overlayRef = useRef<HTMLDivElement>(null)
   const isCompletingRef = useRef<boolean>(false)
 
+  // Skip loader: once per session OR if user prefers reduced motion.
+  // isLoaded must still be set when skipping so the page becomes visible.
+  useEffect(() => {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    let alreadySeen = false
+    try {
+      alreadySeen = sessionStorage.getItem('loaderSeen') === '1'
+    } catch {
+      // sessionStorage blocked (e.g. private-browsing cookie settings)
+    }
+
+    if (prefersReduced || alreadySeen) {
+      setIsLoaded(true)
+      setShouldRender(false)
+      return
+    }
+
+    try {
+      sessionStorage.setItem('loaderSeen', '1')
+    } catch {
+      // ignore write failures
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Animated 3 loading dots interval
   useEffect(() => {
+    if (!shouldRender) return
     const dotInterval = setInterval(() => {
       setDotIndex((prev) => (prev + 1) % 3)
     }, 400)
     return () => clearInterval(dotInterval)
-  }, [])
+  }, [shouldRender])
 
   // Fixed ~800ms progress sequence
   useEffect(() => {
+    if (!shouldRender) return
     let animId: number
     const durationMs = 800
     const startTime = performance.now()
@@ -139,7 +169,7 @@ export default function Loader() {
     return () => {
       cancelAnimationFrame(animId)
     }
-  }, [setIsLoaded])
+  }, [setIsLoaded, shouldRender])
 
   if (!shouldRender) return null
 
@@ -175,16 +205,20 @@ export default function Loader() {
             INITIALIZING SYSTEM MODULES ...
           </p>
 
-          <div className="relative inline-block px-10 py-4">
+          <div className="relative inline-block px-6 py-3 sm:px-10 sm:py-4">
             {/* Box Corner Brackets */}
             <span className="absolute -top-1 -left-1 text-[#F5B800] text-xl">┌</span>
             <span className="absolute -top-1 -right-1 text-[#F5B800] text-xl">┐</span>
             <span className="absolute -bottom-1 -left-1 text-[#F5B800] text-xl">└</span>
             <span className="absolute -bottom-1 -right-1 text-[#F5B800] text-xl">┘</span>
 
-            <h1 className="font-display text-7xl sm:text-8xl md:text-9xl font-black text-[#F5B800] tracking-tight leading-none drop-shadow-[0_0_25px_rgba(245,184,0,0.3)]">
+            <div
+              role="status"
+              aria-live="polite"
+              className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-[#F5B800] tracking-tight leading-none drop-shadow-[0_0_25px_rgba(245,184,0,0.3)]"
+            >
               {progress}%
-            </h1>
+            </div>
           </div>
 
           <p className="font-mono text-xs font-bold text-neutral-300 tracking-[0.2em] uppercase">

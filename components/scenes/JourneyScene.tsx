@@ -123,11 +123,12 @@ export default function JourneyScene() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch pt-2">
             {/* Left Photo Sub-Column (~1/3 at lg, max-w-xs on mobile) */}
             <div className="w-full max-w-xs lg:max-w-none mx-auto lg:mx-0 lg:col-span-5 p-2 sm:p-3 flex items-center justify-center">
-              <div className="group relative w-full aspect-[4/5] rounded-xl">
-                {/* Offset Gold Outline Frame Behind Photo */}
+              {/* overflow-hidden clips the offset frame so it can't push past the container */}
+              <div className="group relative w-full aspect-[4/5] rounded-xl overflow-hidden sm:overflow-visible">
+                {/* Offset Gold Outline Frame Behind Photo — 8px at <sm to stay within overflow-visible clipping zone */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 translate-x-3 translate-y-3 rounded-xl border border-[#F5B800]/20 pointer-events-none transition-transform duration-300 ease-out group-hover:translate-x-2 group-hover:translate-y-2"
+                  className="absolute inset-0 translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3 rounded-xl border border-[#F5B800]/20 pointer-events-none transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:translate-y-1 sm:group-hover:translate-x-2 sm:group-hover:translate-y-2"
                 />
 
                 {/* Photo Image Card */}

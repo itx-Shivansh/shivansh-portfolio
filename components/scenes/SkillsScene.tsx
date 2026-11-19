@@ -148,8 +148,8 @@ export default function SkillsScene() {
           </div>
         </div>
 
-        {/* ── Category Skill Cards Grid ───────────────────────────────── */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        {/* ── Category Skill Cards Grid (Single column for generous card width) ── */}
+        <div className="grid grid-cols-1 gap-4">
           {filteredGroups.map((group) => (
             <div
               key={group.category}

@@ -156,7 +156,7 @@ Project_Shivansh/
 6. **Chunk 6 (Done):** Polish: photo hygiene (real JPEG 1000x1000, 181 KB), card surfaces (`surface.card` & `surface['card-hover']`), removed backdrop-blur from all active scene cards, JetBrains Mono font integration, projects list hover dimming (lg+), CursorSpotlight constants extracted.
 6b. **Chunk 6b (Done):** Layout fixes: Name container query clamp `clamp(2rem, 10.5cqw, 4.5rem)` in left column; Skills section re-layout (stacked header, wrapping filter pills, full-width compact stats row, responsive category grid with unbreakable tags/pills, quote card relocated below grid).
 7. **Chunk 7 (Done):** Cleanup: deleted 9 WebGL canvas files, deleted `components/canvas/`, deleted `HeroScene.tsx` & `ProjectsScene.tsx`, deleted `app/style-guide/`, deleted `docs/transitions.md`. Uninstalled `three`, `@react-three/*`, and `@types/three`. Cleaned `scrollStore.ts` and `constants.ts`.
-8. **Chunk 8:** Mobile polish, responsive tuning, performance audit, and production deployment check (merge to main via a Vercel preview).
+8. **Chunk 8 (Done — Ready for preview deploy):** Mobile polish (photo frame offset, email clamp & break, loader mobile sizing), gated DebugHUD (`NODE_ENV`), loader session storage & reduced-motion skip, metadataBase & dynamic opengraph-image, single-column skills grid refinement, accessibility skip link & single h1 & semantic footer, Lighthouse audit (Perf 85, A11y 96, Best Practices 100, SEO 100), updated README. Ready for Vercel preview deploy.
 
 ## Old journey.ts (replaced)
 ```ts
@@ -297,7 +297,42 @@ export const milestones: Milestone[] = [
   - **Step 5 report-only findings (no changes):** GSAP (~27 kB) and Lenis (~15 kB) are actively used in SmoothScrollProvider, ProjectDetailOverlay, and Loader — both kept, deferred to Chunk 8. DebugHUD ships but returns null in production. Root dev assets (`active-theory-example.mp4`, `indiasignal_image.png`, `obsidian_image.png`) left untouched.
   - **Verification:** `npm run build` → 0 errors, 0 warnings. `npm ls three` → empty. HTTP 200 on `localhost:3006`. Route `/style-guide` gone from build output.
 
+- **Chunk 8: Mobile Polish, Accessibility, Sharing, Audit & Final Verification (2026-11-19):**
+  - **Branch:** `redesign-gold-minimal`.
+  - **Mobile Risks Resolved:**
+    - `JourneyScene.tsx`: Photo frame offset reduced to 8px on `<sm` (`translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3`) and added `overflow-hidden sm:overflow-visible` to prevent horizontal clipping down to 320px.
+    - `ContactScene.tsx`: Clamped direct email font size `clamp(0.95rem, 4.6vw, 1.25rem)`, added `min-w-0` to flex parents, and applied `overflow-wrap: anywhere` fallback. Confirmed contained inside card at 320px.
+    - `Loader.tsx`: Reduced padding to `px-6 py-3` on `<sm` (`sm:px-10 sm:py-4`) and responsive font scale `text-6xl sm:text-7xl md:text-8xl lg:text-9xl`. Fits cleanly at 320px.
+  - **Debug HUD & Loader Taming:**
+    - `DebugHUD.tsx`: Confirmed gated to `process.env.NODE_ENV === 'development'`. When compiled in production, returns `null` and button is completely absent.
+    - `Loader.tsx`: Guarded with `sessionStorage` in `try/catch` to display once per browser session. Added immediate bypass for `prefers-reduced-motion: reduce`. Guarantees `isLoaded(true)` is set when skipped with zero hydration errors. (Note: first paint on returning sessions runs initial mount effect to dismiss).
+  - **Metadata & Social Sharing:**
+    - `app/layout.tsx`: Configured canonical `metadataBase: new URL(SITE_URL)` (`https://shivanshraj-portfolio.vercel.app`), title & description from `content/identity.ts`, OpenGraph card, Twitter `summary_large_image`, `viewport.themeColor = '#000000'`, icons, robots.
+    - `app/opengraph-image.tsx`: Added dynamic Edge runtime OpenGraph image (1200x630, gold/black branding, technical brackets, Shivansh Raj, role title).
+  - **Structure & Accessibility:**
+    - Exactly one `<h1>`: converted `Loader.tsx` percentage counter from `<h1>` to `<div role="status" aria-live="polite">`, ensuring `MainShell.tsx` name headline is the single `<h1>`.
+    - Added `<a href="#main-content">` accessible skip link in `app/layout.tsx` targeting `<main id="main-content">` in `MainShell.tsx`.
+    - Added semantic `<footer>` in `app/page.tsx`.
+    - Added `prefers-reduced-motion` detection in `SmoothScrollProvider.tsx` to disable smooth wheel and zero scroll duration for Lenis.
+  - **Skills Card Layout Refinement:**
+    - Measured at 1280px & 1440px: in 2-column mode, cards had inner width of 244px–248px (< 300px threshold), causing almost all skill pills to wrap. Per instruction, changed `SkillsScene.tsx` category grid to single column (`grid-cols-1`). Result: inner width expanded to 603px; 5 out of 6 categories now fit all skill pills on a single clean row.
+  - **Performance Audit (Lighthouse Mobile against `next start`):**
+    - **Performance:** 85
+    - **Accessibility:** 96
+    - **Best Practices:** 100
+    - **SEO:** 100
+    - Top audits: `layout-shifts` (initial loader transition), `color-contrast` (dark gold technical accents on pitch black), `label-content-name-mismatch`.
+  - **README.md:** Re-authored to factually describe Next.js 14 stack, sections, environment variables, commands, assets, and Vercel deployment. All legacy 3D/canvas references eliminated.
+  - **Browser CDP Verification (320, 375, 768, 1280, 1440px):**
+    - 0px horizontal overflow across all viewports (`docScrollWidth <= window.innerWidth`).
+    - `SHIVANSH` text measured via Range API: fits within column width with positive margins at all sizes (320px: 268.1px text in 272px col, 3.9px margin; 375px: 287.6px text in 327px col, 39.4px margin; 768px: 577.9px text in 657px col, 79.1px margin; 1280px: 430px text in 488.9px col, 58.9px margin; 1440px: 436px text in 495.7px col, 59.7px margin).
+    - Email fully contained inside its card (`emailRight <= cardRight`).
+    - DEBUG MODE button absent in production build.
+    - Exactly one `<h1>` in document.
+    - Saved screenshots to `C:\Users\HP victos\AppData\Local\Temp\screenshots_chunk8\`.
+
 ## Known Layout Risks (Step 3 Audit)
-- **`JourneyScene.tsx` (Photo offset frame at 375px):** The offset gold outline frame behind the portrait photo uses absolute positioning with `translate-x-3 translate-y-3` (+12px). At 375px with 24px side padding (`px-6` = 48px), the container width is 327px. While `max-w-xs` is 320px, 320px + 12px = 332px, which risks slight right-side clipping if outer padding is tighter than 12px.
-- **`ContactScene.tsx` (Direct email address on narrow mobile):** `shivanshrajoo@gmail.com` is rendered as an unbroken 23-character string with font size `text-lg sm:text-xl font-bold`. Inside a `p-5` card (40px horizontal padding) at 375px viewport (327px track), the email link takes ~280px out of 287px available. If viewport drops below 360px without word break, it risks pushing card bounds.
-- **`Loader.tsx` (100% counter box at 375px):** The main percentage display box inside `Loader.tsx` uses `px-10 py-4` (80px horizontal padding) and `text-7xl` font size. On screens narrower than 360px, the bracketed box width approaches the screen margin before the 800ms dismissal.
+- **All Previous Risks Resolved in Chunk 8:**
+  - `JourneyScene.tsx`: Photo frame offset reduced on mobile with overflow clipping.
+  - `ContactScene.tsx`: Email font-size clamped and `overflow-wrap: anywhere` enabled.
+  - `Loader.tsx`: Counter box padding & typography scaled down for `<= 320px`.

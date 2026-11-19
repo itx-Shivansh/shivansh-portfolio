@@ -155,13 +155,13 @@ export default function ContactScene() {
 
             {/* Direct Email Card */}
             <div className="rounded-2xl border border-[#F5B800]/40 bg-surface-card p-5 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 min-w-0">
                 <div className="w-12 h-12 rounded-full bg-[#1c180e] border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] shrink-0">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <div className="space-y-0.5">
+                <div className="space-y-0.5 min-w-0">
                   <span className="font-mono text-[10px] font-bold text-[#F5B800] tracking-widest uppercase">
                     DIRECT EMAIL
                   </span>
@@ -169,7 +169,8 @@ export default function ContactScene() {
                     href={`mailto:${directEmail}`}
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    className="block font-display text-lg sm:text-xl font-bold text-white hover:text-[#F5B800] transition-colors"
+                    className="block font-display font-bold text-white hover:text-[#F5B800] transition-colors min-w-0 break-all"
+                    style={{ fontSize: 'clamp(0.95rem, 4.6vw, 1.25rem)', overflowWrap: 'anywhere' }}
                   >
                     {directEmail}
                   </a>

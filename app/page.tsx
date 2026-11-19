@@ -15,6 +15,10 @@ export default function Home() {
       <ProjectsList />
       <SkillsScene />
       <ContactScene />
+      <footer className="pt-8 pb-12 border-t border-white/10 font-mono text-xs text-neutral-500 flex flex-wrap justify-between items-center gap-3">
+        <span>© {new Date().getFullYear()} Shivansh Raj. All rights reserved.</span>
+        <span>Delhi Technological University</span>
+      </footer>
     </>
   )
 }

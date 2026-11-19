@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shivansh Raj — Portfolio
 
-## Getting Started
+Personal portfolio site for Shivansh Raj, Software Engineer, AI Developer, and Full-Stack builder at Delhi Technological University (B.Tech AE, 2024–2028).
 
-First, run the development server:
+**Live URL:** https://shivanshraj-portfolio.vercel.app
+
+---
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 14 (App Router) |
+| UI | React 18 |
+| Styling | Tailwind CSS 3 + PostCSS |
+| Animation | GSAP 3 + @gsap/react |
+| Smooth scroll | Lenis 1 |
+| State | Zustand 4 |
+| Fonts | Syne (display), Inter (body), JetBrains Mono (mono) — all via `next/font/google` |
+| Language | TypeScript 5 |
+| Linting | ESLint + Prettier |
+
+No WebGL or Three.js — the 3D canvas layer was removed in the redesign. All sections are plain HTML/CSS.
+
+---
+
+## Sections
+
+The site is a single page with a fixed left identity column and a scrolling right column:
+
+| Section | File |
+|---|---|
+| Left column (name, nav, socials, CTAs) | `components/providers/MainShell.tsx` |
+| About | `components/scenes/JourneyScene.tsx` |
+| Projects | `components/sections/ProjectsList.tsx` |
+| Skills | `components/scenes/SkillsScene.tsx` |
+| Contact | `components/scenes/ContactScene.tsx` |
+
+Content lives in `content/`: `identity.ts`, `contact.ts`, `projects.ts`, `skills.ts`, `journey.ts`.
+
+---
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Lint
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment variables
 
-## Deploy on Vercel
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_FORMSPREE_ID` | Formspree form ID for the contact form. If not set, the form falls back to a `mailto:` link. |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create a `.env.local` file at the project root with the above variable to enable the contact form backend.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Assets
+
+- `public/images/shivansh.jpg` — Profile photo (JPEG, 1000×1000)
+- `public/resume.pdf` — Resume PDF linked from the left column and the About section
+- `public/videos/` — Project demo videos referenced from project data (`content/projects.ts`)
+
+---
+
+## Deployment
+
+Deployed on Vercel. Push to `main` and Vercel picks it up automatically. The canonical URL (`SITE_URL`) is set in `app/layout.tsx` — update it there if the domain changes.
